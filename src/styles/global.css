@@ -50,6 +50,15 @@
   textarea::placeholder {
     color: var(--color-gray-400);
   }
+
+  /* v4 gives buttons `cursor: default`; the design was built against v3, where
+     every button — the menu trigger, the carousel arrows, the accordion rows,
+     the gallery thumbnails — showed the pointer. */
+  button:not(:disabled),
+  [role='button']:not(:disabled),
+  summary {
+    cursor: pointer;
+  }
 }
 
 /* ---------------------------------------------------------------------------
@@ -301,10 +310,11 @@ body {
 }
 
 /* ---------------------------------------------------------------------------
-   Lightbox (replaces react-photo-view)
+   react-photo-view — the project gallery viewer, tinted to the brand navy
+   exactly as the original did.
    --------------------------------------------------------------------------- */
-.lightbox-backdrop {
-  background: rgba(15, 25, 49, 1);
+.PhotoView-Slider__Backdrop {
+  background: rgba(15, 25, 49, 1) !important;
   filter: brightness(0.5);
 }
 

@@ -15,6 +15,7 @@ already on screen.
 | First paint | after `react-dom` hydrates the whole tree | server-rendered HTML |
 | Routes | 1 HTML shell, client-side router | 65 prerendered pages |
 | JS shipped on the home page | react, react-dom, framer-motion, three.js, swiper, i18next, react-hook-form, zod, react-select, sonner, lottie, gsap, lenis, countup | gsap + lenis + a few KB of site code (swiper and countup load on demand) |
+| Components that hydrate | the whole tree | one — the photo viewer, on project detail pages |
 | Spanish | swapped in by i18next after hydration | prerendered under `/es/` with `hreflang` |
 | Images | full-size JPEG straight from `public/` | WebP, responsive `srcset`, generated at build |
 | Ambient background | Three.js scene per section | CSS gradients and keyframes |
@@ -29,11 +30,13 @@ Measured over the local production build, third-party tags blocked:
 | `/` (mobile) | 1.3 MB | 307 KB |
 | `/team` | 398 KB | 160 KB |
 | `/projects` | 765 KB | 160 KB |
+| `/projects/<villa>` | 664 KB | 201 KB |
 | `/technologies` | 654 KB | 160 KB |
 | `/investments` | 533 KB | 160 KB |
 
-JS figures are uncompressed; over the wire the shared bundle is ~59 KB gzipped
-and Swiper's two chunks (~43 KB gzipped) only load on pages with a carousel.
+JS figures are uncompressed; over the wire the shared bundle is ~59 KB gzipped,
+Swiper's two chunks (~43 KB gzipped) only load on pages with a carousel, and the
+photo viewer island (~21 KB gzipped) only on project detail pages.
 
 ## Getting started
 
@@ -101,7 +104,9 @@ Three toolchain differences needed explicit handling, each covered by a test in
 - **Tailwind v4** writes `scale-*` and `-translate-*` to the `scale` and
   `translate` properties instead of `transform`, so anything overriding them has
   to use the same property. `scripts/modules/techCards.ts` clears `scale` before
-  handing the card reveal to GSAP.
+  handing the card reveal to GSAP. v4 also gives `<button>` `cursor: default`
+  where v3 gave it `pointer`, which quietly changed the cursor on every button
+  and gallery thumbnail; `global.css` restores it.
 - **Tailwind v4 breakpoint ordering** places `px` breakpoints in a separate
   group from the `rem` defaults, which made `xl:` beat `2xl-prev:` at 1440px and
   shrank the root font size. The whole scale is redeclared in `rem`, in
@@ -113,11 +118,25 @@ original had no such handling.
 ### Progressive enhancement
 
 Everything readable is in the HTML. The accordions are `<details>`, the
-carousels are static slide lists that Swiper picks up, the lightbox and the
-investor form use `<dialog>`, the country picker is a prerendered `<select>`,
-and the counters render their final value before countup.js animates them.
+carousels are static slide lists that Swiper picks up, the investor form uses
+`<dialog>`, the country picker is a prerendered `<select>`, and the counters
+render their final value before countup.js animates them.
 `tests/e2e/html-first.spec.ts` runs a slice of the suite with JavaScript
 disabled to keep it that way.
+
+### The photo viewer
+
+Project galleries open in `react-photo-view` — the same library the React app
+used, for the same pinch zoom, drag-to-pan, rotate, swipe-to-close and the
+opening animation that grows out of the thumbnail you clicked.
+
+It is the only component on the site that hydrates, and it runs on
+`preact/compat` rather than React: ~21 KB gzipped instead of ~62 KB, on the 52
+project detail pages only. `PhotoSlider` is mounted `client:only` because it
+renders into a portal and has no server output of its own — the gallery above
+it stays server-rendered, and a three-line vanilla listener dispatches the
+clicked photo's index at the island. The photos are in the HTML whether or not
+the viewer ever loads.
 
 ## Deployment
 

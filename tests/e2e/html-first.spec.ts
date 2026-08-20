@@ -49,6 +49,9 @@ test.describe('without JavaScript', () => {
     const images = page.locator('[data-gallery="renders"] img');
     await expect(images).toHaveCount(20);
     await expect(images.first()).toHaveAttribute('srcset', /\.webp/);
+
+    // The viewer is an island; the photos must not depend on it.
+    await expect(page.locator('.PhotoView-Portal')).toHaveCount(0);
   });
 
   test('the team roster is readable', async ({ page }) => {
@@ -111,4 +114,17 @@ test('the page ships far less JavaScript than the React build', async ({ page })
   // The React bundle was well over 1 MB uncompressed before Three.js was even
   // counted; this guards against a framework creeping back in.
   expect(total).toBeLessThan(400_000);
+});
+
+test('only the photo viewer hydrates, and only where it is used', async ({ page }) => {
+  const islandsOn = async (path: string) => {
+    await page.goto(path);
+    await page.waitForLoadState('networkidle');
+    return page.locator('astro-island').count();
+  };
+
+  expect(await islandsOn('/'), 'the home page ships no components').toBe(0);
+  expect(await islandsOn('/team'), 'the team page ships no components').toBe(0);
+  expect(await islandsOn('/projects'), 'the project index ships no components').toBe(0);
+  expect(await islandsOn('/projects/Villa_Perez'), 'only the viewer').toBe(1);
 });
