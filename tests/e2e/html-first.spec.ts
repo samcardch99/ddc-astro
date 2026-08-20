@@ -77,6 +77,22 @@ test.describe('without JavaScript', () => {
   });
 });
 
+test('the culture video is not downloaded on desktop', async ({ page, isMobile }) => {
+  test.skip(!!isMobile, 'the culture section only renders below lg');
+
+  const media: string[] = [];
+  page.on('response', (response) => {
+    if (/\.(mp4|webm)$/.test(response.url())) media.push(response.url());
+  });
+
+  await page.goto('/');
+  await page.waitForLoadState('networkidle');
+
+  // Both responsive variants ship in the HTML; the 5.9 MB background video
+  // belongs to the mobile one and must stay unfetched above lg.
+  expect(media).toEqual([]);
+});
+
 test('the page ships far less JavaScript than the React build', async ({ page }) => {
   const scripts: number[] = [];
   page.on('response', async (response) => {

@@ -18,7 +18,22 @@ already on screen.
 | Spanish | swapped in by i18next after hydration | prerendered under `/es/` with `hreflang` |
 | Images | full-size JPEG straight from `public/` | WebP, responsive `srcset`, generated at build |
 | Ambient background | Three.js scene per section | CSS gradients and keyframes |
+| Hero backdrop | a 5508×3088 WebP, 2.3 MB | re-encoded to 3600px / 868 KB and preloaded per breakpoint |
 | Content without JS | empty `<div id="root">` | the entire page |
+
+Measured over the local production build, third-party tags blocked:
+
+| Page | Transferred | of which JS |
+|---|---|---|
+| `/` (desktop) | 1.9 MB | 307 KB |
+| `/` (mobile) | 1.3 MB | 307 KB |
+| `/team` | 398 KB | 160 KB |
+| `/projects` | 765 KB | 160 KB |
+| `/technologies` | 654 KB | 160 KB |
+| `/investments` | 533 KB | 160 KB |
+
+JS figures are uncompressed; over the wire the shared bundle is ~59 KB gzipped
+and Swiper's two chunks (~43 KB gzipped) only load on pages with a carousel.
 
 ## Getting started
 

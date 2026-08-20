@@ -17,7 +17,14 @@ interface Props { lang: Lang }
 const { lang } = Astro.props;
 const meta = getMeta('/', lang);
 ---
-<BaseLayout lang={lang} path="/" title={meta.title} description={meta.description} headerScrollStates>
+<BaseLayout
+  lang={lang}
+  path="/"
+  title={meta.title}
+  description={meta.description}
+  headerScrollStates
+  preloadCover
+>
   <main class="w-full h-auto">
     <Cover lang={lang} />
     <About lang={lang} />
