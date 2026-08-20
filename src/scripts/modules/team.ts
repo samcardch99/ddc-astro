@@ -103,6 +103,7 @@ export function initTeam(): void {
     rows.forEach((row, i) => row.setAttribute('aria-current', i === index ? 'true' : 'false'));
     if (scroll) rows[index].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 
+
     if (index === active || swapping) {
       active = index;
       return;
@@ -123,10 +124,60 @@ export function initTeam(): void {
   rows.forEach((row, index) => row.addEventListener('click', () => void setActive(index)));
   next?.addEventListener('click', () => void setActive(Math.min(active + 1, rows.length - 1), true));
 
-  // Scroll-spy stands in for Swiper's `onActiveIndexChange`.
+  /**
+   * The React roster was a vertical Swiper with `mousewheel` and `speed: 500`:
+   * one wheel gesture moved exactly one member — however hard you flicked — the
+   * selected row sat at the top of the column, and the page never scrolled
+   * underneath. This reproduces all three.
+   */
   if (roster && rows.length) {
+    let stepping = false;
+
+    const alignToTop = (index: number) => {
+      const row = rows[index];
+      if (!row) return;
+      const delta = row.getBoundingClientRect().top - roster.getBoundingClientRect().top;
+      roster.scrollTo({
+        top: roster.scrollTop + delta,
+        behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+      });
+    };
+
+    const step = (direction: 1 | -1) => {
+      const target = active + direction;
+      if (target < 0 || target >= rows.length) return;
+      stepping = true;
+      void setActive(target);
+      alignToTop(target);
+      window.setTimeout(() => {
+        stepping = false;
+      }, 500);
+    };
+
+    roster.addEventListener(
+      'wheel',
+      (event) => {
+        // Swiper captured the wheel outright; `data-lenis-prevent` already keeps
+        // the smooth-scroller off this element.
+        event.preventDefault();
+        if (stepping || Math.abs(event.deltaY) < 4) return;
+        step(event.deltaY > 0 ? 1 : -1);
+      },
+      { passive: false },
+    );
+
+    roster.addEventListener('keydown', (event) => {
+      if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+      event.preventDefault();
+      step(event.key === 'ArrowDown' ? 1 : -1);
+    });
+
+    // Touch still scrolls the column freely, so the selection follows the
+    // scroll position — Swiper's `onActiveIndexChange`. Paused while a wheel
+    // step is animating so the two do not fight.
     const observer = new IntersectionObserver(
       (entries) => {
+        if (stepping) return;
         const visible = entries
           .filter((entry) => entry.isIntersecting)
           .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];

@@ -5,7 +5,7 @@ interface Props {
   class?: string;
   width?: string;
 }
-const { class: className = '', width = '100%' } = Astro.props;
+const { class: className = '', width = '100%' }: Props = Astro.props;
 ---
 <div id="appointment" class={`relative h-fit ${className}`} data-booking-widget>
   <iframe
@@ -15,3 +15,8 @@ const { class: className = '', width = '100%' } = Astro.props;
     title="LeadConnector Booking Widget"
     loading="lazy"></iframe>
 </div>
+
+<!-- LeadConnector resizes the iframe to fit the calendar over postMessage.
+     Without this the frame stays at the 150px default. The React component
+     appended the same script on mount; `defer` keeps it off the parse path. -->
+<script is:inline defer src={site.bookingScript}></script>

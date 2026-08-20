@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/* The v3 config only scanned index.html and the JS/TS sources, so class-looking
+   strings inside the data JSON never produced any CSS — which is why
+   team.json's stale "scale-[1.1] -translate-y-40" had no effect on Javi
+   Ferrer's headshot in the original. v4 auto-detects every file, so the data
+   directory is excluded to keep that behaviour. */
+@source not "../data";
+
 /* ---------------------------------------------------------------------------
    Design tokens — 1:1 port of the Tailwind v3 `theme.extend` from ddc-redesign
    --------------------------------------------------------------------------- */
@@ -58,6 +65,18 @@
   [role='button']:not(:disabled),
   summary {
     cursor: pointer;
+  }
+
+  /* v4's preflight sets `background-color: transparent` on every form control;
+     v3 only did that for buttons, so text fields kept the browser's white
+     field. The contact footer sits on a dark background and colours its inputs
+     `text-secondary`, which is unreadable without it. Any `bg-*` utility still
+     wins, so the deliberately transparent fields in the investor dialog and the
+     project search are unaffected. */
+  input:not([type='checkbox'], [type='radio'], [type='button'], [type='submit'], [type='reset'], [type='range']),
+  select,
+  textarea {
+    background-color: #fff;
   }
 }
 
@@ -301,12 +320,70 @@ body {
   @apply text-secondary;
 }
 
+/* ---------------------------------------------------------------------------
+   Placeholder contrast
+
+   Placeholder text is content people have to read, so it is held to WCAG AA
+   (4.5:1). The inherited defaults were well under: gray-400 measures 2.5:1 on
+   the contact form's white fields and 1.5:1 on the investor dialog's grey
+   panel, and the original marked the "select a reason" option `text-slate-400`
+   at 2.6:1. These are the lightest tints of the brand navy that clear 4.5:1 on
+   each background, so a placeholder still reads as secondary next to a real
+   answer.
+   --------------------------------------------------------------------------- */
+#contact input::placeholder,
+#contact textarea::placeholder {
+  color: #6f7583; /* secondary at 60% on white — 4.62:1 */
+}
+
+/* A closed <select> showing its empty option is displaying the control's
+   value, not a hint, which is why it gets the same treatment. */
+#contact select:has(option[value='']:checked) {
+  color: #6f7583;
+}
+
+#contact select option[value=''] {
+  color: #6f7583;
+}
+
+[data-investment-dialog] input::placeholder,
+[data-investment-dialog] textarea::placeholder {
+  color: #454d60; /* secondary at 70% on #c2c7cf — 4.98:1 */
+}
+
+[data-investment-dialog] select:has(option[value='']:checked),
+[data-investment-dialog] select option[value=''] {
+  color: #454d60;
+}
+
 #our-projects select {
   @apply text-primary;
 }
 
 #our-projects select option {
   @apply bg-primary text-secondary;
+}
+
+/* ---------------------------------------------------------------------------
+   LeadConnector booking widget
+
+   `form_embed.js` resizes the iframe by postMessage once the calendar renders,
+   which lands well after first paint. Reserving the height it settles at keeps
+   the page from jumping; the script can only ever make it taller.
+   --------------------------------------------------------------------------- */
+#appointment iframe {
+  display: block;
+  min-height: 897px;
+}
+
+@media (min-width: 64rem) {
+  #appointment iframe {
+    /* The desktop widget is inside a `lg:scale-90` wrapper, so 787px of layout
+       renders as the 708px the calendar settles at. Reserving the layout height
+       removes the jump entirely — the React page still shifted 705px -> 787px
+       once the script replied. */
+    min-height: 787px;
+  }
 }
 
 /* ---------------------------------------------------------------------------
