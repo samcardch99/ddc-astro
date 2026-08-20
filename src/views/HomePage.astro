@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Cover from '../components/Cover.astro';
+import About from '../components/About.astro';
+import Technologies from '../components/Technologies.astro';
+import Projects from '../components/Projects.astro';
+import Investments from '../components/Investments.astro';
+import OurProcess from '../components/OurProcess.astro';
+import Team from '../components/Team.astro';
+import TeamMobile from '../components/TeamMobile.astro';
+import OurCultureMobile from '../components/OurCultureMobile.astro';
+import Testimonials from '../components/Testimonials.astro';
+import { getMeta } from '../lib/seo';
+import type { Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const meta = getMeta('/', lang);
+---
+<BaseLayout lang={lang} path="/" title={meta.title} description={meta.description} headerScrollStates>
+  <main class="w-full h-auto">
+    <Cover lang={lang} />
+    <About lang={lang} />
+    <Technologies lang={lang} />
+    <Projects lang={lang} />
+    <Investments lang={lang} />
+    <OurProcess lang={lang} />
+
+    <!-- The React app swapped these with `useMediaQuery`; CSS does it here so
+         both variants are in the HTML and neither needs JavaScript to appear. -->
+    <div class="hidden lg:block"><Team lang={lang} /></div>
+    <div class="lg:hidden">
+      <TeamMobile lang={lang} />
+      <OurCultureMobile lang={lang} />
+    </div>
+
+    <Testimonials lang={lang} />
+  </main>
+</BaseLayout>

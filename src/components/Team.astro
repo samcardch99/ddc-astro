@@ -1,0 +1,249 @@
+---
+import { Image } from 'astro:assets';
+import FooterBanner from './FooterBanner.astro';
+import AnimatedBackground from './AnimatedBackground.astro';
+import ArrowCircle from './ArrowCircle.astro';
+import members from '../data/team.json';
+import culture from '../data/ourCulture.json';
+import { employeeAsset } from '../lib/images';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  /** `h1` on /team, `h2` when the section is embedded in the home page. */
+  headingLevel?: 1 | 2;
+}
+const { lang, headingLevel = 2 } = Astro.props;
+const Heading = `h${headingLevel}` as const;
+const t = useTranslations(lang);
+
+const people = members.map((m, i) => ({
+  ...m,
+  index: i,
+  asset: employeeAsset(m.image),
+  extraClass: (m as { class?: string }).class ?? '',
+}));
+---
+<section
+  data-team
+  data-mode="team"
+  class="relative w-full h-screen z-20 bg-primary text-primary px-8"
+>
+  <div class="absolute inset-0 -z-10 opacity-80 bg-black"></div>
+  <AnimatedBackground />
+
+  <Heading class="absolute top-32 left-8 text-3xl lg:text-5xl font-bold overflow-hidden" data-team-title>
+    <span data-when="team">{t('team.title')}</span>
+    <span data-when="culture" hidden>{t('culture.title')}</span>
+  </Heading>
+
+  <button
+    type="button"
+    data-team-toggle
+    class="z-50 bg-primary text-secondary text-lg absolute top-32 border border-primary rounded-full font-bold tracking-wide hover:bg-white/10 transition-all duration-300 w-fit h-fit px-10! py-3! left-1/2 -translate-x-1/2 hover:text-primary"
+  >
+    <span data-when="team">{t('team.button_culture')}</span>
+    <span data-when="culture" hidden>{t('team.button_team')}</span>
+  </button>
+
+  <!-- LEFT: scrollable roster (team) / culture manifesto -->
+  <div class="team-left absolute h-full left-0 overflow-hidden">
+    <div
+      class="team-roster absolute top-56 bottom-20 left-8 overflow-y-auto no-scrollbar"
+      data-lenis-prevent
+      data-team-roster
+    >
+      <ul>
+        {
+          people.map((person) => (
+            <li>
+              <button
+                type="button"
+                class="team-row group relative w-full py-2 pr-4 text-left"
+                data-team-row={person.index}
+                style={`--i:${person.index}`}
+                aria-current={person.index === 0 ? 'true' : 'false'}
+              >
+                <span class="team-row-marker absolute left-0 top-1/2 -translate-y-1/2 h-8 w-[2px] rounded-full transition-opacity duration-300 opacity-0 bg-white/90" />
+                <span class="pl-4 block">
+                  <span class="team-row-name block text-base lg:text-lg transition-opacity duration-300 opacity-80">
+                    {person.name}
+                  </span>
+                  <span class="team-row-role block text-xs lg:text-sm text-primary/80 transition-opacity duration-300 opacity-80">
+                    {t(`team.team_members.${person.id}.role`)}
+                  </span>
+                </span>
+              </button>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div
+      class="team-culture absolute top-48 bottom-20 left-8 w-full h-full select-none pointer-events-none"
+      data-team-culture
+      hidden
+    >
+      <ul class="space-y-2">
+        {
+          culture.map((_, idx) => (
+            <li class="team-culture-item relative w-full py-2 pr-4 text-left" style={`--i:${idx}`}>
+              <div class="pl-4">
+                <h3 class="text-base lg:text-lg font-bold text-primary">
+                  {t(`culture.features.${idx + 1}.title`)}
+                </h3>
+                <p class="text-xs lg:text-sm text-primary/80">
+                  {t(`culture.features.${idx + 1}.description`)}
+                </p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div
+      class="pointer-events-none absolute bottom-0 left-0 w-full h-[18%] bg-linear-to-t from-black/30 from-50% to-transparent"
+    >
+    </div>
+  </div>
+
+  <button
+    type="button"
+    data-team-next
+    class="team-next absolute bottom-24 left-1/2 -translate-x-1/2 z-10 w-10 h-10 hover:text-white/50 transition"
+    aria-label="Next"
+    title="Next"
+  >
+    <ArrowCircle class="w-6 h-6 transition duration-300 stroke-current" />
+  </button>
+
+  <!-- RIGHT: member detail / culture video -->
+  <div class="absolute h-full w-1/4 top-0 right-0 shadow-[inset_5px_0_45px_rgba(0,0,0,0.5)]">
+    <div class="relative h-full w-full overflow-hidden">
+      <div class="team-panels absolute inset-0 w-full h-full" data-team-panels>
+        {
+          people.map((person) => (
+            <div
+              class="team-panel w-full h-full flex-col gap-8 px-12 pt-20 pb-10"
+              data-team-panel={person.index}
+              hidden={person.index !== 0}
+            >
+              <div class="flex flex-col gap-4">
+                {person.asset && (
+                  <Image
+                    data-panel-photo
+                    src={person.asset}
+                    alt={person.name}
+                    widths={[320, 640]}
+                    sizes="25vw"
+                    quality={72}
+                    loading={person.index === 0 ? 'eager' : 'lazy'}
+                    decoding={person.index === 0 ? 'sync' : 'async'}
+                    class={`${person.extraClass} w-full aspect-square object-cover object-top`}
+                  />
+                )}
+                <h3 data-panel-name class="text-lg leading-5 font-bold">
+                  {person.name}
+                  <br />
+                  <span class="text-primary/70 text-sm">
+                    {t(`team.team_members.${person.id}.role`)}
+                  </span>
+                </h3>
+              </div>
+              <p data-panel-bio class="text-xs text-left">{t(`team.team_members.${person.id}.description`)}</p>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="team-video absolute inset-0 z-10 h-full items-start justify-center" data-team-video hidden>
+        <div class="relative w-full aspect-[9/16] h-full overflow-hidden">
+          <video
+            class="absolute inset-0 w-full h-full object-cover"
+            src="/assets/video/our-culture.mp4"
+            muted
+            loop
+            playsinline
+            preload="none"></video>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <FooterBanner lang={lang} class="text-primary" />
+</section>
+
+<style>
+  .team-left {
+    width: 75%;
+  }
+
+  [data-team][data-mode='culture'] .team-left {
+    width: 100%;
+  }
+
+  /* The React version toggled these classes with no transition. */
+  [data-team][data-mode='culture'] .team-roster {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  [data-team][data-mode='culture'] .team-next {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .team-panel {
+    display: flex;
+  }
+  .team-panel[hidden] {
+    display: none;
+  }
+
+  .team-video {
+    display: flex;
+  }
+  .team-video[hidden] {
+    display: none;
+  }
+
+  .team-row[aria-current='true'] .team-row-marker {
+    opacity: 1;
+  }
+  .team-row[aria-current='true'] .team-row-name {
+    opacity: 1;
+    font-weight: 700;
+  }
+  .team-row[aria-current='true'] .team-row-role {
+    opacity: 1;
+  }
+
+  /* framer-motion `itemVariant`: 0.28s easeOut, delay i * 0.06s. */
+  .team-row,
+  .team-culture-item {
+    animation: ddc-item-in 0.28s cubic-bezier(0, 0, 0.58, 1) both;
+    animation-delay: calc(var(--i, 0) * 60ms);
+  }
+
+  @keyframes ddc-item-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+      filter: blur(2px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+      filter: blur(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .team-row,
+    .team-culture-item {
+      animation: none;
+    }
+  }
+</style>

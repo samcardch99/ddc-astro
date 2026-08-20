@@ -1,0 +1,43 @@
+---
+import FooterBanner from './FooterBanner.astro';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+<section id="about" class="relative w-full h-screen px-8 bg-primary text-secondary" data-about>
+  <div
+    class="absolute px-8 lg:px-12 left-0 top-1/2 -translate-y-full flex flex-col lg:flex-row lg:justify-between items-end gap-4 w-full"
+  >
+    <h2 data-about-title class="text-5xl lg:text-5xl font-bold">{t('about.title')}</h2>
+    <p data-about-subtitle class="text-2xl lg:text-5xl max-w-[94%] lg:max-w-[70%] font-bold text-right">
+      {t('about.subtitle')}
+    </p>
+  </div>
+
+  <div class="absolute left-0 top-3/4 -translate-y-2/3 lg:-translate-y-full w-full px-8 lg:px-12">
+    <div class="relative">
+      <span
+        class="absolute -top-6 left-0 -translate-x-1/2 -translate-y-1/2 text-secondary opacity-40 text-2xl"
+        aria-hidden="true">+</span
+      >
+      <span
+        class="absolute -top-6 right-0 translate-x-1/2 -translate-y-1/2 text-secondary opacity-40 text-2xl"
+        aria-hidden="true">+</span
+      >
+      <span
+        class="absolute -bottom-6 left-0 -translate-x-1/2 translate-y-1/2 text-secondary opacity-40 text-2xl"
+        aria-hidden="true">+</span
+      >
+      <span
+        class="absolute -bottom-6 right-0 translate-x-1/2 translate-y-1/2 text-secondary opacity-40 text-2xl"
+        aria-hidden="true">+</span
+      >
+
+      <p data-about-text class="relative text-sm lg:text-lg lg:max-w-[99%]">{t('about.text')}</p>
+    </div>
+  </div>
+
+  <FooterBanner lang={lang} />
+</section>

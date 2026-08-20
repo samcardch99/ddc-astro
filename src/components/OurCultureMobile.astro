@@ -1,0 +1,62 @@
+---
+import 'swiper/css';
+import culture from '../data/ourCulture.json';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  videoSrc?: string;
+  class?: string;
+}
+
+const { lang, videoSrc = '/assets/video/our-culture.mp4', class: className = '' } = Astro.props;
+const t = useTranslations(lang);
+---
+<section
+  class={`relative w-full min-h-screen overflow-hidden ${className}`}
+  aria-label="Culture with video background and auto comments"
+>
+  <video
+    data-culture-video
+    src={videoSrc}
+    muted
+    loop
+    playsinline
+    autoplay
+    preload="metadata"
+    class="absolute inset-0 w-full h-full object-cover"></video>
+
+  <div
+    class="pointer-events-none absolute inset-x-0 bottom-0 h-56 md:h-64 bg-linear-to-t from-black/70 via-black/30 to-transparent"
+  >
+  </div>
+
+  <h2 class="text-3xl font-bold text-primary absolute left-8 bottom-52 mix-blend-difference">
+    {t('culture.title')}
+  </h2>
+
+  <div class="absolute inset-x-0 bottom-0 z-10 px-8 pb-8 md:pb-12">
+    <div
+      class="relative h-40 overflow-hidden [mask-image:linear-gradient(to_top,black,black,transparent)]"
+    >
+      <div class="swiper w-full h-full" data-culture-swiper data-slides={culture.length}>
+        <div class="swiper-wrapper">
+          {
+            culture.map((_, i) => (
+              <div class="swiper-slide flex! items-start!">
+                <div class="text-white/95 space-y-1">
+                  <p class="text-base md:text-lg font-bold leading-tight">
+                    {t(`culture.features.${i + 1}.title`)}
+                  </p>
+                  <p class="text-xs md:text-sm text-white/75 leading-snug">
+                    {t(`culture.features.${i + 1}.description`)}
+                  </p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

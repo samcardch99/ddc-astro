@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectsInside from '../components/interior/ProjectsInside.astro';
+import { getMeta } from '../lib/seo';
+import type { Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const meta = getMeta('/projects', lang);
+---
+<BaseLayout
+  lang={lang}
+  path="/projects"
+  title={meta.title}
+  description={meta.description}
+  headerClass="is-clear"
+  contactFooter={false}
+>
+  <main class="w-full h-auto"><ProjectsInside lang={lang} /></main>
+</BaseLayout>

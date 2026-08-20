@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectDetails from '../components/interior/ProjectDetails.astro';
+import Lightbox from '../components/Lightbox.astro';
+import { projectMeta } from '../lib/seo';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  project: any;
+}
+
+const { lang, project } = Astro.props;
+const t = useTranslations(lang);
+const meta = projectMeta(
+  project.name,
+  t(`project_details.project_description.${project.folder}.description`),
+);
+---
+<BaseLayout
+  lang={lang}
+  path={`/projects/${project.folder}`}
+  title={meta.title}
+  description={meta.description}
+  headerClass="is-clear"
+>
+  <main class="w-full h-auto">
+    <ProjectDetails lang={lang} project={project} />
+  </main>
+  <Lightbox />
+</BaseLayout>

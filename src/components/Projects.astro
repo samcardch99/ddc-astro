@@ -1,0 +1,160 @@
+---
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/pagination';
+import { Image } from 'astro:assets';
+import FooterBanner from './FooterBanner.astro';
+import PrimaryButton from './PrimaryButton.astro';
+import ArrowCircle from './ArrowCircle.astro';
+import { projectCover } from '../lib/images';
+import { localizePath, useTranslations, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const projects = [
+  { id: 'Villa_Santa_Marta', title: 'Villa Santa Marta', cover: 'bg__1.jpeg' },
+  { id: 'Villa_Victor', title: 'Villa Victor', cover: 'bg__2.jpeg' },
+  { id: 'Villa_Ochoa', title: 'Villa Ochoa', cover: 'bg__3.jpeg' },
+  { id: 'Villa_Esplanade', title: 'Villa Esplanade', cover: 'bg__4.jpeg' },
+  { id: 'Villa_Guajira', title: 'Villa Guajira', cover: 'bg__5.jpeg' },
+  { id: 'Villa_Tortuga', title: 'Villa Tortuga', cover: 'bg__6.jpeg' },
+  { id: 'Villa_Barranquilla', title: 'Villa Barranquilla', cover: 'bg__7.jpeg' },
+].map((p) => ({ ...p, image: projectCover(p.cover), href: localizePath(`/projects/${p.id}`, lang) }));
+
+const corner = 'opacity-40 text-2xl';
+---
+<section
+  id="projects"
+  class="w-full h-screen flex items-center justify-center px-8 bg-primary relative"
+>
+  <h2
+    data-split-words
+    class="absolute left-0 top-28 md-custom:top-24 lg:top-28 text-4xl font-bold mb-8 px-8 text-secondary"
+  >
+    {t('projects.title')}
+  </h2>
+
+  <div class="relative w-full md-custom:w-[59%] lg:w-[35%] aspect-video text-secondary">
+    <span class={`absolute -top-5 md-custom:-top-6 lg:-top-8 left-0 -translate-x-1/2 -translate-y-1/2 ${corner}`} aria-hidden="true">+</span>
+    <span class={`absolute -top-5 md-custom:-top-6 lg:-top-8 right-0 translate-x-1/2 -translate-y-1/2 ${corner}`} aria-hidden="true">+</span>
+    <span class={`absolute -bottom-5 md-custom:-bottom-6 lg:-bottom-8 left-0 -translate-x-1/2 translate-y-1/2 ${corner}`} aria-hidden="true">+</span>
+    <span class={`absolute -bottom-5 md-custom:-bottom-6 lg:-bottom-8 right-0 translate-x-1/2 translate-y-1/2 ${corner}`} aria-hidden="true">+</span>
+
+    <div
+      class="absolute h-px w-[90%] left-1/2 -translate-x-1/2 translate-y-1/2 bg-secondary -bottom-5 md-custom:-bottom-6 lg:-bottom-8"
+    >
+    </div>
+    <div
+      class="projects-pagination absolute -bottom-2! lg:-bottom-4! md-custom:-bottom-3! translate-y-1/2 self-center left-1/2! -translate-x-1/2! flex justify-center"
+    >
+    </div>
+
+    <div
+      class="flex absolute left-1/2 -translate-x-1/2 -bottom-12 md-custom:-bottom-12 lg:-bottom-14 w-full translate-y-1/2 items-center justify-between text-secondary"
+      aria-live="polite"
+    >
+      <div class="w-full flex items-center justify-between" data-projects-label>
+        <span class="font-bold text-xl" data-projects-title>{projects[0].title}</span>
+        <span class="text-xl opacity-80">2025</span>
+      </div>
+    </div>
+  </div>
+
+  <button
+    type="button"
+    class="hidden lg:block projects-prev z-40 text-secondary absolute left-[20%] top-1/2 -translate-y-1/2 hover:scale-110 hover:bg-gray-300 rounded-full cursor-pointer transition-all duration-300"
+  >
+    <span class="sr-only">Prev</span>
+    <ArrowCircle class="w-8 h-8 transition duration-300 stroke-current rotate-90" />
+  </button>
+
+  <button
+    type="button"
+    class="hidden lg:block projects-next z-40 text-secondary absolute right-[20%] top-1/2 -translate-y-1/2 hover:scale-110 hover:bg-gray-300 rounded-full cursor-pointer transition-all duration-300"
+  >
+    <span class="sr-only">Next</span>
+    <ArrowCircle class="w-8 h-8 transition duration-300 stroke-current -rotate-90" />
+  </button>
+
+  <div
+    data-projects-swiper
+    class="swiper w-[90%] md-custom:w-[60%] md-custom:max-h-[50vh] lg:max-h-max lg:w-[55%] 2xl-custom:w-[50%] absolute! top-1/2! left-1/2! -translate-x-1/2! -translate-y-1/2 swiper-projects"
+  >
+    <div class="swiper-wrapper">
+      {
+        projects.map((project, index) => (
+          <div class="swiper-slide w-[90%]! lg:w-[60%]! h-full" data-project-title={project.title}>
+            <a href={project.href} class="slide-content block overflow-hidden h-full">
+              <span class="sr-only">{project.title}</span>
+              {project.image && (
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  widths={[480, 960]}
+                  sizes="(min-width: 1024px) 40vw, 90vw"
+                  quality={72}
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  decoding={index === 0 ? 'sync' : 'async'}
+                  class="slide-content-img w-full h-full object-cover"
+                />
+              )}
+            </a>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="projects-cta lg:hidden absolute left-1/2 -translate-x-1/2">
+    <PrimaryButton
+      href={localizePath('/projects', lang)}
+      class="bg-secondary px-4! py-4! text-lg hover:text-secondary font-bold"
+    >
+      {t('projects.button')}
+    </PrimaryButton>
+  </div>
+
+  <div class="projects-cta-lg hidden lg:block absolute left-1/2 -translate-x-1/2">
+    <PrimaryButton
+      href={localizePath('/projects', lang)}
+      class="bg-secondary font-bold px-4! py-4! text-lg text-primary hover:bg-secondary/50 hover:text-secondary"
+    >
+      {t('projects.button')}
+    </PrimaryButton>
+  </div>
+
+  <FooterBanner lang={lang} class="text-secondary" />
+</section>
+
+<style>
+  /* Mirrors the inline `bottom: calc(...)` the React version computed from
+     window.innerWidth; expressed as media queries so it is correct on paint. */
+  .projects-cta {
+    bottom: calc(30% - ((90vw * 0.506) / 2));
+  }
+
+  @media (min-width: 637px) {
+    .projects-cta {
+      bottom: calc(30% - ((60vw * 0.506) / 2));
+    }
+  }
+
+  .projects-cta-lg {
+    bottom: calc(35% - ((60vw * 0.337) / 2));
+  }
+
+  /* Without JS, Swiper never initialises — keep the first slide readable. */
+  @media (scripting: none) {
+    .swiper-projects .swiper-wrapper {
+      display: flex;
+      overflow-x: auto;
+      gap: 1rem;
+    }
+    .swiper-projects .swiper-slide {
+      flex: 0 0 90%;
+      pointer-events: auto;
+    }
+  }
+</style>

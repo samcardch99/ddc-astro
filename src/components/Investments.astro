@@ -1,0 +1,86 @@
+---
+import FooterBanner from './FooterBanner.astro';
+import PrimaryButton from './PrimaryButton.astro';
+import AnimatedBackground from './AnimatedBackground.astro';
+import { localizePath, useTranslations, useTransHtml, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const transHtml = useTransHtml(lang);
+
+const plus = 'text-primary opacity-40 text-2xl lg:text-4xl';
+---
+<section
+  id="investments"
+  data-investments
+  class="w-full h-auto xl:min-h-screen flex flex-col justify-center bg-primary z-20 gap-12 py-32 px-8 items-center relative"
+>
+  <div class="absolute inset-0 -z-10 opacity-80 bg-black"></div>
+  <AnimatedBackground />
+
+  <div class="flex flex-col w-full gap-4 justify-start items-start 2xl:relative 2xl:inset-auto 2xl:px-0">
+    <div class="flex w-full justify-between items-center">
+      <h2 data-inv-title class="lg:text-5xl text-[2.1rem] lg:leading-normal leading-10 font-bold">
+        {t('investments.title')}
+      </h2>
+      <PrimaryButton
+        href={localizePath('/investments', lang)}
+        class="top-btn hidden lg:block bg-primary text-xl py-3! px-6! text-secondary hover:text-primary"
+      >
+        {t('investments.button')}
+      </PrimaryButton>
+    </div>
+    <div class="flex flex-col">
+      <p data-inv-subtitle class="lg:text-xl text-left">{t('investments.subtitle')}</p>
+      <span class="mt-2">(Construction First)</span>
+    </div>
+    <PrimaryButton
+      href={localizePath('/investments', lang)}
+      class="mobile-btn bg-primary mt-6 text-secondary self-center lg:hidden hover:text-primary"
+    >
+      {t('investments.button')}
+    </PrimaryButton>
+  </div>
+
+  <div class="flex flex-col w-full lg:gap-12 max-w-[90%] lg:max-w-[70%] h-auto">
+    <div class="lg:flex-row flex flex-col">
+      <div class="inv-block w-full h-full flex flex-col justify-center items-center relative py-6 lg:py-0">
+        <span class={`absolute -top-5 left-0 -translate-x-1/2 lg:-translate-x-1/2 ${plus}`} aria-hidden="true">+</span>
+        <span class={`absolute -top-5 lg:-bottom-5 lg:top-auto right-0 lg:right-full translate-x-1/2 lg:translate-x-1/2 ${plus}`} aria-hidden="true">+</span>
+        <h3 class="lg:text-4xl text-2xl text-center font-bold" set:html={transHtml('investments.grid.1.title')} />
+        <p class="text-gray-400 text-sm text-center">{t('investments.grid.1.description')}</p>
+      </div>
+
+      <div class="inv-block lg:border-l lg:border-primary w-full h-full flex flex-col justify-center items-center relative py-6 lg:py-0">
+        <div class="lg:hidden absolute top-0 left-1/2 -translate-x-1/2 w-[85%] h-[0.5px] bg-primary"></div>
+        <span class={`absolute top-0 lg:-top-5 right-0 -translate-y-1/2 lg:translate-y-0 translate-x-1/2 lg:translate-x-1/2 ${plus}`} aria-hidden="true">+</span>
+        <span class={`absolute lg:-bottom-5 lg:top-auto top-0 left-0 lg:left-full -translate-x-1/2 lg:-translate-x-1/2 -translate-y-1/2 lg:translate-y-0 ${plus}`} aria-hidden="true">+</span>
+        <h3 class="lg:text-4xl text-2xl font-bold text-center" set:html={transHtml('investments.grid.2.title')} />
+        <p class="text-gray-400 text-sm text-center">{t('investments.grid.2.description')}</p>
+      </div>
+    </div>
+
+    <div class="hidden lg:block w-full bg-primary h-[0.5px]"></div>
+
+    <div class="lg:flex-row flex flex-col">
+      <div class="inv-block w-full h-full flex flex-col justify-center items-center relative py-6 lg:py-0">
+        <div class="lg:hidden absolute top-0 left-1/2 -translate-x-1/2 w-[85%] h-[0.5px] bg-primary"></div>
+        <span class={`absolute top-0 lg:-top-5 left-0 -translate-x-1/2 lg:-translate-x-1/2 -translate-y-1/2 lg:translate-y-0 ${plus}`} aria-hidden="true">+</span>
+        <span class={`absolute top-0 lg:-bottom-5 lg:top-auto right-0 lg:right-full -translate-y-1/2 lg:translate-y-0 translate-x-1/2 lg:translate-x-1/2 ${plus}`} aria-hidden="true">+</span>
+        <h3 class="lg:text-4xl text-2xl text-center font-bold" set:html={transHtml('investments.grid.3.title')} />
+        <p class="text-gray-400 text-sm text-center">{t('investments.grid.3.description')}</p>
+      </div>
+
+      <div class="inv-block lg:border-l lg:border-primary w-full h-full flex flex-col justify-center items-center relative py-6 lg:py-0">
+        <div class="lg:hidden absolute top-0 left-1/2 -translate-x-1/2 w-[85%] h-[0.5px] bg-primary"></div>
+        <span class={`absolute top-0 lg:-top-5 right-0 -translate-y-1/2 lg:translate-y-0 translate-x-1/2 lg:translate-x-1/2 ${plus}`} aria-hidden="true">+</span>
+        <span class={`absolute lg:-bottom-5 lg:top-auto top-0 left-0 lg:left-full -translate-x-1/2 lg:-translate-x-1/2 -translate-y-1/2 lg:translate-y-0 ${plus}`} aria-hidden="true">+</span>
+        <h3 class="lg:text-4xl text-2xl font-bold text-center" set:html={transHtml('investments.grid.4.title')} />
+        <p class="text-gray-400 text-sm text-center">{t('investments.grid.4.description')}</p>
+      </div>
+    </div>
+  </div>
+
+  <FooterBanner lang={lang} class="text-primary" />
+</section>

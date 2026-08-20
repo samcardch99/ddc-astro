@@ -1,0 +1,98 @@
+---
+import { Image } from 'astro:assets';
+import FooterBanner from '../FooterBanner.astro';
+import AnimatedBackground from '../AnimatedBackground.astro';
+import InvestmentCard from '../InvestmentCard.astro';
+import InvestmentDialog from '../InvestmentDialog.astro';
+import LeadConnectorWidget from '../LeadConnectorWidget.astro';
+import mapDesktop from '../../assets/investments/investment_map1.png';
+import mapMobile from '../../assets/investments/investment_map_mobile.png';
+import items from '../../data/investments.json';
+import { useTranslations, type Lang } from '../../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+/** The desktop layout offsets the two cards; the mobile one stacks them. */
+const desktopCards = [
+  { title: 'Miami Premium ', class: 'w-fit -translate-y-[20%]', contentKey: 3 },
+  { title: 'Miami Lux', class: 'w-fit translate-y-[35%]', contentKey: 4 },
+];
+---
+<section
+  class="min-h-screen h-auto w-full relative z-20 pt-32 bg-primary px-8 pb-20 lg:px-0 lg:pb-0 flex flex-col gap-16 lg:gap-0"
+>
+  <div class="absolute inset-0 -z-10 bg-black/80"></div>
+  <AnimatedBackground />
+
+  <!-- Desktop: interactive map beside the offset plan cards -->
+  <div class="hidden lg:flex gap-2 lg:scale-75 xl:scale-100 justify-center items-center h-[80vh]">
+    <Image
+      src={mapDesktop}
+      alt="Investment map"
+      widths={[720, 1440]}
+      sizes="50vw"
+      format="webp"
+      quality={80}
+      loading="eager"
+      class="h-full w-auto object-contain"
+    />
+
+    <div class="flex flex-col">
+      {
+        desktopCards.map((card) => (
+          <InvestmentCard
+            lang={lang}
+            title={card.title}
+            class={card.class}
+            assetType={t(`investments_inside.card.content.${card.contentKey}.active`)}
+            constructionTerm={t(`investments_inside.card.content.${card.contentKey}.time`)}
+            investorProfile={t(`investments_inside.card.content.${card.contentKey}.profile`)}
+          />
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- Mobile: stacked map + cards -->
+  <Image
+    src={mapMobile}
+    alt="Investment map"
+    widths={[480, 960]}
+    sizes="100vw"
+    format="webp"
+    quality={80}
+    loading="eager"
+    class="lg:hidden w-full h-auto object-contain"
+  />
+
+  <div class="flex flex-col justify-center items-center gap-8">
+    <h1 class="text-5xl font-bold self-start lg:sr-only">{t('investments_inside.card.title')}</h1>
+    <div class="lg:hidden flex flex-col justify-center items-center gap-8 w-full">
+    {
+      items.map((card, i) => (
+        <InvestmentCard
+          lang={lang}
+          title={card.title}
+          assetType={t(`investments_inside.card.content.${i + 1}.active`)}
+          constructionTerm={t(`investments_inside.card.content.${i + 1}.time`)}
+          investorProfile={t(`investments_inside.card.content.${i + 1}.profile`)}
+        />
+      ))
+    }
+    </div>
+  </div>
+
+  <LeadConnectorWidget class="lg:scale-90 lg:mt-16" />
+
+  <div class="hidden lg:block absolute lg:sticky bottom-0 left-0 w-full">
+    <FooterBanner lang={lang} class="text-primary px-8" />
+    <div
+      class="bottom-0 left-0 w-full h-[10vh] lg:h-[15vh] pointer-events-none bg-linear-to-t from-black to-transparent"
+    >
+    </div>
+  </div>
+
+  <InvestmentDialog lang={lang} />
+</section>

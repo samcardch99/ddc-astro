@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Team from '../components/Team.astro';
+import TeamMobile from '../components/TeamMobile.astro';
+import OurCultureMobile from '../components/OurCultureMobile.astro';
+import { getMeta } from '../lib/seo';
+import type { Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const meta = getMeta('/team', lang);
+---
+<BaseLayout lang={lang} path="/team" title={meta.title} description={meta.description}>
+  <main class="w-full h-auto">
+    <div class="hidden lg:block"><Team lang={lang} headingLevel={1} /></div>
+    <div class="lg:hidden">
+      <TeamMobile lang={lang} headingLevel={1} />
+      <OurCultureMobile lang={lang} />
+    </div>
+  </main>
+</BaseLayout>

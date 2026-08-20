@@ -1,0 +1,38 @@
+[
+  {
+    "description": "~30% lower cost",
+    "icon": "cheap.svg"
+  },
+  {
+    "description": "60–70% faster",
+    "icon": "faster.svg"
+  },
+  {
+    "description": "Higher quality & precision",
+    "icon": "quality.png"
+  },
+  {
+    "description": "Steel-reinforced modular structures",
+    "icon": "steel.png"
+  },
+  {
+    "description": "Greater structural efficiency",
+    "icon": "efficiency.svg"
+  },
+  {
+    "description": "Durability",
+    "icon": "durability.svg"
+  },
+  {
+    "description": "Low maintenance",
+    "icon": "maintenance.png"
+  },
+  {
+    "description": "Adaptable & scalable",
+    "icon": "scalable.png"
+  },
+  {
+    "description": "100% recyclable steel (with recycled content)",
+    "icon": "recyclable.svg"
+  }
+]

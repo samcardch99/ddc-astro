@@ -1,0 +1,174 @@
+---
+import { Image } from 'astro:assets';
+import FooterBanner from '../FooterBanner.astro';
+import PrimaryButton from '../PrimaryButton.astro';
+import technologies from '../../data/technologies.json';
+import { technologyAsset } from '../../lib/images';
+import { localizePath, useTranslations, useTransHtml, type Lang } from '../../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const transHtml = useTransHtml(lang);
+
+const cards = ['01', '02', '03', '04', '05'].map((number, i) => ({
+  number,
+  index: i,
+  asset: technologyAsset(`${i + 1}.jpg`),
+}));
+
+const stats = technologies.map((tech, i) => ({
+  index: i,
+  asset: technologyAsset(tech.icon),
+  description: t(`technology_statistics.${i + 1}.description`),
+}));
+
+const onSite = [1, 2, 3, 4, 5, 6].map((n) => ({ n, asset: technologyAsset(`obra${n}.jpeg`) }));
+const corner = 'text-secondary opacity-40 text-2xl';
+---
+<section
+  data-technologies-inside
+  class="w-full pt-32 relative bg-primary z-20 flex flex-col justify-start items-center lg:gap-20"
+>
+  <div class="-z-10 bg-primary mix-blend-screen"></div>
+
+  <div class="flex flex-col w-full gap-4 justify-start items-start px-8 pb-20 lg:pb-0 isolate">
+    <div class="flex w-full justify-between items-center text-secondary">
+      <h1 data-reveal-lines class="lg:text-5xl text-[2rem] lg:leading-normal leading-10 font-bold">
+        {t('technology_inside.title')}
+      </h1>
+      <PrimaryButton
+        href={`${localizePath('/investments', lang)}#appointment`}
+        class="top-cta hidden lg:block bg-secondary text-xl py-3! px-6! hover:text-secondary text-primary"
+      >
+        {t('technology_inside.button')}
+      </PrimaryButton>
+    </div>
+
+    <p
+      data-reveal-lines
+      class="lg:text-xl text-secondary text-left"
+      set:html={transHtml('technology_inside.subtitle', '<br />')}
+    />
+
+    <PrimaryButton
+      href={`${localizePath('/investments', lang)}#appointment`}
+      class="mobile-cta bg-secondary mt-6 text-primary lg:hidden"
+    >
+      {t('technology_inside.button')}
+    </PrimaryButton>
+  </div>
+
+  <div
+    class="grid grid-cols-1 grid-rows-none md:grid-cols-3 md:grid-rows-2 lg:grid-cols-3 lg:grid-rows-2 w-full md:gap-x-10 lg:gap-x-28 gap-y-20 md:gap-y-12 lg:gap-y-20 items-center justify-center px-8 md:px-10 lg:px-16 pb-16"
+  >
+    {
+      cards.map((card) => (
+        <div class="tech-card flex group w-full min-h-fit aspect-[4/3] flex-col justify-between items-start gap-4 p-8 text-primary bg-[#131415] relative">
+          <span class={`absolute -top-8 left-0 lg:-left-2 -translate-x-1/2 ${corner} z-50`} aria-hidden="true">+</span>
+          <span class={`absolute -top-8 right-0 lg:-right-2 translate-x-1/2 ${corner}`} aria-hidden="true">+</span>
+          <span class={`absolute -bottom-8 left-0 lg:-left-2 -translate-x-1/2 ${corner}`} aria-hidden="true">+</span>
+          <span class={`absolute -bottom-8 right-0 lg:-right-2 translate-x-1/2 ${corner}`} aria-hidden="true">+</span>
+
+          <div class="absolute overflow-hidden inset-0 z-30 pointer-events-none">
+            {card.asset && (
+              <Image
+                src={card.asset}
+                alt=""
+                widths={[480, 960]}
+                sizes="(min-width: 768px) 30vw, 90vw"
+                quality={72}
+                loading="lazy"
+                decoding="async"
+                class="tech-card-img opacity-100 absolute h-full w-full z-30 object-cover group-hover:scale-[1000%] group-hover:opacity-0 transition-all duration-700 ease-in-out"
+              />
+            )}
+          </div>
+
+          <h2 class="tech-card-number opacity-0 scale-0 text-6xl md:text-[clamp(1.5rem,3.5vw,2.5rem)] lg:text-6xl font-bold border-b border-primary w-full text-left group-hover:scale-100 group-hover:opacity-100 transition-all duration-700 ease-in-out">
+            {card.number}
+          </h2>
+          <p class="tech-card-text opacity-0 scale-0 w-full text-left group-hover:scale-100 group-hover:opacity-100 transition-all duration-700 ease-in-out text-[clamp(0.9rem,1vw,1.25rem)] md:text-[clamp(0.62rem,1.4vw,0.85rem)] lg:text-[clamp(0.9rem,1vw,1.25rem)]">
+            {t(`technology_cards.${card.index + 1}.description`)}
+          </p>
+        </div>
+      ))
+    }
+  </div>
+
+  <div
+    class="stats-grid grid md:grid-cols-3 md:grid-rows-3 lg:grid-cols-3 lg:grid-rows-3 grid-flow-row w-full md:gap-x-10 lg:gap-x-28 gap-y-20 md:gap-y-12 lg:gap-y-20 px-8 md:px-10 lg:px-16 pt-20"
+  >
+    {
+      stats.map((stat) => (
+        <div class="stat-card relative aspect-[3.5/1] w-full flex px-4 py-4 justify-between">
+          <span class={`absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 ${corner}`} aria-hidden="true">+</span>
+          <span class={`absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 ${corner}`} aria-hidden="true">+</span>
+          <span class={`absolute bottom-0 left-0 -translate-x-1/2 translate-y-1/2 ${corner}`} aria-hidden="true">+</span>
+          <span class={`absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2 ${corner}`} aria-hidden="true">+</span>
+          {stat.asset && (
+            <Image
+              src={stat.asset}
+              alt=""
+              width={96}
+              height={96}
+              quality={80}
+              loading="lazy"
+              decoding="async"
+              class="object-contain h-12 w-12 self-center"
+            />
+          )}
+          <p class="text-xs lg:text-base text-secondary self-center max-w-[70%] text-end">
+            {stat.description}
+          </p>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="w-full flex flex-col gap-10 px-8 md:px-10 lg:px-16 pt-20">
+    <div class="flex flex-col gap-4 justify-start items-start">
+      <h2 class="lg:text-5xl text-[2rem] lg:leading-normal leading-10 font-bold text-secondary text-left">
+        {t('technology_inside.images_title')}
+      </h2>
+      <p class="lg:text-xl text-secondary text-left">{t('technology_inside.images_subtitle')}</p>
+    </div>
+
+    <div
+      class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 w-full md:gap-x-10 lg:gap-x-28 gap-y-20 md:gap-y-12 lg:gap-y-20"
+    >
+      {
+        onSite.map((item) => (
+          <div class="relative w-full aspect-[3/4]">
+            <span class={`absolute -top-3 -left-3 -translate-x-1/2 -translate-y-1/2 ${corner} z-10`} aria-hidden="true">+</span>
+            <span class={`absolute -top-3 -right-3 translate-x-1/2 -translate-y-1/2 ${corner} z-10`} aria-hidden="true">+</span>
+            <span class={`absolute -bottom-3 -left-3 -translate-x-1/2 translate-y-1/2 ${corner} z-10`} aria-hidden="true">+</span>
+            <span class={`absolute -bottom-3 -right-3 translate-x-1/2 translate-y-1/2 ${corner} z-10`} aria-hidden="true">+</span>
+            <div class="w-full h-full overflow-hidden">
+              {item.asset && (
+                <Image
+                  src={item.asset}
+                  alt={`Obra ${item.n}`}
+                  widths={[480, 960]}
+                  sizes="(min-width: 768px) 30vw, 90vw"
+                  quality={72}
+                  loading="lazy"
+                  decoding="async"
+                  class="w-full h-full object-cover"
+                />
+              )}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="sticky bottom-0 left-0 w-full mt-auto">
+    <FooterBanner lang={lang} class="text-secondary" />
+    <div
+      class="pointer-events-none z-30 w-full h-[15vh] bg-linear-to-t from-primary from-50% to-transparent"
+    >
+    </div>
+  </div>
+</section>

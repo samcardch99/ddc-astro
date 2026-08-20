@@ -1,0 +1,38 @@
+[
+
+  {
+    "number": "1",
+    "title": "Market analysis",
+    "content": "We validate demand, pricing, and absorption in the target area, and review zoning, utilities, and site risks. The outcome is a clear go/no-go with a preliminary schedule and cost window.",
+    "image": "/assets/accordion/1.jpeg",
+    "alt": "Image representing market analysis"
+  },
+  {
+    "number": "2",
+    "title": "Financing & loan management",
+    "content": "We assemble the lender package, secure terms with regional banks, and coordinate appraisal and closing. During the build, we manage draw schedules, inspections, and compliance so funds flow on time.",
+    "image": "/assets/accordion/2.jpeg",
+    "alt": "Image representing financing and loan management"
+  },
+  {
+    "number": "3",
+    "title": "Architectural project",
+    "content": "We develop the design aligned to the panelized steel system—walls, roof, and floor—defining service paths, openings, and connection details. You receive permit-ready plans, panel schedules, and a crane/assembly plan.",
+    "image": "/assets/accordion/3.jpg",    
+    "alt": "Image representing architectural project"
+  },
+  {
+    "number": "4",
+    "title": "Modular construction (3-4 months)",
+    "content": "Panels are fabricated with Florida partners, labeled for traceability, and delivered to site for a repeatable assembly sequence: layout → first lift → lock & align → close-in. Quality checks are documented at each stage until punchlist close-out.",
+    "image": "/assets/accordion/4.jpg",
+    "alt": "Image representing modular construction"
+  },
+  {
+    "number": "5",
+    "title": "Pre-sale & exclusive sales",
+    "content": "With Tsalach Real Estate, we set the go-to-market plan—positioning, pricing, and launch calendar—then manage leads, reservations, and closings. Buyers get clear documentation and timelines from the first contact to handover.",
+    "image": "/assets/accordion/5.webp",
+    "alt": "Image representing pre-sale and exclusive sales"
+  }
+]

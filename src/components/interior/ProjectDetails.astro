@@ -1,0 +1,250 @@
+---
+import { getImage } from 'astro:assets';
+import FooterBanner from '../FooterBanner.astro';
+import AnimatedBackground from '../AnimatedBackground.astro';
+import { renderGallery, realGallery } from '../../lib/images';
+import { useTranslations, type Lang } from '../../i18n/ui';
+
+interface Villa {
+  name: string;
+  folder: string;
+  address: string;
+  bedrooms?: number | null;
+  bathrooms?: number | null;
+  total_images: number;
+  total_real_images?: number | null;
+  areas_info?: string | null;
+}
+
+interface Props {
+  lang: Lang;
+  project: Villa;
+}
+
+const { lang, project } = Astro.props;
+const t = useTranslations(lang);
+
+/** Two derivatives per photo: a 480 px card and a 1200 px lightbox source. */
+async function toGallery(entries: ReturnType<typeof renderGallery>) {
+  return Promise.all(
+    entries.map(async ({ image, index }) => {
+      const [card, full] = await Promise.all([
+        getImage({ src: image, width: 480, format: 'webp', quality: 72 }),
+        getImage({ src: image, width: 1200, format: 'webp', quality: 72 }),
+      ]);
+      return {
+        index,
+        src: card.src,
+        srcset: `${card.src} 480w, ${full.src} 1200w`,
+        full: full.src,
+        width: card.attributes.width ?? 480,
+        height: card.attributes.height,
+      };
+    }),
+  );
+}
+
+const renders = await toGallery(renderGallery(project.folder, project.total_images));
+const reales = project.total_real_images
+  ? await toGallery(realGallery(project.folder, project.total_real_images))
+  : [];
+---
+<section
+  id="project-details"
+  data-project-details
+  data-folder={project.folder}
+  data-has-reales={reales.length > 0 ? 'true' : 'false'}
+  data-mode="renders"
+  class="relative z-20 min-h-screen w-full flex flex-col gap-16 pt-24 bg-primary"
+>
+  <div class="absolute inset-0 -z-10 bg-black opacity-80"></div>
+  <AnimatedBackground />
+
+  <div class="relative project-hero">
+    <div class="px-8 mb-6">
+      <div class="flex flex-col w-full items-start">
+        <h1 class="text-4xl font-bold text-primary mb-2" style="--i:0">{project.name}</h1>
+        <p class="font-bold text-sm lg:text-lg text-primary/80" style="--i:1">{project.address}</p>
+
+        <p class="font-semibold text-sm lg:text-lg mb-4 text-primary/80" style="--i:2">
+          {
+            project.areas_info ? (
+              <span>{t(`project_details.project_description.${project.folder}.areas_info`)}</span>
+            ) : (
+              <>
+                <span>{project.bedrooms} </span>
+                <span>{t('project_details.bedrooms')}</span>
+                <span> ● </span>
+                <span>{project.bathrooms}</span>
+                <span> {t('project_details.bathrooms')}</span>
+              </>
+            )
+          }
+        </p>
+
+        <p class="text-xs lg:text-lg lg:w-3/5" style="--i:3">
+          {t(`project_details.project_description.${project.folder}.description`)}
+        </p>
+
+        {
+          reales.length > 0 && (
+            <div class="w-full flex justify-end mt-4" style="--i:4">
+              <div class="flex items-center gap-2 text-white" role="group">
+                <button
+                  type="button"
+                  data-photo-mode="renders"
+                  aria-pressed="true"
+                  class="photo-mode-btn flex items-center gap-1.5 py-1 rounded-lg text-sm font-semibold transition-colors text-grey/50 hover:bg-white/20"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4" aria-hidden="true">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                    <line x1="12" y1="22.08" x2="12" y2="12" />
+                  </svg>
+                  {t('project_details.renders')}
+                </button>
+                <span class="text-primary/50" aria-hidden="true">/</span>
+                <button
+                  type="button"
+                  data-photo-mode="reales"
+                  aria-pressed="false"
+                  class="photo-mode-btn flex items-center gap-1.5 py-1 rounded-lg text-sm font-semibold transition-colors text-grey/50 hover:bg-white/20"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4" aria-hidden="true">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                    <circle cx="12" cy="13" r="4" />
+                  </svg>
+                  {t('project_details.reales')}
+                </button>
+              </div>
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="px-8 pb-32 min-h-screen">
+    {
+      (
+        [
+          ['renders', renders],
+          ['reales', reales],
+        ] as const
+      ).map(
+        ([mode, list]) =>
+          list.length > 0 && (
+            <div
+              class="project-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10"
+              data-gallery={mode}
+              hidden={mode !== 'renders'}
+            >
+              {list.map((photo, i) => (
+                <article
+                  class="group aspect-video p-3 relative cursor-pointer"
+                  style={`--i:${i}`}
+                >
+                  <span class="left-span absolute -bottom-8 lg:-bottom-4 left-0 lg:-left-5 -translate-x-1/2 text-primary opacity-40 text-2xl lg:hidden" aria-hidden="true">
+                    +
+                  </span>
+                  <span class="right-span absolute -bottom-8 right-0 lg:-right-5 translate-x-1/2 text-primary opacity-40 text-2xl" aria-hidden="true">
+                    +
+                  </span>
+                  <div class="overflow-hidden shadow-[0_18px_35px_-10px_rgba(0,0,0,.45)]">
+                    <button
+                      type="button"
+                      class="block w-full"
+                      data-lightbox-open
+                      data-full={photo.full}
+                      data-gallery-mode={mode}
+                      data-position={i}
+                    >
+                      <span class="sr-only">{`${project.name} — ${i + 1}`}</span>
+                      <img
+                        src={photo.src}
+                        srcset={photo.srcset}
+                        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 90vw"
+                        alt={`${project.name} ${i + 1}`}
+                        width={photo.width}
+                        height={photo.height}
+                        loading={i < 3 && mode === 'renders' ? 'eager' : 'lazy'}
+                        decoding={i < 3 && mode === 'renders' ? 'sync' : 'async'}
+                        class="h-[180px] sm:h-[200px] md:h-[220px] lg:aspect-video lg:h-full w-full object-contain"
+                      />
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ),
+      )
+    }
+  </div>
+
+  <div class="project-footer sticky inset-x-0 bottom-0 mix-blend-difference">
+    <FooterBanner lang={lang} />
+  </div>
+</section>
+
+<style>
+  .project-hero > div > div > * {
+    animation: ddc-fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(0.15s + var(--i, 0) * 0.08s);
+  }
+
+  .project-grid > article {
+    animation: ddc-card-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(0.15s + min(var(--i, 0), 12) * 0.06s);
+  }
+
+  .project-grid[hidden] {
+    display: none;
+  }
+
+  .project-footer {
+    animation: ddc-fade-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @keyframes ddc-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .photo-mode-btn[aria-pressed='true'] {
+    color: var(--color-primary);
+  }
+
+  @keyframes ddc-fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes ddc-card-in {
+    from {
+      opacity: 0;
+      transform: translateY(18px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-hero > div > div > *,
+    .project-grid > article,
+    .project-footer {
+      animation: none;
+    }
+  }
+</style>

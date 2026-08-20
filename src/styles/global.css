@@ -1,0 +1,322 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Design tokens — 1:1 port of the Tailwind v3 `theme.extend` from ddc-redesign
+   --------------------------------------------------------------------------- */
+@theme {
+  /* The whole breakpoint scale is redeclared in ascending order and in `rem`.
+     Tailwind v4 emits `px` breakpoints in a separate group from the `rem`
+     defaults, which would make `xl:` win over `2xl-prev:` at 1440px and shrink
+     the root font size — the opposite of the v3 behaviour. Same values as the
+     original tailwind.config.js: 637px, 860px, 1440px, 2000px, 3200px. */
+  --breakpoint-*: initial;
+  --breakpoint-md-custom: 39.8125rem; /* 637px */
+  --breakpoint-sm: 40rem; /* 640px */
+  --breakpoint-md: 48rem; /* 768px */
+  --breakpoint-md-860px: 53.75rem; /* 860px */
+  --breakpoint-lg: 64rem; /* 1024px */
+  --breakpoint-xl: 80rem; /* 1280px */
+  --breakpoint-2xl-prev: 90rem; /* 1440px */
+  --breakpoint-2xl: 96rem; /* 1536px */
+  --breakpoint-2xl-custom: 125rem; /* 2000px */
+  --breakpoint-3xl-custom: 200rem; /* 3200px */
+
+  --color-primary: #c2c7cf;
+  --color-secondary: #0f1931;
+  --color-tertiary: #162d57;
+  --color-grey: #bac0c6;
+  --color-green: #37361c;
+
+  /* Exactly the original stack. Adding ui-sans-serif/system-ui in front of the
+     generic keyword changes which font supplies glyphs Noirden lacks (e.g. the
+     ● separator on project pages renders noticeably larger in SF Pro). */
+  --font-sans: "Noirden", sans-serif;
+}
+
+/* ---------------------------------------------------------------------------
+   Tailwind v3 compatibility: v4 changed two defaults that the original design
+   relies on. Restoring them keeps the port pixel-faithful.
+   --------------------------------------------------------------------------- */
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-gray-400);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Base document styles (ported from src/index.css)
+   --------------------------------------------------------------------------- */
+:root {
+  line-height: 1.5;
+  font-weight: 400;
+  @apply tracking-widest;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #c2c7cf;
+}
+
+html {
+  @apply lg:text-[0.9rem] xl:text-[0.71rem] 2xl-prev:text-base 2xl:text-base 2xl-custom:text-[1.33rem] 3xl-custom:text-[2rem];
+  scroll-behavior: auto;
+}
+
+body {
+  background-color: #0f1931;
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 100vw;
+  width: 100vw;
+  min-height: 100dvh;
+  @apply text-primary font-sans;
+  overflow-x: hidden;
+}
+
+#root,
+.app-root {
+  width: 100vw;
+}
+
+/* ---------------------------------------------------------------------------
+   Cover parallax background
+   --------------------------------------------------------------------------- */
+.cover {
+  position: relative;
+  overflow: hidden;
+  --bg-y: 0vh;
+}
+
+.cover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/bg/bg-sm.webp");
+  background-size: cover;
+  background-position: center;
+  filter: brightness(55%);
+  transform: translate3d(20%, var(--bg-y), 0) scale(1.4);
+  will-change: transform;
+  z-index: -1;
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .cover::before {
+    background-image: url("/bg/bg-md.webp");
+    transform: translate3d(0, var(--bg-y), 0) scale(1.3);
+  }
+}
+
+@media (min-width: 1024px) {
+  .cover::before {
+    background-image: url("/bg/bg-lg.webp");
+  }
+}
+
+@media (min-width: 1280px) {
+  .cover::before {
+    background-image: url("/bg/bg-xl.webp");
+  }
+}
+
+.stroke-text {
+  -webkit-text-stroke: 1px #c2c7cf;
+  color: transparent;
+}
+
+/* ---------------------------------------------------------------------------
+   Header colour states, toggled by ScrollTrigger
+   --------------------------------------------------------------------------- */
+#header {
+  @apply transition-colors duration-500;
+}
+
+#header.is-dark {
+  mix-blend-mode: normal;
+  @apply text-secondary;
+}
+
+#header.is-clear {
+  mix-blend-mode: normal;
+  @apply text-primary;
+}
+
+#header.is-dark svg {
+  @apply text-secondary;
+}
+
+#header.is-clear svg {
+  @apply text-primary;
+}
+
+#header.is-dark2 svg {
+  @apply text-secondary;
+}
+
+.hamburger-dark {
+  @apply bg-primary;
+}
+
+.hamburger-clear {
+  @apply bg-secondary;
+}
+
+/* ---------------------------------------------------------------------------
+   Utilities
+   --------------------------------------------------------------------------- */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-sign {
+  display: none;
+}
+
+/* Word/line reveal wrappers.
+   GSAP's `mask` option clones each word/line into a `*-mask` element and sets
+   `overflow: clip` inline. `clip` does not make the box a scroll container, so
+   an inline-block keeps its text baseline and the heading ends up ~12px
+   shorter than the original, which used `overflow: hidden`. Forcing `hidden`
+   restores the original line box. */
+.wordWrapper-mask {
+  overflow: hidden !important;
+  display: inline-block;
+}
+
+.lineWrapper-mask {
+  overflow: hidden !important;
+  display: block;
+}
+
+/* ---------------------------------------------------------------------------
+   Swiper — project carousel
+   --------------------------------------------------------------------------- */
+.swiper-projects .swiper-slide {
+  pointer-events: none;
+  z-index: 1;
+}
+
+.swiper-projects .swiper-slide-active,
+.swiper-projects .swiper-slide-duplicate-active {
+  pointer-events: auto;
+  z-index: 50;
+  cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .swiper-slide .slide-content {
+    transition: all 0.3s ease;
+    opacity: 0.3;
+  }
+
+  .swiper-slide-active .slide-content {
+    transition: all 0.3s ease;
+    opacity: 1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .swiper-slide .slide-content {
+    @apply bg-primary;
+  }
+
+  .swiper-slide-active .slide-content {
+    @apply bg-primary;
+  }
+
+  .swiper-slide .slide-content-img {
+    @apply opacity-30;
+    transition: opacity 0.25s ease-in-out;
+  }
+
+  .swiper-slide-active .slide-content-img {
+    @apply opacity-100;
+    transition: opacity 0.25s ease-in-out;
+  }
+}
+
+.projects-pagination {
+  line-height: 0;
+}
+
+.projects-pagination .swiper-pagination-bullet {
+  width: 1rem;
+  height: 0.25rem;
+  border-radius: 9999px;
+  background: #7b8794;
+  opacity: 0.35;
+  margin: 0 6px !important;
+  transition: transform 0.25s ease, opacity 0.25s ease,
+    background-color 0.25s ease, width 0.25s ease;
+}
+
+.projects-pagination .swiper-pagination-bullet-active {
+  background: #203247;
+  opacity: 1;
+  width: 1rem;
+}
+
+.projects-pagination .swiper-pagination-bullet:hover,
+.projects-pagination .swiper-pagination-bullet:focus-visible {
+  opacity: 0.8;
+  transform: translateY(-1px);
+  outline: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Contact form
+   --------------------------------------------------------------------------- */
+#contact svg {
+  @apply shadow-none;
+}
+
+#contact input,
+#contact select,
+#contact textarea {
+  @apply text-secondary;
+}
+
+#our-projects select {
+  @apply text-primary;
+}
+
+#our-projects select option {
+  @apply bg-primary text-secondary;
+}
+
+/* ---------------------------------------------------------------------------
+   Lightbox (replaces react-photo-view)
+   --------------------------------------------------------------------------- */
+.lightbox-backdrop {
+  background: rgba(15, 25, 49, 1);
+  filter: brightness(0.5);
+}
+
+/* ---------------------------------------------------------------------------
+   Reduced motion — every scripted animation checks this too.
+   --------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

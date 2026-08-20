@@ -1,0 +1,14 @@
+---
+import ProjectDetailPage from '../../views/ProjectDetailPage.astro';
+import villas from '../../data/villas.json';
+
+export function getStaticPaths() {
+  return villas.map((project) => ({
+    params: { project: project.folder },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+---
+<ProjectDetailPage lang="en" project={project} />

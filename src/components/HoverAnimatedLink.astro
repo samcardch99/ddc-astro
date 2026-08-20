@@ -1,0 +1,33 @@
+---
+interface Props {
+  text: string;
+  href: string;
+  class?: string;
+  target?: string;
+  rel?: string;
+  'data-close-menu'?: boolean;
+}
+
+const { text, href, class: className = '', target, rel, ...rest } = Astro.props;
+const base = 'block transition-transform duration-200';
+---
+<a
+  href={href}
+  target={target}
+  rel={rel ?? (target === '_blank' ? 'noopener noreferrer' : undefined)}
+  class={`hover-animated-link relative inline-block overflow-hidden group ${className}`}
+  {...rest}
+>
+  <span class={`${base} group-hover:-translate-y-full`}>{text}</span>
+  <span
+    class={`absolute top-full left-0 w-full ${base} duration-200 group-hover:-translate-y-full`}
+    aria-hidden="true">{text}</span
+  >
+</a>
+
+<style is:global>
+  /* Touch devices have no hover, so a tap plays the same roll-up for 1s. */
+  .hover-animated-link.is-active > span {
+    transform: translateY(-100%);
+  }
+</style>
