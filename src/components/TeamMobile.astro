@@ -15,11 +15,12 @@ const { lang, headingLevel = 2 } = Astro.props;
 const Heading = `h${headingLevel}` as const;
 const t = useTranslations(lang);
 
+// See Team.astro: the `class` field in team.json never produced any CSS in
+// the original build, so the framing comes from the component alone.
 const people = members.map((m, i) => ({
   ...m,
   index: i,
   asset: employeeAsset(m.image),
-  extraClass: (m as { class?: string }).class ?? 'object-top',
 }));
 ---
 <section class="h-auto w-full pt-32 text-primary bg-primary z-20 relative">
@@ -59,7 +60,7 @@ const people = members.map((m, i) => ({
                       quality={72}
                       loading="lazy"
                       decoding="async"
-                      class={`absolute inset-0 w-full h-full object-cover ${person.extraClass}`}
+                      class="absolute inset-0 w-full h-full object-cover object-top"
                     />
                   )}
                 </div>

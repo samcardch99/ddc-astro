@@ -17,11 +17,14 @@ const { lang, headingLevel = 2 } = Astro.props;
 const Heading = `h${headingLevel}` as const;
 const t = useTranslations(lang);
 
+// team.json carries a `class` field, but the v3 build never scanned JSON so
+// those utilities were never generated — the framing came entirely from the
+// classes in the component. Applying them now would, for instance, shove Javi
+// Ferrer's headshot 160px up and out of frame.
 const people = members.map((m, i) => ({
   ...m,
   index: i,
   asset: employeeAsset(m.image),
-  extraClass: (m as { class?: string }).class ?? '',
 }));
 ---
 <section
@@ -141,7 +144,7 @@ const people = members.map((m, i) => ({
                     quality={72}
                     loading={person.index === 0 ? 'eager' : 'lazy'}
                     decoding={person.index === 0 ? 'sync' : 'async'}
-                    class={`${person.extraClass} w-full aspect-square object-cover object-top`}
+                    class="w-full aspect-square object-cover object-top"
                   />
                 )}
                 <h3 data-panel-name class="text-lg leading-5 font-bold">
