@@ -1,0 +1,209 @@
+---
+import LogoLetters from './LogoLetters.astro';
+import LogoCircle from './LogoCircle.astro';
+import HoverAnimatedLink from './HoverAnimatedLink.astro';
+import { site } from '../lib/site';
+import {
+  languageLabels,
+  localizePath,
+  stripLangFromPath,
+  useTranslations,
+  type Lang,
+} from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  class?: string;
+}
+
+const { lang, class: className = '' } = Astro.props;
+const t = useTranslations(lang);
+
+const currentPath = stripLangFromPath(Astro.url.pathname.replace(/\/$/, '') || '/');
+const hrefFor = (locale: Lang) => localizePath(currentPath, locale);
+
+const home = localizePath('/', lang);
+const menu = [
+  { key: 'main_menu.home', href: localizePath('/', lang) },
+  { key: 'main_menu.team', href: localizePath('/team', lang) },
+  { key: 'main_menu.investments', href: localizePath('/investments', lang) },
+  { key: 'main_menu.projects', href: localizePath('/projects', lang) },
+  { key: 'main_menu.technologies', href: localizePath('/technologies', lang) },
+  { key: 'main_menu.contact', href: `${localizePath('/', lang)}#contact` },
+];
+
+const social = [
+  { label: 'Instagram', href: site.instagram },
+  { label: 'Youtube', href: site.youtube },
+  { label: 'Portfolio', href: site.portfolio },
+];
+---
+
+<header
+  id="header"
+  class={`${className} w-full h-auto fixed top-0 left-0 grid grid-cols-3 items-center p-8 z-50 backdrop-blur-xs [mask-image:linear-gradient(to_bottom,black_60%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_60%,transparent_100%)]`}
+>
+  <!-- Left: wordmark on desktop, compact language switch on mobile -->
+  <div class="justify-self-start flex items-center">
+    <a href={home} class="cursor-pointer hidden lg:block">
+      <span class="sr-only">Home</span>
+      <LogoLetters class="h-4 w-auto text-white transition-colors duration-300" />
+    </a>
+
+    <p class="font-light lg:hidden whitespace-nowrap">
+      <a href={hrefFor('en')} class={lang === 'en' ? 'font-bold' : 'font-thin'} hreflang="en">EN</a>
+      <span aria-hidden="true"> | </span>
+      <a href={hrefFor('es')} class={lang === 'es' ? 'font-bold' : 'font-thin'} hreflang="es">ES</a>
+    </p>
+  </div>
+
+  <!-- Center: monogram -->
+  <a href={home} class="cursor-pointer justify-self-center">
+    <span class="sr-only">DDC Developments — Home</span>
+    <LogoCircle class="text-white transition-colors duration-300" />
+  </a>
+
+  <!-- Right: language switch + menu trigger -->
+  <div class="flex gap-10 justify-self-end items-center">
+    <p class="hidden lg:block whitespace-nowrap">
+      <a href={hrefFor('en')} class={lang === 'en' ? 'font-bold' : 'font-thin'} hreflang="en"
+        >{languageLabels.en}</a
+      >
+      <span aria-hidden="true"> | </span>
+      <a href={hrefFor('es')} class={lang === 'es' ? 'font-bold' : 'font-thin'} hreflang="es"
+        >Spanish</a
+      >
+    </p>
+    <button
+      type="button"
+      id="open-menu"
+      aria-controls="main-menu"
+      aria-expanded="false"
+      class="font-bold text-lg bg-transparent lg:hover:text-primary/65 transition-colors duration-200"
+    >
+      <span class="sr-only">Menu</span>
+      <svg
+        height="2rem"
+        width="2rem"
+        viewBox="0 0 32 32"
+        fill="currentColor"
+        class="transition-colors lg:hidden"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <path
+          d="M4,10h24c1.104,0,2-0.896,2-2s-0.896-2-2-2H4C2.896,6,2,6.896,2,8S2.896,10,4,10z M28,14H4c-1.104,0-2,0.896-2,2  s0.896,2,2,2h24c1.104,0,2-0.896,2-2S29.104,14,28,14z M28,22H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h24c1.104,0,2-0.896,2-2  S29.104,22,28,22z"
+        ></path>
+      </svg>
+      <span class="hidden lg:block" aria-hidden="true">Menu</span>
+    </button>
+  </div>
+</header>
+
+<!-- Full-screen navigation overlay -->
+<div
+  id="main-menu"
+  class="hidden opacity-0 h-[100dvh] w-full backdrop-blur-xl bg-secondary/85 fixed top-0 left-0 z-[500] text-primary"
+>
+  <header class="absolute left-0 top-0 py-8 lg:py-12 px-8 w-full flex items-center">
+    <img
+      class="sm:block hidden h-4"
+      alt="DDC Developments"
+      src="/assets/svg/logo_letters_white.svg"
+      width="242"
+      height="19"
+    />
+    <img
+      src="/assets/svg/logo_circle_white.svg"
+      alt="DDC"
+      class="h-12 sm:hidden"
+      width="57"
+      height="57"
+    />
+    <span class="close_btn absolute pt-8 px-6 top-0 right-0">
+      <button type="button" class="close_menu cursor-pointer">
+        <span class="sr-only">Close menu</span>
+        <img class="h-8" alt="" src="/assets/svg/close_menu.svg" width="32" height="32" />
+      </button>
+    </span>
+  </header>
+
+  <div
+    class="nav_left_items hidden md:flex md:flex-col justify-between items-center absolute bottom-14 w-fit p-6 lg:p-0 md:top-1/4 md:left-[20%] lg:left-1/4 md:bottom-1/4 md:pt-[0.6rem]"
+  >
+    <img
+      src="/assets/svg/logo_circle_white.svg"
+      alt=""
+      class="h-28 hidden sm:block"
+      width="57"
+      height="57"
+    />
+    <nav class="text-xl lg:mb-[0.87rem]">
+      <ul class="leading-relaxed">
+        {
+          social.map((item) => (
+            <li>
+              <a class="hover-underline-animation left" href={item.href} rel="noopener noreferrer">
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+
+  <nav class="absolute top-1/4 bottom-1/4 lg:right-1/4 right-6 text-5xl">
+    <div class="flex flex-col h-full justify-between lg:items-start items-end">
+      {
+        menu.map((item) => (
+          <div class="overflow-hidden">
+            <div class="nav_items">
+              <HoverAnimatedLink text={t(item.key)} href={item.href} class="close_menu" />
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </nav>
+
+  <footer
+    class="nav_footer absolute bottom-0 w-full flex justify-between p-6 lg:p-2 items-center lg:text-xl tracking-[0.2]"
+  >
+    <div class="flex lg:gap-4 w-full lg:w-auto justify-between items-end">
+      <a
+        class="hover-underline-animation left"
+        href={localizePath('/privacy-policy', lang)}
+        target="_blank"
+        rel="noopener noreferrer">{t('footer.privacyPolicy')}</a
+      >
+
+      <div class="flex flex-col gap-12 items-center justify-end">
+        <div
+          class="nav_left_items lg:hidden flex flex-col items-end text-end justify-end w-full p-0 pt-[0.6rem]"
+        >
+          <nav class="text-base">
+            <ul class="leading-loose">
+              {
+                social.map((item) => (
+                  <li>
+                    <a
+                      class="hover-underline-animation left"
+                      href={item.href}
+                      rel="noopener noreferrer"
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <a class="hidden! lg:block! hover-underline-animation left" href={`mailto:${site.email}`}
+      >{site.email}</a
+    >
+  </footer>
+</div>

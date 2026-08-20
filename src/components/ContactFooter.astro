@@ -1,0 +1,223 @@
+---
+import HoverAnimatedLink from './HoverAnimatedLink.astro';
+import AnimatedBackground from './AnimatedBackground.astro';
+import { site } from '../lib/site';
+import { localizePath, useTranslations, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const inputClass =
+  'text-sm placeholder:pl-1 border p-1 rounded-xl sm:w-3/4 lg:w-full';
+
+const messages = {
+  username_min: t('validation.username_min'),
+  email_invalid: t('validation.email_invalid'),
+  email_min: t('validation.email_min'),
+  phone_min: t('validation.phone_min'),
+  findUs_min: t('validation.findUs_min'),
+  investingWithUs_min: t('validation.investingWithUs_min'),
+  message_min: t('validation.message_min'),
+  terms_required: t('validation.terms_required'),
+  success_title: t('form_send.success_title'),
+  success: t('form_send.success'),
+  fail_title: t('form_send.fail_title'),
+  sending: t('footer.sending'),
+  send: t('footer.send'),
+};
+---
+<footer
+  id="contact"
+  class="w-full h-auto relative border-t z-20 bg-primary/90 text-primary"
+>
+  <div class="absolute inset-0 -z-10 opacity-80 bg-black"></div>
+  <AnimatedBackground />
+
+  <div class="flex flex-col">
+    <div class="flex flex-col md:flex-row h-auto w-full lg:px-10">
+      <div class="contact_wrapper relative p-8 flex flex-col justify-start items-start gap-2 w-full">
+        <div class="w-full">
+          <h3>{t('footer.phone')}</h3>
+          <a href={site.phoneHref} class="hover-underline-animation left">{site.phone}</a>
+        </div>
+        <div class="w-full">
+          <h3>{t('footer.email')}</h3>
+          <a href={`mailto:${site.email}`} class="text-sm hover-underline-animation left"
+            >{site.email}</a
+          >
+        </div>
+        <div class="w-full">
+          <h3>{t('footer.hoursLabel')}</h3>
+          <p>{t('footer.hoursValue')}</p>
+        </div>
+        <div class="w-full">
+          <h3>{t('footer.socialLabel')}</h3>
+          <div class="flex flex-col">
+            <a href={site.instagram} rel="noopener noreferrer" class="hover-underline-animation left w-fit">Instagram</a>
+            <a href={site.youtube} rel="noopener noreferrer" class="hover-underline-animation left w-fit">Youtube</a>
+          </div>
+        </div>
+        <div class="w-full">
+          <h3>{t('footer.addressLabel')}</h3>
+          <a href={site.mapsUrl} rel="noopener noreferrer" class="text-sm hover-underline-animation left"
+            >{site.address}</a
+          >
+        </div>
+        <iframe
+          src={site.mapsEmbed}
+          class="lg:absolute lg:bottom-8 lg:left-8 w-full lg:w-[20rem] h-[20rem] mt-12 lg:mt-0 lg:h-60 rounded-xl"
+          style="border: 0"
+          allowfullscreen
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Google Maps location of 3470 NW 82nd Ave, Suite 790, Doral, FL"></iframe>
+      </div>
+
+      <form
+        id="contact_form"
+        class="flex flex-col gap-2 px-8 py-6"
+        novalidate
+        data-contact-form
+        data-messages={JSON.stringify(messages)}
+        data-webhook={site.contactWebhook}
+      >
+        <h2 class="font-bold text-5xl">{t('footer.title')}</h2>
+        <p class="font-bold text-xl">{t('footer.subtitle')}</p>
+        <p class="text-sm">{t('footer.description')}</p>
+
+        <div class="flex flex-col gap-1">
+          <label for="contact-username">{t('footer.name')}</label>
+          <input
+            id="contact-username"
+            name="username"
+            type="text"
+            placeholder="Jane Smith"
+            autocomplete="name"
+            minlength="2"
+            required
+            class={inputClass}
+          />
+          <span class="text-red-500 text-xs" data-error-for="username"></span>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label for="contact-email">{t('footer.email')}</label>
+          <input
+            id="contact-email"
+            name="email"
+            type="email"
+            placeholder={t('footer.emailPlaceHolder')}
+            autocomplete="email"
+            required
+            class={inputClass}
+          />
+          <span class="text-red-500 text-xs" data-error-for="email"></span>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label for="contact-phone">{t('footer.phone')}</label>
+          <input
+            id="contact-phone"
+            name="phone"
+            type="tel"
+            placeholder="305-555-1234"
+            autocomplete="tel"
+            minlength="6"
+            required
+            class={inputClass}
+          />
+          <span class="text-red-500 text-xs" data-error-for="phone"></span>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label for="contact-findus">{t('footer.findUs')}</label>
+          <input
+            id="contact-findus"
+            name="findUs"
+            type="text"
+            placeholder="Instagram, Youtube..."
+            minlength="3"
+            required
+            class="text-sm placeholder:pl-1 border p-1 rounded-xl resize-none"
+          />
+          <span class="text-red-500 text-xs" data-error-for="findUs"></span>
+        </div>
+
+        <div class="flex flex-col gap-1 font-light">
+          <label for="investingWithUs">{t('footer.reason')}</label>
+          <div class="border-fade-top border-fade-bottom relative flex flex-col gap-1 pl-1 py-3">
+            <select
+              id="investingWithUs"
+              name="investingWithUs"
+              required
+              class="border border-gray-300 rounded-xl px-3 py-3 text-base"
+            >
+              <option value="" disabled selected>{t('footer.reasonPlaceholder')}</option>
+              <option value="Collaboration opportunities">{t('contact_reasons.collaboration')}</option>
+              <option value="General inquiries">{t('contact_reasons.inquiries')}</option>
+              <option value="Business proposals">{t('contact_reasons.business')}</option>
+              <option value="Other">{t('contact_reasons.other')}</option>
+            </select>
+          </div>
+          <span class="text-red-500 text-xs" data-error-for="investingWithUs"></span>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label for="contact-message">{t('footer.message')}</label>
+          <textarea
+            id="contact-message"
+            name="message"
+            placeholder={t('footer.messagePlaceHolder')}
+            minlength="10"
+            required
+            class="text-sm placeholder:pl-1 border p-2 rounded-xl resize-none w-full"></textarea>
+          <span class="text-red-500 text-xs" data-error-for="message"></span>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <input id="contact-terms" type="checkbox" name="terms" required class="h-4 w-4" />
+          <label for="contact-terms" class="text-sm font-normal">
+            {t('footer.acceptPolicy')}{'  '}
+            <a
+              href={localizePath('/privacy-policy', lang)}
+              class="font-bold"
+              target="_blank"
+              rel="noopener noreferrer">{t('footer.privacyPolicy')}</a
+            >
+          </label>
+        </div>
+        <span class="text-red-500 text-xs" data-error-for="terms"></span>
+
+        <button
+          type="submit"
+          class="self-start flex items-center rounded-3xl p-1 pl-3 text-xl disabled:opacity-50 mt-4"
+        >
+          <span data-submit-label>{t('footer.send')}</span>
+          <img class="w-auto h-10 lg:h-7" src="/assets/svg/send_button.svg" alt="" width="40" height="40" />
+        </button>
+      </form>
+
+      <div
+        class="md:hidden border-fade-top footer_banner relative w-full px-4 py-2 bottom-0 flex justify-between items-center"
+      >
+        <a href={localizePath('/', lang)}>All Rights<br /> Reserved</a>
+        <a href={localizePath('/privacy-policy', lang)} target="_blank" rel="noopener noreferrer"
+          >{t('footer.privacyPolicy')}</a
+        >
+      </div>
+    </div>
+
+    <div
+      class="hidden footer_banner mt-20 border-fade-top relative w-full px-8 py-2 bottom-0 md:flex justify-between items-center"
+    >
+      <span>All Rights Reserved</span>
+      <HoverAnimatedLink
+        text={t('footer.privacyPolicy')}
+        target="_blank"
+        href={localizePath('/privacy-policy', lang)}
+        class="border-b"
+      />
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,217 @@
+---
+import countries from 'i18n-iso-countries';
+import enLocale from 'i18n-iso-countries/langs/en.json';
+import esLocale from 'i18n-iso-countries/langs/es.json';
+import { site } from '../lib/site';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+countries.registerLocale(enLocale as never);
+countries.registerLocale(esLocale as never);
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+// Resolved at build time: the country list ships as plain <option>s, so the
+// picker needs zero JavaScript (react-select + i18n-iso-countries was ~120 kB).
+const countryOptions = Object.entries(countries.getNames(lang, { select: 'official' }))
+  .map(([value, label]) => ({ value, label: String(label) }))
+  .sort((a, b) => a.label.localeCompare(b.label, lang));
+
+const fieldClass =
+  'w-full bg-transparent text-secondary p-3 border border-secondary/40 focus:border-secondary outline-none rounded-none';
+const labelClass = 'text-xs uppercase tracking-wide opacity-80';
+
+const budgetOptions = [
+  '$200,000 – $300,000',
+  '$300,000 – $500,000',
+  t('investments_inside.form.first_select_3'),
+];
+const fundsOptions = [
+  t('investments_inside.form.second_select_1'),
+  t('investments_inside.form.second_select_2'),
+  t('investments_inside.form.second_select_3'),
+];
+const companyOptions = [
+  t('investments_inside.form.third_select_1'),
+  t('investments_inside.form.third_select_2'),
+  t('investments_inside.form.third_select_3'),
+];
+
+const messages = {
+  name: t('investments_inside.form.validation.name'),
+  email_invalid: t('investments_inside.form.validation.email.invalid'),
+  email_required: t('investments_inside.form.validation.email.required'),
+  phone: t('investments_inside.form.validation.phone'),
+  select: t('investments_inside.form.validation.select'),
+  fail_title: t('form_send.fail_title'),
+  sending: t('investments_inside.form.button_sending'),
+  send: t('investments_inside.form.button'),
+};
+---
+<dialog
+  id="investment-dialog"
+  data-investment-dialog
+  data-webhook={site.investmentWebhook}
+  data-whatsapp={site.whatsappNumber}
+  data-messages={JSON.stringify(messages)}
+  class="ddc-dialog w-[92vw] max-w-[520px] max-h-[90vh] overflow-y-auto bg-primary text-secondary p-6 sm:p-8 shadow-2xl rounded-none"
+  data-lenis-prevent
+>
+  <button
+    type="button"
+    data-close-investment-dialog
+    class="absolute top-3 right-3 h-8 w-8 grid place-items-center text-secondary/80 hover:text-secondary"
+  >
+    <span class="sr-only">Close</span>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="h-5 w-5 text-secondary"
+      aria-hidden="true"
+    >
+      <path d="M18 6L6 18M6 6l12 12"></path>
+    </svg>
+  </button>
+
+  <h2 class="text-2xl font-semibold tracking-tight">{t('investments_inside.form.title')}</h2>
+  <p class="mt-1 text-sm opacity-80">
+    {t('investments_inside.form.subtitle')}{' '}
+    <span class="font-medium" data-investment-title></span>
+  </p>
+
+  <form class="mt-6 space-y-5" novalidate data-investment-form>
+    <input type="hidden" name="investment_title" data-investment-title-input />
+
+    <div class="flex flex-col gap-2">
+      <label class={labelClass} for="inv-name">{t('investments_inside.form.name')}</label>
+      <input
+        id="inv-name"
+        name="name"
+        type="text"
+        required
+        minlength="2"
+        maxlength="80"
+        autocomplete="name"
+        class={fieldClass}
+        placeholder={t('investments_inside.form.name_placeholder')}
+      />
+      <span class="text-rose-400 text-xs" data-error-for="name"></span>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label class={labelClass} for="inv-email">{t('investments_inside.form.mail')}</label>
+      <input
+        id="inv-email"
+        name="email"
+        type="email"
+        required
+        autocomplete="email"
+        class={fieldClass}
+        placeholder={t('investments_inside.form.mail_placeholder')}
+      />
+      <span class="text-rose-400 text-xs" data-error-for="email"></span>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label class={labelClass} for="inv-country">{t('investments_inside.form.country')}</label>
+      <select id="inv-country" name="country" required class={`${fieldClass} cursor-pointer`}>
+        <option value="" selected disabled>{t('investments_inside.form.country_placeholder')}</option>
+        {countryOptions.map((c) => <option value={c.label}>{c.label}</option>)}
+      </select>
+      <span class="text-rose-400 text-xs" data-error-for="country"></span>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label class={labelClass} for="inv-phone">{t('investments_inside.form.phone')}</label>
+      <input
+        id="inv-phone"
+        name="phone"
+        type="tel"
+        required
+        pattern="[0-9+()\-\s]{7,20}"
+        autocomplete="tel"
+        class={fieldClass}
+        placeholder={t('investments_inside.form.phone_placeholder')}
+      />
+      <span class="text-rose-400 text-xs" data-error-for="phone"></span>
+    </div>
+
+    <fieldset class="flex flex-col gap-2">
+      <legend class="text-sm font-medium">{t('investments_inside.form.first_select')}</legend>
+      <div class="flex flex-col gap-1">
+        {
+          budgetOptions.map((opt) => (
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="radio" name="budget" value={opt} required class="accent-secondary" />
+              <span class="text-sm">{opt}</span>
+            </label>
+          ))
+        }
+      </div>
+      <span class="text-rose-400 text-xs" data-error-for="budget"></span>
+    </fieldset>
+
+    <fieldset class="flex flex-col gap-2">
+      <legend class="text-sm font-medium">{t('investments_inside.form.second_select')}</legend>
+      <div class="flex flex-col gap-1">
+        {
+          fundsOptions.map((opt) => (
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="radio" name="funds" value={opt} required class="accent-secondary" />
+              <span class="text-sm">{opt}</span>
+            </label>
+          ))
+        }
+      </div>
+      <span class="text-rose-400 text-xs" data-error-for="funds"></span>
+    </fieldset>
+
+    <fieldset class="flex flex-col gap-2">
+      <legend class="text-sm font-medium">{t('investments_inside.form.third_select')}</legend>
+      <div class="flex flex-col gap-1">
+        {
+          companyOptions.map((opt) => (
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="radio" name="company" value={opt} required class="accent-secondary" />
+              <span class="text-sm">{opt}</span>
+            </label>
+          ))
+        }
+      </div>
+      <span class="text-rose-400 text-xs" data-error-for="company"></span>
+    </fieldset>
+
+    <div class="pt-2 flex items-center gap-3">
+      <button
+        type="submit"
+        class="px-8 py-3 bg-[#1E1F20] rounded-full text-primary ring-1 ring-white/20 hover:bg-secondary/20 hover:text-secondary transition-all disabled:opacity-60 w-full sm:w-auto"
+      >
+        <span data-submit-label>{t('investments_inside.form.button')}</span>
+      </button>
+    </div>
+  </form>
+</dialog>
+
+<style is:global>
+  .ddc-dialog {
+    margin: auto;
+    position: fixed;
+    inset: 0;
+    border: 0;
+  }
+
+  .ddc-dialog::backdrop {
+    background: rgb(0 0 0 / 0.5);
+    backdrop-filter: blur(4px);
+  }
+
+  .ddc-dialog:not([open]) {
+    display: none;
+  }
+</style>

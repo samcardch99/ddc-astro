@@ -1,0 +1,111 @@
+---
+import FooterBanner from './FooterBanner.astro';
+import PrimaryButton from './PrimaryButton.astro';
+import AnimatedBackground from './AnimatedBackground.astro';
+import CountUp from './CountUp.astro';
+import { localizePath, useTranslations, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const plus = 'text-primary opacity-40 text-2xl lg:text-3xl';
+---
+<section
+  id="technologies"
+  data-technologies
+  class="relative h-screen bg-primary w-full px-8 text-primary isolate"
+>
+  <div class="absolute inset-0 -z-1 opacity-80 bg-black"></div>
+  <AnimatedBackground />
+
+  <div
+    class="flex flex-col h-[65%] lg:h-[55%] justify-between absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 lg:-translate-y-[10%] w-full px-8 lg:py-8"
+  >
+    <div class="flex justify-between w-full items-center">
+      <h2 data-tech-title class="text-[2.1rem] lg:text-6xl font-bold text-left">
+        {t('technology.title')}
+      </h2>
+
+      <PrimaryButton
+        href={localizePath('/technologies', lang)}
+        class="top-btn hidden lg:block bg-primary p-3! hover:bg-white/10 hover:text-primary active:bg-white/10 active:text-primary text-lg text-secondary self-center"
+      >
+        {t('technology.button')}
+      </PrimaryButton>
+    </div>
+
+    <div class="flex lg:flex-row flex-col w-full px-4">
+      <div class="metric-block flex flex-col justify-center items-center w-full relative">
+        <span class={`absolute -top-5 lg:top-0 left-0 -translate-x-1/2 -translate-y-1/2 lg:translate-y-0 ${plus}`} aria-hidden="true">+</span>
+        <span class={`absolute -top-5 right-0 lg:right-full lg:bottom-0 lg:top-auto translate-x-1/2 -translate-y-1/2 lg:translate-y-0 ${plus}`} aria-hidden="true">+</span>
+        <p class="text-3xl lg:text-4xl font-bold">
+          <CountUp prefix="" suffix="+" start={100} end={200} duration={2} />
+        </p>
+        <p class="opacity-60 text-xs lg:text-sm">{t('technology.1')}</p>
+      </div>
+
+      <div class="metric-block relative flex flex-col justify-center items-center w-full my-5 py-5">
+        <div
+          class="absolute top-0 left-1/2 -translate-x-1/2 w-[85%] h-[0.5px] lg:top-1/2 lg:left-0 lg:-translate-y-1/2 lg:w-[0.5px] lg:h-[85%] bg-primary"
+        >
+        </div>
+        <div
+          class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[85%] h-[0.5px] lg:w-[0.5px] lg:h-[85%] lg:top-1/2 lg:left-full lg:-translate-y-1/2 bg-primary"
+        >
+        </div>
+
+        <span class="lg:hidden absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 text-primary opacity-40 text-2xl" aria-hidden="true">+</span>
+        <span class="lg:hidden absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 text-primary opacity-40 text-2xl" aria-hidden="true">+</span>
+        <span class="lg:hidden absolute bottom-0 left-0 -translate-x-1/2 translate-y-1/2 text-primary opacity-40 text-2xl" aria-hidden="true">+</span>
+        <span class="lg:hidden absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2 text-primary opacity-40 text-2xl" aria-hidden="true">+</span>
+
+        <p class="text-3xl lg:text-4xl font-bold">
+          <CountUp prefix="~" suffix="%" start={10} end={30} duration={2} />
+        </p>
+        <p class="opacity-60 text-xs lg:text-sm">{t('technology.2')}</p>
+      </div>
+
+      <div class="metric-block flex flex-col justify-center items-center w-full relative pb-7 lg:pb-0">
+        <span class={`absolute -bottom-6 lg:top-0 left-0 lg:left-full -translate-x-1/2 -translate-y-1/2 lg:translate-y-0 h-fit ${plus}`} aria-hidden="true">+</span>
+        <span class={`absolute -bottom-6 right-0 translate-x-1/2 -translate-y-1/2 lg:translate-y-0 lg:bottom-0 ${plus}`} aria-hidden="true">+</span>
+        <p class="text-3xl lg:text-4xl font-bold">
+          <CountUp prefix="" suffix="" start={30} end={60} duration={2} /><CountUp
+            prefix="-"
+            suffix="%"
+            start={40}
+            end={70}
+            duration={2}
+          />
+        </p>
+        <p class="opacity-60 text-xs lg:text-sm">{t('technology.3')}</p>
+      </div>
+    </div>
+
+    <PrimaryButton
+      href={localizePath('/technologies', lang)}
+      class="mobile-btn lg:hidden bg-primary hover:bg-white/10 hover:text-primary active:bg-white/10 active:text-primary text-secondary self-center"
+    >
+      {t('technology.button')}
+    </PrimaryButton>
+
+    <div class="hidden lg:grid grid-cols-3 grid-flow-col w-full items-center text-sm lg:text-lg font-bold">
+      <a
+        href={localizePath('/investments', lang)}
+        class="hover:text-white transition-colors duration-300 justify-self-start"
+        >{t('footer_banner.investments')}</a
+      >
+      <a
+        href={localizePath('/projects', lang)}
+        class="hover:text-white transition-colors duration-300 justify-self-center"
+        >{t('footer_banner.projects')}</a
+      >
+      <a
+        href={localizePath('/technologies', lang)}
+        class="hover:text-white transition-colors duration-300 justify-self-end"
+        >{t('footer_banner.technologies')}</a
+      >
+    </div>
+  </div>
+
+  <FooterBanner lang={lang} class="lg:hidden" />
+</section>

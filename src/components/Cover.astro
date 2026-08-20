@@ -1,0 +1,58 @@
+---
+import FooterBanner from './FooterBanner.astro';
+import PrimaryButton from './PrimaryButton.astro';
+import { localizePath, useTranslations, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+<section id="home" class="relative cover h-[100svh] w-full px-8 pb-8 pt-16" data-cover>
+  <div
+    data-cover-words
+    class="relative grid grid-flow-col grid-cols-3 items-center w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-full h-auto font-bold text-primary lg:text-5xl"
+  >
+    <h1 class="contents">
+      <span data-cover-left class="justify-self-start z-10">{t('cover.faster')}</span>
+      <span data-cover-center class="justify-self-center z-10">{t('cover.stronger')}</span>
+      <span data-cover-right class="justify-self-end z-10">{t('cover.smarter')}</span>
+    </h1>
+
+    <span
+      data-cover-build
+      aria-hidden="true"
+      class="cover-build absolute -top-1 lg:-top-4 left-0 pointer-events-none select-none will-change-transform text-transparent font-extrabold text-3xl lg:text-8xl whitespace-nowrap"
+      >{t('cover.build')}</span
+    >
+  </div>
+
+  <div
+    class="absolute top-3/4 left-1/2 -translate-x-1/2 -translate-y-1/2 lg:bottom-[10%] px-8 w-full gap-8 lg:gap-5 lg:justify-between grid grid-rows-2 lg:grid-cols-2"
+  >
+    <h2 class="justify-self-start self-start lg:max-w-[60%] text-sm lg:text-lg">
+      {t('cover.description')}
+    </h2>
+    <PrimaryButton
+      href={`${localizePath('/investments', lang)}#appointment`}
+      class="text-primary justify-self-end bg-gray-200/15 hover:bg-primary! hover:text-secondary transition-all duration-200"
+    >
+      {t('cover.button')}
+    </PrimaryButton>
+  </div>
+
+  <FooterBanner lang={lang} />
+</section>
+
+<style>
+  .cover-build {
+    -webkit-text-stroke: 1px #c2c7cf;
+    visibility: hidden;
+  }
+  /* Without JS the outline word would never appear; show it in place instead. */
+  @media (scripting: none) {
+    .cover-build {
+      visibility: visible;
+      transform: translateY(-70%);
+    }
+  }
+</style>

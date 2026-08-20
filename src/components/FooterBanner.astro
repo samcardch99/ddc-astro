@@ -1,0 +1,31 @@
+---
+import HoverAnimatedLink from './HoverAnimatedLink.astro';
+import { localizePath, useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  class?: string;
+}
+
+const { lang, class: className = '' } = Astro.props;
+const t = useTranslations(lang);
+---
+<footer
+  class={`${className} z-50 grid grid-cols-3 grid-flow-col w-full items-center absolute bottom-4 left-0 px-8 lg:px-12 lg:bottom-8 text-sm lg:text-lg font-bold`}
+>
+  <HoverAnimatedLink
+    text={t('footer_banner.investments')}
+    href={localizePath('/investments', lang)}
+    class="justify-self-start"
+  />
+  <HoverAnimatedLink
+    text={t('footer_banner.projects')}
+    href={localizePath('/projects', lang)}
+    class="justify-self-center"
+  />
+  <HoverAnimatedLink
+    text={t('footer_banner.technologies')}
+    href={localizePath('/technologies', lang)}
+    class="justify-self-end"
+  />
+</footer>

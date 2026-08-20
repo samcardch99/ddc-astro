@@ -1,0 +1,17 @@
+---
+import { site } from '../lib/site';
+
+interface Props {
+  class?: string;
+  width?: string;
+}
+const { class: className = '', width = '100%' } = Astro.props;
+---
+<div id="appointment" class={`relative h-fit ${className}`} data-booking-widget>
+  <iframe
+    src={site.booking}
+    style={`width: ${width}; border: none; overflow: visible;`}
+    id="1FWmMbyLslj9CnJDOv7e_1747676594550"
+    title="LeadConnector Booking Widget"
+    loading="lazy"></iframe>
+</div>

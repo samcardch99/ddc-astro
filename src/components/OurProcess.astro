@@ -1,0 +1,167 @@
+---
+import { Image } from 'astro:assets';
+import FooterBanner from './FooterBanner.astro';
+import PrimaryButton from './PrimaryButton.astro';
+import ArrowCircle from './ArrowCircle.astro';
+import items from '../data/accordion.json';
+import { accordionAsset } from '../lib/images';
+import { localizePath, useTranslations, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const steps = items.map((item, i) => ({
+  ...item,
+  index: i,
+  asset: accordionAsset(item.image),
+}));
+---
+<section
+  id="our-process"
+  class="relative h-auto min-h-screen lg:h-auto w-full pt-32 pb-20 lg:pb-0 flex flex-col gap-8 z-20"
+>
+  <!-- Cross-fading blurred backdrop, driven by the open accordion row -->
+  <div class="absolute inset-0 -z-10 overflow-hidden pointer-events-none" data-process-backdrop>
+    {
+      steps.map((step) => (
+        <div
+          class:list={[
+            'absolute inset-0 transition-opacity duration-700 ease-out',
+            step.index === 0 ? 'opacity-100' : 'opacity-0',
+          ]}
+          data-backdrop-index={step.index}
+        >
+          {step.asset && (
+            <Image
+              src={step.asset}
+              alt=""
+              widths={[640, 1280]}
+              sizes="100vw"
+              quality={45}
+              loading="lazy"
+              decoding="async"
+              class="w-full h-full object-cover blur-xl scale-105"
+            />
+          )}
+        </div>
+      ))
+    }
+    <div class="absolute inset-0 bg-primary/80"></div>
+  </div>
+
+  <div
+    class="flex flex-col px-8 w-full gap-4 justify-start items-start 2xl-custom:absolute 2xl-custom:left-0 2xl-custom:top-32 2xl-custom:px-8 2xl:relative 2xl:inset-auto 2xl:px-0"
+  >
+    <div class="flex w-full justify-between items-center px-8">
+      <h2 class="lg:text-5xl text-[2.1rem] lg:leading-normal leading-10 font-bold text-secondary">
+        {t('our_process.title')}
+      </h2>
+
+      <PrimaryButton
+        href={localizePath('/investments', lang)}
+        class="hidden lg:block text-xl py-3! px-6! bg-secondary text-primary hover:bg-secondary/50 hover:text-secondary!"
+      >
+        {t('our_process.button')}
+      </PrimaryButton>
+    </div>
+  </div>
+
+  <div class="w-full h-full transition-colors duration-500 px-8 lg:px-16 2xl-custom:pt-32 text-secondary" data-process-accordion>
+    {
+      steps.map((step) => (
+        <details
+          class:list={[
+            'process-row border-b relative transition-colors duration-500 border-gray-400',
+            step.index === steps.length - 1 &&
+              "after:content-['+'] after:absolute after:-left-4 lg:after:-left-8 after:bottom-0 after:translate-y-1/2 after:text-lg after:opacity-60",
+          ]}
+          data-index={step.index}
+        >
+          <summary class="process-summary group relative flex items-center justify-between w-full h-[10vh] lg:h-[14vh] py-4 cursor-pointer before:content-['+'] before:absolute before:-left-4 lg:before:-left-8 before:top-0 before:-translate-y-1/2 before:text-lg before:opacity-60">
+            <span class="flex items-center justify-between h-full w-[75vw] lg:w-[20vw]">
+              <span class="process-number font-bold text-4xl transition-all duration-300 opacity-30">
+                {step.number}
+              </span>
+              <span class="text-base font-bold">
+                {t(`our_process.accordion.${step.index + 1}.title`)}
+              </span>
+              <span class="h-full w-px py-2 transition-colors duration-300 bg-gray-400" />
+            </span>
+
+            <ArrowCircle class="process-arrow w-5 h-5 transition-transform duration-300 stroke-current" />
+          </summary>
+
+          <div class="process-panel flex lg:flex-row flex-col gap-4 lg:gap-16 items-start overflow-hidden">
+            {step.asset && (
+              <Image
+                src={step.asset}
+                alt={step.alt}
+                widths={[320, 640]}
+                sizes="(min-width: 1024px) 30vw, 75vw"
+                quality={70}
+                loading="lazy"
+                decoding="async"
+                class="lg:h-80 lg:ml-[20vw] object-cover h-full w-[75vw] lg:w-auto"
+              />
+            )}
+            <div class="lg:px-4 lg:py-0 lg:pr-0 py-4 pr-4 text-sm transition-colors duration-500 text-secondary/85">
+              {t(`our_process.accordion.${step.index + 1}.description`)}
+            </div>
+          </div>
+        </details>
+      ))
+    }
+  </div>
+
+  <PrimaryButton
+    href={localizePath('/investments', lang)}
+    class="mt-6 self-center lg:hidden bg-secondary text-primary"
+  >
+    {t('our_process.button')}
+  </PrimaryButton>
+
+  <div class="absolute lg:sticky bottom-0 left-0 w-full">
+    <FooterBanner lang={lang} class="text-secondary px-8" />
+    <div
+      class="bottom-0 left-0 w-full h-[10vh] lg:h-[15vh] pointer-events-none bg-linear-to-t from-primary to-transparent"
+    >
+    </div>
+  </div>
+</section>
+
+<style>
+  .process-summary {
+    list-style: none;
+    /* The React row was a <button>, whose UA style centres its text — that is
+       what centres a title that wraps onto two lines. <summary> defaults to
+       `start`, so it is restored explicitly. */
+    text-align: center;
+  }
+  .process-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  details[open] > .process-summary .process-number {
+    opacity: 1;
+  }
+
+  details[open] > .process-summary .process-arrow {
+    transform: rotate(180deg);
+  }
+
+  /* The React panel used `transition-all duration-500` on an
+     `opacity-0 max-h-0` → `opacity-100 max-h-fit mb-8` swap; only the opacity
+     and the margin actually animate, so that is what is reproduced here. */
+  .process-panel {
+    opacity: 0;
+    margin-bottom: 0;
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+      margin-bottom 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  details[open] > .process-panel {
+    opacity: 1;
+    margin-bottom: 2rem;
+  }
+</style>

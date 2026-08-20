@@ -1,0 +1,88 @@
+---
+import 'swiper/css';
+import 'swiper/css/effect-cards';
+import { Image } from 'astro:assets';
+import FooterBanner from './FooterBanner.astro';
+import PrimaryButton from './PrimaryButton.astro';
+import ArrowCircle from './ArrowCircle.astro';
+import cards from '../data/testimonials.json';
+import cardBg from '../assets/misc/testimonial_card_bg.webp';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const corner = 'text-secondary opacity-40 text-2xl';
+---
+<section
+  id="testimonials"
+  class="h-screen w-full bg-primary text-secondary flex flex-col items-center justify-center gap-12 pt-32 lg:pt-20 pb-10 relative overflow-hidden"
+>
+  <h2 class="text-4xl lg:text-5xl font-bold absolute left-8 top-20">{t('testimonials.title')}</h2>
+
+  <div class="relative h-[60%] lg:h-[65%] aspect-[9/13]">
+    <span class={`absolute -top-8 left-0 lg:-left-8 -translate-x-1/2 ${corner}`} aria-hidden="true">+</span>
+    <span class={`absolute -top-8 right-0 lg:-right-8 translate-x-1/2 ${corner}`} aria-hidden="true">+</span>
+    <span class={`absolute -bottom-8 left-0 lg:-left-8 -translate-x-1/2 ${corner}`} aria-hidden="true">+</span>
+    <span class={`absolute -bottom-8 right-0 lg:-right-8 translate-x-1/2 ${corner}`} aria-hidden="true">+</span>
+
+    <button
+      type="button"
+      class="hidden lg:block my-prev z-40 text-secondary absolute -left-1/2 top-1/2 -translate-y-1/2 hover:scale-110 hover:bg-gray-300 rounded-full cursor-pointer transition-all duration-300"
+    >
+      <span class="sr-only">Prev</span>
+      <ArrowCircle class="w-8 h-8 transition duration-300 stroke-current rotate-90" />
+    </button>
+
+    <button
+      type="button"
+      class="hidden lg:block my-next z-40 text-secondary absolute -right-1/2 top-1/2 -translate-y-1/2 hover:scale-110 hover:bg-gray-300 rounded-full cursor-pointer transition-all duration-300"
+    >
+      <span class="sr-only">Next</span>
+      <ArrowCircle class="w-8 h-8 transition duration-300 stroke-current -rotate-90" />
+    </button>
+
+    <div class="absolute inset-0">
+      <div class="swiper w-full h-full" data-testimonials-swiper>
+        <div class="swiper-wrapper">
+          {
+            cards.map((_, idx) => (
+              <div class="swiper-slide w-full! h-full! flex items-center justify-center">
+                <article class="slide-content relative h-full w-full text-primary will-change-transform rounded-md overflow-hidden">
+                  <Image
+                    src={cardBg}
+                    alt=""
+                    widths={[480, 720]}
+                    sizes="(min-width: 1024px) 30vw, 60vw"
+                    quality={70}
+                    loading={idx === 0 ? 'eager' : 'lazy'}
+                    decoding={idx === 0 ? 'sync' : 'async'}
+                    class="pointer-events-none absolute w-auto max-w-max object-cover"
+                  />
+                  <div class="absolute top-6 right-6 text-xl select-none" aria-label="5 out of 5 stars">
+                    ★★★★★
+                  </div>
+                  <div class="absolute bottom-6 left-6 right-6">
+                    <h3 class="text-2xl lg:text-xl font-bold tracking-wide mb-4">
+                      {t(`testimonials.cards.${idx + 1}.name`)}
+                    </h3>
+                    <p class="text-xs">{t(`testimonials.cards.${idx + 1}.description`)}</p>
+                  </div>
+                </article>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <PrimaryButton
+    href="#contact"
+    class="text-primary bg-secondary text-xl px-8! py-3! hover:bg-secondary/50 hover:text-secondary!"
+  >
+    {t('testimonials.button')}
+  </PrimaryButton>
+
+  <FooterBanner lang={lang} class="text-secondary" />
+</section>

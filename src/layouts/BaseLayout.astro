@@ -1,0 +1,140 @@
+---
+import '../styles/fonts.css';
+import '../styles/global.css';
+
+import { site } from '../lib/site';
+import {
+  locales,
+  localizePath,
+  ogLocale,
+  type Lang,
+} from '../i18n/ui';
+
+import Header from '../components/Header.astro';
+import ContactFooter from '../components/ContactFooter.astro';
+import WhatsappButton from '../components/WhatsappButton.astro';
+import Toaster from '../components/Toaster.astro';
+
+import fontLight from '../assets/fonts/Noirden-Light.woff?url';
+import fontRegular from '../assets/fonts/Noirden-Regular.woff?url';
+import fontBold from '../assets/fonts/Noirden-Bold.woff?url';
+
+interface Props {
+  lang: Lang;
+  /** Locale-independent path, e.g. `/team`. Used for canonical + hreflang. */
+  path: string;
+  title: string;
+  description: string;
+  /** The site-wide contact form. Hidden on /projects and /privacy-policy. */
+  contactFooter?: boolean;
+  /** Renders the fixed site header. Interior pages pass extra classes. */
+  header?: boolean;
+  headerClass?: string;
+  bodyClass?: string;
+  /** Scroll-driven header colour switching (home page only). */
+  headerScrollStates?: boolean;
+}
+
+const {
+  lang,
+  path,
+  title,
+  description,
+  contactFooter = true,
+  header = true,
+  headerClass = '',
+  bodyClass = '',
+  headerScrollStates = false,
+} = Astro.props;
+
+const canonical = new URL(localizePath(path, lang), site.url).href;
+const ogImage = new URL('/assets/og-image.jpg', site.url).href;
+
+const gtmSnippet = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${site.gtmId}');`;
+
+const gtagSnippet = `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${site.gtagId}');gtag('event','conversion',{send_to:'${site.gtagConversion}'});`;
+---
+
+<!doctype html>
+<html lang={lang} translate="no">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {
+      locales.map((locale) => (
+        <link
+          rel="alternate"
+          hreflang={locale}
+          href={new URL(localizePath(path, locale), site.url).href}
+        />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={new URL(localizePath(path, 'en'), site.url).href} />
+
+    <meta
+      name="keywords"
+      content="DDC, Constructora, Modular, Miami, DDC Constructora, construcción modular Miami, empresa constructora modular, proyectos DDC Miami, modular construction Miami, DDC builder, Miami modular builder, modular housing Miami, modular projects DDC"
+    />
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={ogLocale[lang]} />
+    <meta property="og:site_name" content={site.name} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- Render-critical webfonts: fetched in parallel with the HTML parse. -->
+    <link rel="preload" href={fontBold} as="font" type="font/woff" crossorigin />
+    <link rel="preload" href={fontRegular} as="font" type="font/woff" crossorigin />
+    <link rel="preload" href={fontLight} as="font" type="font/woff" crossorigin />
+
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+
+    <!-- Google Tag Manager -->
+    <script is:inline set:html={gtmSnippet} />
+    <!-- End Google Tag Manager -->
+
+    <!-- Google tag (gtag.js) -->
+    <script
+      is:inline
+      async
+      src={`https://www.googletagmanager.com/gtag/js?id=${site.gtagId}`}></script>
+    <script is:inline set:html={gtagSnippet} />
+  </head>
+
+  <body class={bodyClass} data-lang={lang} data-path={path}>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src={`https://www.googletagmanager.com/ns.html?id=${site.gtmId}`}
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"></iframe></noscript
+    >
+
+    <div class="app-root" data-header-scroll-states={headerScrollStates ? 'true' : null}>
+      {header && <Header lang={lang} class={headerClass} />}
+      <slot />
+      {contactFooter && <ContactFooter lang={lang} />}
+    </div>
+
+    <WhatsappButton />
+    <Toaster />
+
+    <script>
+      import '../scripts/main';
+    </script>
+  </body>
+</html>

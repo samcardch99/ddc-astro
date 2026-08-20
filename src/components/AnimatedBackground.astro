@@ -1,0 +1,161 @@
+---
+/**
+ * Ambient background blobs.
+ *
+ * The original used a Three.js scene of #162d57 spheres drifting behind a
+ * `blur(66–530px) brightness(0.1)` filter at 60% opacity — i.e. the geometry
+ * was never legible, only the slow drift of dark navy light was. This is the
+ * same effect with layered radial gradients and CSS keyframes: no WebGL
+ * context, no ~600 kB of JavaScript, and it paints with the first frame.
+ */
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+<div class={`ddc-blobs ${className}`} aria-hidden="true">
+  <span class="ddc-blob ddc-blob--1"></span>
+  <span class="ddc-blob ddc-blob--2"></span>
+  <span class="ddc-blob ddc-blob--3"></span>
+  <span class="ddc-blob ddc-blob--4"></span>
+  <span class="ddc-blob ddc-blob--5"></span>
+</div>
+
+<style is:global>
+  .ddc-blobs {
+    position: absolute;
+    inset: 0;
+    height: 100svh;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -20;
+    opacity: 0.6;
+    filter: blur(66px) brightness(0.1);
+    contain: strict;
+  }
+
+  @media (min-width: 640px) {
+    .ddc-blobs {
+      filter: blur(106px) brightness(0.1);
+    }
+  }
+
+  @media (min-width: 3200px) {
+    .ddc-blobs {
+      filter: blur(530px) brightness(0.1);
+    }
+  }
+
+  .ddc-blob {
+    position: absolute;
+    display: block;
+    width: 46vmin;
+    height: 46vmin;
+    border-radius: 9999px;
+    background: radial-gradient(circle at 50% 50%, #162d57 0%, #162d57 55%, rgba(22, 45, 87, 0) 72%);
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+  }
+
+  .ddc-blob--1 {
+    top: 6%;
+    left: 8%;
+    animation: ddc-drift-1 26s ease-in-out infinite alternate;
+  }
+  .ddc-blob--2 {
+    top: 44%;
+    left: 58%;
+    width: 54vmin;
+    height: 54vmin;
+    animation: ddc-drift-2 31s ease-in-out infinite alternate;
+  }
+  .ddc-blob--3 {
+    top: 62%;
+    left: 14%;
+    width: 40vmin;
+    height: 40vmin;
+    animation: ddc-drift-3 22s ease-in-out infinite alternate;
+  }
+  .ddc-blob--4 {
+    top: 12%;
+    left: 62%;
+    width: 38vmin;
+    height: 38vmin;
+    animation: ddc-drift-4 35s ease-in-out infinite alternate;
+  }
+  .ddc-blob--5 {
+    top: 34%;
+    left: 30%;
+    width: 50vmin;
+    height: 50vmin;
+    animation: ddc-drift-5 28s ease-in-out infinite alternate;
+  }
+
+  /* The Three.js version squashed each sphere as it neared the camera
+     (`scale(deform, 1/deform, deform)`); the scale/skew here reproduces it. */
+  @keyframes ddc-drift-1 {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1, 1);
+    }
+    50% {
+      transform: translate3d(22vw, 14vh, 0) scale(1.35, 0.74);
+    }
+    100% {
+      transform: translate3d(8vw, 34vh, 0) scale(0.9, 1.1);
+    }
+  }
+
+  @keyframes ddc-drift-2 {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1, 1);
+    }
+    45% {
+      transform: translate3d(-26vw, 18vh, 0) scale(0.8, 1.25);
+    }
+    100% {
+      transform: translate3d(-6vw, -20vh, 0) scale(1.3, 0.77);
+    }
+  }
+
+  @keyframes ddc-drift-3 {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1, 1);
+    }
+    55% {
+      transform: translate3d(28vw, -22vh, 0) scale(1.2, 0.83);
+    }
+    100% {
+      transform: translate3d(40vw, 6vh, 0) scale(0.95, 1.05);
+    }
+  }
+
+  @keyframes ddc-drift-4 {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1, 1);
+    }
+    40% {
+      transform: translate3d(-18vw, 28vh, 0) scale(1.4, 0.71);
+    }
+    100% {
+      transform: translate3d(-32vw, 4vh, 0) scale(1, 1);
+    }
+  }
+
+  @keyframes ddc-drift-5 {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1, 1);
+    }
+    50% {
+      transform: translate3d(14vw, -26vh, 0) scale(0.78, 1.28);
+    }
+    100% {
+      transform: translate3d(-16vw, -8vh, 0) scale(1.15, 0.87);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ddc-blob {
+      animation: none !important;
+    }
+  }
+</style>

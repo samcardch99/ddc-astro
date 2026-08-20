@@ -1,0 +1,22 @@
+---
+interface Props {
+  start: number;
+  end: number;
+  duration?: number;
+  prefix?: string;
+  suffix?: string;
+  class?: string;
+}
+const { start, end, duration = 2, prefix = '', suffix = '', class: className = '' } = Astro.props;
+---
+<!-- Rendered with its final value so the number is meaningful before (and
+     without) JavaScript; countup.js animates from `start` on first view. -->
+<span
+  class={className}
+  data-countup
+  data-start={start}
+  data-end={end}
+  data-duration={duration}
+  data-prefix={prefix}
+  data-suffix={suffix}>{prefix}{end}{suffix}</span
+>

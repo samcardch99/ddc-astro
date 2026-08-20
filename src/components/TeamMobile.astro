@@ -1,0 +1,150 @@
+---
+import { Image } from 'astro:assets';
+import FooterBanner from './FooterBanner.astro';
+import AnimatedBackground from './AnimatedBackground.astro';
+import members from '../data/team.json';
+import { employeeAsset } from '../lib/images';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  /** `h1` on /team, `h2` when the section is embedded in the home page. */
+  headingLevel?: 1 | 2;
+}
+const { lang, headingLevel = 2 } = Astro.props;
+const Heading = `h${headingLevel}` as const;
+const t = useTranslations(lang);
+
+const people = members.map((m, i) => ({
+  ...m,
+  index: i,
+  asset: employeeAsset(m.image),
+  extraClass: (m as { class?: string }).class ?? 'object-top',
+}));
+---
+<section class="h-auto w-full pt-32 text-primary bg-primary z-20 relative">
+  <div class="absolute inset-0 -z-10 opacity-80 bg-black"></div>
+  <AnimatedBackground class="h-[200vh]!" />
+
+  <Heading class="text-4xl font-bold mb-8 px-8">{t('team.title')}</Heading>
+
+  <div class="w-full max-w-xl pb-20 px-8 text-primary" data-team-accordion>
+    {
+      people.map((person) => (
+        <div class="team-m-item relative" style={`--i:${person.index}`}>
+          <details class="team-m-details" open={person.index === 0}>
+            <summary
+              class="team-m-summary group relative w-full text-left py-3 pl-5 pr-3 cursor-pointer"
+            >
+              <span class="team-m-marker absolute left-0 top-2 bottom-2 w-[2px] rounded-full transition-opacity duration-300 opacity-0 bg-white/90" />
+              <span class="block">
+                <span class="team-m-name block text-xl leading-tight font-bold transition-opacity duration-300 opacity-80">
+                  {person.name}
+                </span>
+                <span class="team-m-role block text-sm text-primary/80 transition-opacity duration-300 opacity-80">
+                  {t(`team.team_members.${person.id}.role`)}
+                </span>
+              </span>
+            </summary>
+
+            <div class="team-m-panel pl-5 pr-3">
+              <div class="mt-3 mb-4">
+                <div class="relative w-2/3 max-w-xs aspect-square overflow-hidden rounded-md">
+                  {person.asset && (
+                    <Image
+                      src={person.asset}
+                      alt={person.name}
+                      widths={[256, 512]}
+                      sizes="(min-width: 640px) 320px, 60vw"
+                      quality={72}
+                      loading="lazy"
+                      decoding="async"
+                      class={`absolute inset-0 w-full h-full object-cover ${person.extraClass}`}
+                    />
+                  )}
+                </div>
+                <p class="mt-3 text-xs leading-relaxed text-primary/90">
+                  {t(`team.team_members.${person.id}.description`)}
+                </p>
+              </div>
+            </div>
+          </details>
+
+          <div class="mx-0 my-2 h-px bg-white/10" />
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="sticky bottom-0 left-0 w-full">
+    <FooterBanner lang={lang} />
+    <div
+      class="pointer-events-none z-30 bottom-0 left-0 w-full h-[15vh] bg-linear-to-t from-black/40 from-50% to-transparent"
+    >
+    </div>
+  </div>
+</section>
+
+<style>
+  .team-m-summary {
+    list-style: none;
+  }
+  .team-m-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  details[open] > .team-m-summary .team-m-marker,
+  details[open] > .team-m-summary .team-m-name,
+  details[open] > .team-m-summary .team-m-role {
+    opacity: 1;
+  }
+
+  /* The panel's height is animated from script (framer's `panelVariants`:
+     0.32s cubic-bezier(.22,1,.36,1) open, 0.22s easeInOut close). */
+  .team-m-panel {
+    overflow: clip;
+  }
+
+  /* framer `itemReveal` with viewport={{ once: true, amount: 0.35 }} */
+  .team-m-item {
+    opacity: 0;
+    transform: translateY(18px);
+    filter: blur(2px);
+  }
+
+  .team-m-item[data-visible='true'] {
+    animation: ddc-item-reveal 0.42s cubic-bezier(0, 0, 0.58, 1) both;
+    animation-delay: calc(var(--i, 0) * 40ms);
+  }
+
+  @keyframes ddc-item-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+      filter: blur(2px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+      filter: blur(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .team-m-item {
+      opacity: 1;
+      transform: none;
+      filter: none;
+      animation: none;
+    }
+  }
+
+  /* Without JS the observer never fires, so show every row. */
+  @media (scripting: none) {
+    .team-m-item {
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
+  }
+</style>
