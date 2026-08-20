@@ -1,0 +1,27 @@
+/* Webfont: Noirden — self-hosted, only the three weights the design uses. */
+@font-face {
+  font-family: "Noirden";
+  src: url("../assets/fonts/Noirden-Light.woff") format("woff");
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  text-rendering: optimizeLegibility;
+}
+
+@font-face {
+  font-family: "Noirden";
+  src: url("../assets/fonts/Noirden-Regular.woff") format("woff");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  text-rendering: optimizeLegibility;
+}
+
+@font-face {
+  font-family: "Noirden";
+  src: url("../assets/fonts/Noirden-Bold.woff") format("woff");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  text-rendering: optimizeLegibility;
+}

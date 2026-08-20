@@ -1,0 +1,640 @@
+{
+  "slogan": "<0>Designing</0> the future, <1/> <0>Building</0> a Legacy",
+  "contact": "Contact",
+  "menu": "Menu",
+  "technologies": "Technologies",
+  "about_title": "The future <0/> is not <0/> Waited",
+  "about_title_mobile": "The future is <0/> not Waited, it is <1/> built",
+  "about_text": "At DDC Developments, we are dedicated to transforming the construction industry with a strong commitment to environmental responsibility. By leveraging cutting- edge technologies like our modular systems, we offer innovative and sustainable solutions that redefine efficiency and performance. Our disruptive approach positions us as an industry leader, driving progress and shaping the future of construction.",
+  "modular_construction_grid": "<0>Modular construction</0> with<1/> power to manufacture <2/> <0>properties</0> <3/> per day",
+  "manufacture_grid": "<0>Manufacture facility </0><1/>  in Florida",
+  "properties_grid": "More than <0/> <1>properties</1>",
+  "investments_grid": "Investments in projects",
+  "start_investment_grid": "Start your new <0/>investment now",
+  "explore_projects": "Explore some of our projects",
+  "convert_projects": "We convert designs into reality through innovative the modular construction method.",
+  "all_cases_button": "See all cases",
+  "market_analysis": "Market <0/> analysis",
+  "financing": "Financing and loan management",
+  "architectural_project": "Architectural Project",
+  "modular_construction": "  Modular construction 3-4<0/> months",
+  "presale": "Pre-sale and exclusivity for sale",
+  "our_areas": "Our Areas <0/> and <1>Technologies</1>",
+  "modular_system_accordion_title": "Modular System",
+  "ar_accordion_title": "Augmented Reality",
+  "bim_accordion_title": "BIM Software",
+  "tokenization_accordion_title": "Real Estate tokenization",
+  "ddc_app_accordion_title": "The DDC App",
+  "modular_system_accordion": "At DDC, we rely on a cutting-edge modular construction system that allows for faster execution, greater precision, and superior quality. By using prefabricated components, we streamline the building process and reduce environmental impact—transforming how real estate projects are developed across Florida.",
+  "ar_accordion": "We use Augmented Reality to offer immersive project previews, allowing clients and investors to visualize spaces before construction begins. This technology improves decision-making and creates a stronger emotional connection with every property.",
+  "bim_accordion": "Through BIM (Building Information Modeling), DDC guarantees project accuracy, cost control, and streamlined collaboration. This digital model centralizes architectural, structural, and MEP data—ensuring a smarter, more transparent construction process.",
+  "tokenization_accordion": "We’re pioneering real estate tokenization to democratize access to investment. By converting property value into digital tokens, we make it easier for global investors to participate with transparency, liquidity, and lower entry barriers.",
+  "ddc_app_accordion": "Our mobile app empowers investors to track progress, manage documents, and monitor returns—all in real-time. It’s your direct line to every DDC project, designed to make property investment simple, secure, and accessible.",
+  "our_team": "Our <0>Team</0>",
+  "team_members": {
+    "danilo_dominguez": {
+      "role": "CEO and Founder",
+      "description": "Our CEO, Danilo Dominguez, has been dedicating his life to better understanding how we can better connect all real estate industries. From Real Estate Brokerage to Residential & Commercial construction. For him, it's all about the clients' experiences."
+    },
+    "danilo_dominguez_catasus": {
+      "role": "Chief Operating Officer",
+      "description": "A veteran builder, Danilo turns strategy into flawless execution. He fine-tunes procurement, scheduling, and on-site workflows so our modular builds rise faster and safer. His hands-on leadership safeguards cost, quality, and compliance, delivering the operational excellence clients and investors expect from DDC."
+    },
+    "israel_gonzalez": {
+      "role": "Senior Business Developer",
+      "description": "Israel opens new doors for DDC. With keen market insight and an investor-first mindset, he scouts opportunities, negotiates strategic partnerships, and builds pipelines that fuel our modular projects. His blend of financial acumen and relationship savvy turns prospects into long-term collaborators who share DDC’s vision."
+    },
+    "yiseny_anzola": {
+      "role": "Business Developer",
+      "description": "Yiseny turns interest into ownership. Grounded in Miami’s fast-moving market, she guides buyers and investors from first inquiry to closing, making every step clear and efficient. Her proactive approach and personable style ensure each transaction reflects the distinction, prestige, and quality that define DDC."
+    },
+    "alejandro_fonticoba": {
+      "role": "Project Manager",
+      "description": "Alejandro keeps every DDC build on track. From permitting to punch-list, he aligns architects, engineers, and trades, tracking costs and milestones so modules arrive and assemble without delays. His rigorous oversight safeguards budgets and ensures DDC’s signature quality reaches the site as designed."
+    },
+    "alex_olivares": {
+      "role": "Senior General Contractor",
+      "description": "Alex is the on‑site force behind DDC’s precision builds. Drawing on deep field experience, he orchestrates crews, suppliers, and safety protocols so our modular structures rise flawlessly. His eye for detail and proactive problem‑solving keep timelines tight and quality uncompromised—delivering the craft clients expect."
+    },
+    "javi_ferrer": {
+      "role": "Sales Director",
+      "description": "Javi turns ideas into stories people remember. Using clear data and fresh creativity, he builds campaigns that show why DDC’s modular projects stand out. From a social-post to an investor pitch, he keeps every detail polished so clients and partners feel the distinction and quality that define DDC."
+    },
+    "alejandra_rosas": {
+      "role": "Loan Processor",
+      "description": "Alejandra plays a key role in ensuring the financial backbone of each project runs smoothly. With deep knowledge of loan documentation and regulatory processes, she supports our clients and internal teams to streamline approvals and secure reliable financing. Her precision and dedication help bring DDC projects to life with confidence and clarity."
+    },
+    "liliana_patiño": {
+      "role": "Transaction Coordinator",
+      "description": "Liliana ensures every real estate transaction runs smoothly from start to finish. With strong attention to detail and client coordination, he bridges the gap between contracts, timelines, and closing processes. His commitment to clarity and execution makes him a key player in delivering seamless deals at DDC."
+    },
+    "stephanie_parra": {
+      "role": "Account Manager",
+      "description": "Stephanie is the link between our clients and the full execution of every project. As Account Manager, she ensures communication is fluid, expectations are clear, and every step of the process is aligned with our client’s goals. Her proactive approach and strategic mindset help strengthen long-term relationships and guarantee satisfaction at every stage."
+    },
+    "lorena_ardila": {
+      "role": "Marketing Planner",
+      "description": "Lorena leads the strategic coordination of our marketing efforts, ensuring every campaign aligns with DDC’s vision and brand identity. With a sharp eye for planning and a deep understanding of audience dynamics, she transforms ideas into structured actions that drive visibility, positioning, and growth. Her work connects every message with purpose."
+    },
+    "wilfredo_alvarado": {
+      "role": "Creative Director",
+      "description": "Wilfredo turns concepts into immersive realities. As the mind behind DDC’s photorealistic renders, augmented-reality previews, and graphic identity, he lets clients walk through a project—feel its light, materials, and flow—long before construction begins, elevating every decision with clarity, beauty, and technical precision."
+    }
+  },
+  "footer": {
+    "title": "Get in Touch",
+    "subtitle": "Contact us today",
+    "description": "Make an exclusive appointment to discover our company and philosophy.",
+    "name": "Name",
+    "email": "Email address",
+    "phone": "Phone number",
+    "findUs": "How did you find us?",
+    "reason": "Reasons for investing with us:",
+    "reasonPlaceholder": "-- Select a reason --",
+    "message": "Message",
+    "acceptPolicy": "I accept the ",
+    "privacyPolicy": "Privacy Policy",
+    "sending": "Sending",
+    "emailPlaceHolder": "youremail@example.com",
+    "messagePlaceHolder": "Write your Message...",
+    "send": "Send",
+    "emailLabel": "E-mail",
+    "hoursLabel": "Hours",
+    "hoursValue": "Monday–Friday 9:00am – 6:00pm",
+    "socialLabel": "Social Media",
+    "addressLabel": "Address"
+  },
+  "contact_reasons": {
+    "collaboration": "Collaboration opportunities",
+    "inquiries": "General inquiries",
+    "business": "Business proposals",
+    "other": "Other"
+  },
+  "validation": {
+    "username_min": "Username must be at least 2 characters.",
+    "email_invalid": "Invalid email address.",
+    "email_min": "Please enter a valid email address.",
+    "phone_min": "Phone number must be at least 6 digits.",
+    "findUs_min": "Please let us know how you found us.",
+    "investingWithUs_min": "Please select at least one option.",
+    "message_min": "Please write a message.",
+    "terms_required": "You must accept the terms and policies"
+  },
+  "form_send": {
+    "success_title": "Form send",
+    "success": "Thanks, we'll be in touch.",
+    "fail_title": "Error sending form"
+  },
+  "projectDetails": {
+    "Villa_Sunset": {
+      "distribution": "5 Beds ● 4 Baths",
+      "description": " Architecturally distinctive residence, renovated in 2026, located in the heart of Glenvar Heights, where contemporary design thoughtfully preserves the property’s original character and authenticity. Offering 4,459 sq ft of carefully curated interior space, this home delivers a truly unique living experience for buyers who appreciate timeless design and privacy.  The renovation respected and highlighted original elements, including an authentic wine cellar that adds identity and understated luxury rarely found today. Generous social areas with excellent indoor-outdoor flow, five bedrooms and four bathrooms, including a ground-floor bedroom ideal for guests or a private office.  Pool, terraces, and mature landscaping create a serene retreat just minutes from Miami’s key destinations. Solid concrete construction, metal roof, and impact windows. A one-of-a-kind property for those seeking more than a home—character, history, and lasting value."
+    },
+    "Villa_Victor": {
+      "distribution": "5 Beds ● 5 Baths",
+      "description": "Villa Victor blends sleek architecture with tropical serenity. Its dark exterior contrasts with warm wood accents, creating a bold, modern look. Inside, open living spaces and natural light define a refined lifestyle, while the private pool deck offers an inviting escape—designed for both relaxation and entertaining."
+    },
+    "Villa_Santa_Marta": {
+      "distribution": "4 Beds ● 5 Baths",
+      "description": "This modern home seamlessly blends bold architectural design with natural elements. The façade combines concrete and wood, harmonizing with lush surroundings for a balanced, elegant look. Inside, open spaces with marble finishes, natural wood tones, and ample light create a serene atmosphere, prioritizing comfort, functionality, and connection to nature."
+    },
+    "Villa_Ochoa": {
+      "distribution": "4 Beds ● 4 Baths",
+      "description": "Villa Ochoa combines minimalist architecture with natural elegance. The exterior’s clean lines and earthy tones integrate seamlessly with lush surroundings, while expansive windows invite natural light inside. The open plan interior, featuring marble accents and warm wood, fosters comfort and sophistication, creating a harmonious balance between modern design and serene living."
+    },
+    "Villa_Esplanade": {
+      "distribution": "4 Beds ● 5 Baths",
+      "description": "Villa Esplanade blends waterfront tranquility with modern minimalism. Nestled in lush Miami greenery, this one story home celebrates horizontal lines, warm textures, and open plan elegance where architecture meets serenity."
+    },
+    "Villa_Guajira": {
+      "distribution": "8 Beds ● 6 Baths",
+      "description": "Villa Guajira is a modern duplex in Miami, offering clean lines, warm textures, and tropical landscaping. Its design blends indoor-outdoor living with private pools, luxurious interiors, and a serene, contemporary ambiance. Perfect for elegant urban lifestyles."
+    },
+    "Villa_Tortuga": {
+      "distribution": "4 Beds ● 4 Baths",
+      "description": "Contemporary elegance meets tropical serenity. This waterfront residence blends minimalist interiors with warm textures, expansive windows, and seamless outdoor living—designed to elevate comfort, light, and luxury under the Florida sun."
+    },
+    "Villa_Barranquilla": {
+      "distribution": "4 Beds ● 4 Baths",
+      "description": "Villa Barranquilla merges contemporary architecture with natural warmth. The façade features bold lines and wooden accents, blending seamlessly with lush greenery. Inside, open layouts with soft tones, wooden textures, and abundant natural light create a harmonious space that balances elegance and comfort, perfect for modern living."
+    },
+    "button": "See Portfolio"
+  },
+  "ddc_investment": {
+    "title": "Why Invest with DDC <0/> Developments?",
+    "button": "Make an Appointment",
+    "lower_costs": {
+      "text": "Lower Costs – Maximized ROI"
+    },
+    "faster_returns": {
+      "title": "Faster <0>Returns</0>",
+      "img": "faster_returns.svg"
+    },
+    "structural_strength": {
+      "text": "Proven <0>Structural Strength</0> Durable, reliable assets"
+    },
+    "flexible_investor": {
+      "title": "Smart, Scalable Entry <0></0> Points",
+      "subtitle": "Flexible investor models",
+      "img": "flexible_investor_en.svg"
+    },
+    "eco_friendly": {
+      "title": "Eco-Conscious Construction",
+      "text": "100% recyclable materials"
+    },
+    "appointment_now": "Make an appointment now"
+  },
+  "main_menu": {
+    "home": "Home",
+    "team": "Team",
+    "technologies": "Technologies",
+    "contact": "Contact",
+    "investments": "Investments",
+    "projects": "Projects"
+  },
+  "cover": {
+    "build": "Build",
+    "faster": "Faster",
+    "stronger": "Stronger",
+    "smarter": "Smarter",
+    "description": "The modern way to build: beautiful, resilient, and reliably on-time.",
+    "button": "Book a 30 min Intro"
+  },
+  "footer_banner": {
+    "projects": "Projects",
+    "technologies": "Technologies",
+    "investments": "Investments"
+  },
+  "about": {
+    "title": "About",
+    "subtitle": "The future is not waited, it is built",
+    "text": "At DDC Developments we build for a cleaner future. We use modular systems to achieve precision, speed, and consistent quality, raising the standard of value for investors and communities in Florida."
+  },
+  "technology": {
+    "title": "The evidence is in the numbers",
+    "button": "Explore Technologies",
+    "1": "mph wind Engeniering",
+    "2": "lower build costs",
+    "3": "faster schedules"
+  },
+  "technology_inside": {
+    "title": "Inside the DDC Panel System",
+    "subtitle": "What makes DDC different <0/> (construction - first)",
+    "button": "Book 30 min Intro",
+    "images_title": "On-Site Images",
+    "images_subtitle": "Real projects captured on site, from panel delivery to final assembly."
+  },
+  "technology_statistics": {
+    "1": {
+      "description": "~30% lower cost",
+      "icon": "cheap.svg"
+    },
+    "2": {
+      "description": "60–70% faster",
+      "icon": "faster.svg"
+    },
+    "3": {
+      "description": "Higher quality & precision",
+      "icon": "quality.png"
+    },
+    "4": {
+      "description": "Steel-reinforced modular structures",
+      "icon": "steel.png"
+    },
+    "5": {
+      "description": "Greater structural efficiency",
+      "icon": "efficiency.svg"
+    },
+    "6": {
+      "description": "Durability",
+      "icon": "durability.svg"
+    },
+    "7": {
+      "description": "Low maintenance",
+      "icon": "maintenance.png"
+    },
+    "8": {
+      "description": "Adaptable & scalable",
+      "icon": "scalable.png"
+    },
+    "9": {
+      "description": "100% recyclable steel (with recycled content)",
+      "icon": "recyclable.svg"
+    }
+  },
+  "panels": {
+    "floor": "Floor Panels",
+    "roof": "Roof Panels",
+    "wall": "Wall Panels",
+    "floor_desc": "Rigid, level assemblies that install fast",
+    "roof_desc": "Lightweight, high-span modules that close the envelope quickly",
+    "wall_desc": "Pre-engineered walls with planned service paths"
+  },
+  "technology_cards": {
+    "1": {
+      "description": "Design for assembly. Details and interfaces are planned so panels go together fast and clean."
+    },
+    "2": {
+      "description": "Factory precision, field simplicity. Panels arrive labeled with traceable IDs and pass documented quality checks."
+    },
+    "3": {
+      "description": "Clear trade boundaries. Foundations, openings, services, and cladding are pre-scoped to reduce rework."
+    },
+    "4": {
+      "description": "Repeatable on-site sequence. Layout → first lift → lock & align → close-in—calm, predictable sites."
+    },
+    "5": {
+      "description": "Disciplined handover. Complete as-built documentation and closed punchlists."
+    }
+  },
+  "projects": {
+    "title": "Projects",
+    "button": "View All Projects"
+  },
+  "projects_inside": {
+    "title": "Our Projects",
+    "search": "Search Projects",
+    "list": "List",
+    "grid": "Grid",
+    "location": "Location",
+    "all": "All"
+  },
+  "project_details": {
+    "project_description": {
+      "Villa_Sunset": {
+        "description": " Architecturally distinctive residence, renovated in 2026, located in the heart of Glenvar Heights, where contemporary design thoughtfully preserves the property’s original character and authenticity. Offering 4,459 sq ft of carefully curated interior space, this home delivers a truly unique living experience for buyers who appreciate timeless design and privacy.  The renovation respected and highlighted original elements, including an authentic wine cellar that adds identity and understated luxury rarely found today. Generous social areas with excellent indoor-outdoor flow, five bedrooms and four bathrooms, including a ground-floor bedroom ideal for guests or a private office.  Pool, terraces, and mature landscaping create a serene retreat just minutes from Miami’s key destinations. Solid concrete construction, metal roof, and impact windows. A one-of-a-kind property for those seeking more than a home—character, history, and lasting value."
+      },
+      "Villa_Anzola": {
+        "description": "A bespoke architectural retreat in Lehigh Acres, Florida. This refined tropical home pairs natural textures with contemporary lines and generous outdoor living, offering an exclusive experience where every detail is crafted for distinction, comfort, and timeless sophistication."
+      },
+      "Villa_Maria": {
+        "description": "A serene tropical modern retreat in Lehigh Acres. Villa Maria blends natural textures, warm wood accents, and matte black architecture with lush outdoor living around a private pool. Refined interiors, a chef kitchen, spa like baths, and a pergola lounge deliver timeless comfort and quiet sophistication."
+      },
+      "Villa_Dorticos": {
+        "description": "A waterfront retreat in Punta Gorda where bold geometry meets organic softness. A dark and elegant exterior pairs with warm wood and lush greenery, opening to expansive layouts with double height light, warm tones, and curated illumination. Terraced gardens, a pool terrace, and a private dock create a seamless connection to nature, delivering refined comfort and timeless sophistication."
+      },
+      "Villa_Oceania": {
+        "description": "A waterfront tropical modern residence in Punta Gorda. Villa Oceania pairs sculpted rooflines, matte dark stucco, and warm wood with generous glass and lush gardens, opening to elegant interiors with soft lighting, a chef kitchen, and spa baths. A long waterfront terrace with pool, lounge areas, and a dock frames sweeping water views and delivers a calm, refined lifestyle with timeless sophistication."
+      },
+      "Villa_Oasis": {
+        "description": "A waterfront tropical modern residence in Florida. Dark stucco and warm wood pair with generous glass and clean roof lines, opening to serene interiors with an open kitchen, spa baths, and curated lighting. A pool terrace, lounge deck, and a private dock deliver calm living with timeless sophistication."
+      },
+      "Villa_Nacho": {
+        "description": "A tropical modern residence in Lehigh Acres. Villa Nacho blends matte dark stucco, warm wood screens, and crisp geometry with lush landscaping. Bright interiors with clerestory light, an open chef kitchen, and spa baths flow to a private pool terrace, delivering refined comfort, privacy, and timeless sophistication."
+      },
+      "Villa_Valeria": {
+        "description": "A contemporary sanctuary in Miami where refined minimalism meets organic warmth. Clean geometry, textured stucco, and vertical wood screens frame light filled interiors that flow to a private courtyard with pool, pergola lounge, and garden. Calm palettes, curated lighting, and crafted details elevate daily living and create a timeless sense of harmony."
+      },
+      "Villa_Barranquilla": {
+        "description": "A contemporary retreat in Miami that pairs textured stucco, vertical wood screens, and generous glass with lush greenery. Bold lines and warm natural tones shape calm interiors where open layouts, crafted millwork, and soft lighting flow to a private patio with pool and lounge. The result is refined comfort and modern elegance in perfect balance."
+      },
+      "Villa_Santa_Marta": {
+        "description": "A modern sanctuary in Miami that blends bold geometry with natural warmth. A concrete facade with wood screens sits within lush gardens and generous glazing. Inside, open spaces with marble finishes and natural wood tones gather daylight and flow to a private pool deck and an upper terrace, delivering refined comfort, function, and a calm connection to nature."
+      },
+      "Villa_Cartagena": {
+        "description": "A contemporary refuge in Miami that unites refined architecture with tropical nature. A tall glass volume wrapped in warm wood screens anchors the facade, bringing lush greenery into calm, light filled interiors. Open living areas with a chef kitchen and spa baths flow to a private garden with pool and lounge, delivering a serene and sophisticated way of life."
+      },
+      "Villa_Guajira": {
+        "description": "Villa Guajira is a modern duplex in Miami, offering clean lines, warm textures, and tropical landscaping. Its design blends indoor-outdoor living with private pools, luxurious interiors, and a serene, contemporary ambiance. Perfect for elegant urban lifestyles."
+      },
+      "Villa_Ochoa": {
+        "description": "Villa Ochoa pairs minimalist architecture with natural warmth. A low, linear façade in stone-gray stucco and vertical wood screens sits within lush greenery, while expansive glazing and clerestory windows bathe the interiors in soft Florida light. Inside, an open plan wrapped in creamy plaster, marble accents, and custom millwork drifts out to the covered terrace, pool, and private dock—an effortless balance of modern design and serene living."
+      },
+      "Villa_Don_Quixote": {
+        "description": "Villa Don Quixote blends modern elegance with a serene outdoor retreat. A bold façade of clean lines and warm, earthy textures pairs with lush greenery. Inside, open layouts and soft, layered lighting create effortless comfort, while the poolside lounge invites relaxation—striking a refined balance between sophistication and tranquility."
+      },
+      "Villa_Atlantico": {
+        "description": "This modern home harmonizes with its natural surroundings through a minimalist exterior, clean lines, and earthy tones. Wooden accents and dark textures add elegance while blending with the lush greenery. Inside, neutral palettes, natural materials like wood and stone, and an open-plan layout maximize light and comfort. Floor-to-ceiling curtains and indoor greenery enhance the connection to nature, creating a tranquil and balanced space for relaxation."
+      },
+      "Villa_Nukes": {
+        "description": "A modern sanctuary in Lehigh Acres that pairs calm sophistication with natural elegance. Clean geometry, warm woods, and an earthy palette frame bright, open-plan living that flows to a sunlit pool terrace. With four bedrooms, three baths, and lush privacy, it’s designed for effortless indoor-outdoor relaxation."
+      },
+      "Villa_Esplanade": {
+        "description": "A serene, single-story residence that pairs coastal calm with contemporary minimalism. Rhythmic wood screens, low horizontal lines, and generous glazing frame sculpted gardens and soften the façade. Inside, a clerestory-lit great room centers a chef’s kitchen with a monolithic island, while spa-like suites feature rich stone and warm veneers. Seamless indoor-outdoor flow leads to landscaped terraces and pool—elegance made effortless."
+      },
+      "Villa_Penate": {
+        "description": "Villa Penate is a refined one-story residence that balances crisp geometry with warm, tactile finishes. A moody façade with wood accents and expansive glazing leads to light-filled interiors chef’s kitchen, lofted living, and spa suites that unfold to a pool terrace and waterfront dock, creating seamless, resort-style indoor–outdoor living."
+      },
+      "Villa_Victor": {
+        "description": "Villa Victor blends sleek architecture with tropical serenity. Its dark exterior contrasts with warm wood accents, creating a bold, modern look. Inside, open living spaces and natural light define a refined lifestyle, while the private pool deck offers an inviting escape—designed for both relaxation and entertaining."
+      },
+      "Villa_Tortuga": {
+        "description": "Villa Tortuga pairs a low, modern profile with warm wood accents and soft lighting, set among palms for a relaxed streetscape. Inside, airy rooms and a lofty kitchen–dining space use pale oak, stone, and matte black details for quiet sophistication, while calm bedrooms and a spa-like bath open to a pool terrace made for easy coastal living."
+      },
+      "DDC_Wellness_Center": {
+        "description": "A wellness driven residential master plan that brings together 70 smart homes and a state of the art health and fitness center. The community is delivered with DfMA and modular construction in cold formed steel, fully coordinated in BIM for accuracy, quality control, and accelerated schedules. Homes are net zero ready with high performance envelopes, low U value glazing, continuous insulation, energy recovery ventilation, efficient HVAC, and heat pump water heating. The project includes distributed photovoltaics, readiness for battery storage, EV charging, and a community energy management system. Biocentric landscape design provides shade, green corridors, stormwater capture, and efficient irrigation. Native home automation enables app based control of lighting, climate, and security, plus indoor air quality sensors. The Wellness Center features a gym, studios for classes, therapy rooms, and consultation suites, with acoustic design and circadian lighting to maximize comfort, health, and productivity.",
+        "areas_info": "70 Smart Homes • Wellness Center with gym, green areas, and health clinic"
+      },
+      "Villa_Ciego_de_Avila": {
+        "description": "A single-story modern retreat that pairs dark stucco with warm wood slats and natural stone for a refined, understated presence. A deep entry porch leads to an open living area with lofty ceilings, clerestory light, and custom millwork. The kitchen features a sculpted marble island, vertical wood paneling, and clean lines that integrate dining and family spaces. The primary suite opens to the terrace and includes a spa-style bath; three secondary bedrooms form a private wing with two full bathrooms. Outdoors, a perimeter deck and linear pool shape a resortlike setting framed by tropical landscaping and low lighting—ideal for effortless entertaining and everyday relaxation. Warm minimalism, designed for seamless indoor-outdoor living."
+      },
+      "Villa_Gabriel": {
+        "description": "A contemporary estate with classical poise. The arrival sequence is defined by a soaring, double-height portico wrapped in warm vertical wood and soft arch lighting, setting a calm, elegant tone. Inside, an open great room flows to the dining area and chef’s kitchen with sculpted stone surfaces, fluted wood detailing, and custom millwork. The primary suite is a private retreat with a spa-style bath and tailored dressing room, while three secondary suites are organized for privacy. Large sliders open to a resortlike pool terrace lined with rhythmic columns, lounge areas, and lush landscaping, perfect for effortless entertaining and everyday serenity."
+      },
+      "Villa_JH_II": {
+        "description": "A contemporary residence organized around a central pool courtyard that blends modern minimalism with tropical warmth. The front façade combines soft textures, dark tones, and vertical wood detailing, setting a refined yet inviting tone. Inside, a seamless open plan connects the living, dining, and chef’s kitchen, anchored by fluted wood, natural stone, and curated lighting.The primary suite enjoys direct pool views, a spa-inspired bath, and a custom walk-in closet. Five additional bedrooms are distributed for privacy, each designed with large windows and access to natural light. The outdoor terrace expands the living space, featuring a covered lounge, summer kitchen, and expansive pool deck surrounded by lush greenery—ideal for relaxed living and sophisticated entertaining."
+      },
+      "Villa_Perez": {
+        "description": "A sleek one-story residence that balances bold lines with warm, natural finishes. The arrival court features a deep floating canopy, sculpted landscaping, and a refined entry framed in vertical slats. Inside, the great room flows to a dramatic chef’s kitchen with dark stone, a fluted wood island, and soaring clerestory light, then to a generous dining area. Oversized sliders open to a resort-style pool terrace with wide decking, lounge zones, and soft landscape lighting, ideal for effortless indoor-outdoor living. The primary suite includes a spa bath and custom wardrobe, while three secondary suites are set along a private wing for quiet comfort."
+      },
+      "Villa_Tropical_Oasis": {
+        "description": "Villa Tropical Oasis extends its warm minimalism to the outdoors, merging sleek architecture with a lush tropical setting. A dark stucco and natural wood facade with deep eaves frames the entry court of palms and stone, creating a calm, modern arrival. Floor to ceiling windows open the great room to a terraced ipe deck with cable rail, lounge and dining zones, and a hammock nook that overlooks a sculpted pool edged in natural rock and layered planting.The grounds live like a private club. A turf sports lawn accommodates soccer and a basketball key for daily play, while discreet landscape lighting and dense greenery ensure privacy and a resort mood in the evening. Together with the serene interiors, the home delivers a refined indoor outdoor lifestyle designed for relaxation, wellness, and effortless entertaining."
+      }
+    },
+    "bathrooms": "Bathrooms",
+    "bedrooms": "Bedrooms",
+    "renders": "Renders",
+    "reales": "Real"
+  },
+  "investments": {
+    "title": "Why invest with DDC Developments?",
+    "subtitle": "What makes DDC different",
+    "button": "Investor Hub",
+    "grid": {
+      "1": {
+        "title": "End to end <0/> Platform",
+        "description": "From acquisition to pre-sale under one"
+      },
+      "2": {
+        "title": "40+ properties <0/> developed",
+        "description": "Proven delivery across markets"
+      },
+      "3": {
+        "title": "$650M real estate <0/> transactions",
+        "description": "From acquisition to pre-sale, under one playbook."
+      },
+      "4": {
+        "title": "$50M+ under management",
+        "description": "Scale with disciplined governance."
+      }
+    }
+  },
+  "our_process": {
+    "title": "Our Process",
+    "button": "Investor-Hub",
+    "accordion": {
+      "1": {
+        "title": "Market analysis",
+        "description": "We validate demand, pricing, and absorption in the target area, and review zoning, utilities, and site risks. The outcome is a clear go/no-go with a preliminary schedule and cost window."
+      },
+      "2": {
+        "title": "Financial & Loan Management",
+        "description": "We assemble the lender package, secure terms with regional banks, and coordinate appraisal and closing. During the build, we manage draw schedules, inspections, and compliance so funds flow on time."
+      },
+      "3": {
+        "title": "Architectural project",
+        "description": "We develop the design aligned to the panelized steel system—walls, roof, and floor—defining service paths, openings, and connection details. You receive permit-ready plans, panel schedules, and a crane/assembly plan."
+      },
+      "4": {
+        "title": "Fast & Ecological Modular Construction",
+        "description": "Panels are fabricated with Florida partners, labeled for traceability, and delivered to site for a repeatable assembly sequence: layout → first lift → lock & align → close-in. Quality checks are documented at each stage until punchlist close-out."
+      },
+      "5": {
+        "title": "Pre-sale & exclusive sales",
+        "description": "With Tsalach Real Estate, we set the go-to-market plan—positioning, pricing, and launch calendar—then manage leads, reservations, and closings. Buyers get clear documentation and timelines from the first contact to handover."
+      }
+    }
+  },
+  "team": {
+    "title": "Team",
+    "button_team": "Team",
+    "button_culture": "Our Culture",
+    "team_members": {
+      "danilo_dominguez": {
+        "role": "CEO and Founder",
+        "description": "Our CEO, Danilo Dominguez, has been dedicating his life to better understanding how we can better connect all real estate industries. From Real Estate Brokerage to Residential & Commercial construction. For him, it's all about the clients' experiences."
+      },
+      "danilo_dominguez_catasus": {
+        "role": "Chief Operating Officer",
+        "description": "A veteran builder, Danilo turns strategy into flawless execution. He fine-tunes procurement, scheduling, and on-site workflows so our modular builds rise faster and safer. His hands-on leadership safeguards cost, quality, and compliance, delivering the operational excellence clients and investors expect from DDC."
+      },
+      "israel_gonzalez": {
+        "role": "Senior Business Developer",
+        "description": "Israel opens new doors for DDC. With keen market insight and an investor-first mindset, he scouts opportunities, negotiates strategic partnerships, and builds pipelines that fuel our modular projects. His blend of financial acumen and relationship savvy turns prospects into long-term collaborators who share DDC’s vision."
+      },
+      "yiseny_anzola": {
+        "role": "Business Developer",
+        "description": "Yiseny turns interest into ownership. Grounded in Miami’s fast-moving market, she guides buyers and investors from first inquiry to closing, making every step clear and efficient. Her proactive approach and personable style ensure each transaction reflects the distinction, prestige, and quality that define DDC."
+      },
+      "alejandro_fonticoba": {
+        "role": "Project Manager",
+        "description": "Alejandro keeps every DDC build on track. From permitting to punch-list, he aligns architects, engineers, and trades, tracking costs and milestones so modules arrive and assemble without delays. His rigorous oversight safeguards budgets and ensures DDC’s signature quality reaches the site as designed."
+      },
+      "alex_olivares": {
+        "role": "Senior General Contractor",
+        "description": "Alex is the on‑site force behind DDC’s precision builds. Drawing on deep field experience, he orchestrates crews, suppliers, and safety protocols so our modular structures rise flawlessly. His eye for detail and proactive problem‑solving keep timelines tight and quality uncompromised—delivering the craft clients expect."
+      },
+      "javi_ferrer": {
+        "role": "Sales Director",
+        "description": "Javi turns ideas into stories people remember. Using clear data and fresh creativity, he builds campaigns that show why DDC’s modular projects stand out. From a social-post to an investor pitch, he keeps every detail polished so clients and partners feel the distinction and quality that define DDC."
+      },
+      "alejandra_rosas": {
+        "role": "Loan Processor",
+        "description": "Alejandra plays a key role in ensuring the financial backbone of each project runs smoothly. With deep knowledge of loan documentation and regulatory processes, she supports our clients and internal teams to streamline approvals and secure reliable financing. Her precision and dedication help bring DDC projects to life with confidence and clarity."
+      },
+      "liliana_patiño": {
+        "role": "Transaction Coordinator",
+        "description": "Liliana ensures every real estate transaction runs smoothly from start to finish. With strong attention to detail and client coordination, he bridges the gap between contracts, timelines, and closing processes. His commitment to clarity and execution makes him a key player in delivering seamless deals at DDC."
+      },
+      "lorena_ardila": {
+        "role": "Marketing Planner",
+        "description": "Lorena leads the strategic coordination of our marketing efforts, ensuring every campaign aligns with DDC’s vision and brand identity. With a sharp eye for planning and a deep understanding of audience dynamics, she transforms ideas into structured actions that drive visibility, positioning, and growth. Her work connects every message with purpose."
+      },
+      "wilfredo_alvarado": {
+        "role": "Creative Director",
+        "description": "Wilfredo turns concepts into immersive realities. As the mind behind DDC’s photorealistic renders, augmented-reality previews, and graphic identity, he lets clients walk through a project—feel its light, materials, and flow—long before construction begins, elevating every decision with clarity, beauty, and technical precision."
+      },
+      "esteban_villavicencio": {
+        "role": "Senior Civil Engineer",
+        "description": "Esteban turns vision into buildable, code-compliant reality. He leads the civil scope—from foundations, grading, and drainage to structural coordination for modular installs—so every project meets Florida Building Code and local requirements. Working closely with our COO, Project Manager, and Senior General Contractor, he streamlines submittals, inspections, and RFIs, value-engineering connections and site works to keep timelines tight without compromising safety or quality."
+      },
+      "blanca_mendoza": {
+        "role": "Sales Associate",
+        "description": "Blanca transforms interest into well-informed decisions. She manages lead follow-up, property showings, and investor touchpoints with clarity and warmth, ensuring each step is organized and stress-free. Aligned with our Sales Director’s strategy, she maintains spotless pipelines and proactive communication so clients feel the distinction and quality that define DDC."
+      },
+      "anisleidy_valle": {
+        "role": "Human Resources Leader",
+        "description": "Anisleidy builds a strong people culture at DDC. She leads hiring, onboarding, and compliance, and supports the teams that use modular systems to deliver predictable schedules and high quality results."
+      },
+      "alejandro_gomez": {
+        "role": "CEO Executive Assistant",
+        "description": "Alejandro is the right hand of our CEO, managing schedules, communications, and strategic priorities with precision. He ensures that every decision and initiative is executed seamlessly, supporting the leadership team in driving DDC’s vision forward."
+      },
+      "rosario_gomez": {
+        "role": "Operations Manager",
+        "description": "Rosario ensures every operation and real estate project runs smoothly from start to finish. With a strong focus on planning and control, she connects teams, processes, and execution, playing a key role in keeping DDC’s operations efficient, coordinated, and consistently reliable."
+      },
+      "mateo_correa_hernandez": {
+        "role": "Finance Manager",
+        "description": "Mateo strengthens DDC’s financial operations through accounting management, treasury oversight, and the coordination of disbursements with financial institutions. With a focus on efficiency and control, he helps optimize processes, ensure resource availability, and support key decision making, contributing to stronger results across every project."
+      },
+      "daniela_marichal": {
+        "role": "Permit Runner",
+        "description": "Daniela is the vital link between our projects and local authorities. She navigates the complexities of municipal bureaucracy with speed and precision, ensuring all permits and documentation are processed without delay. Her proactive coordination keeps our construction timelines on track, allowing DDC to maintain its commitment to rapid and compliant modular delivery."
+      },
+      "dany_rodriguez": {
+        "role": "Superintendent",
+        "description": "Dany brings a keen, vigilant perspective to the construction site, transforming blueprints into physical structures with unwavering attention to detail. His watchful eyes oversee every trade, ensuring that the highest standards of quality are maintained at every phase."
+      }
+    }
+  },
+  "culture": {
+    "title": "Our Culture",
+    "features": {
+      "1": {
+        "title": "Safety is non–negotiable",
+        "description": "Every site, every shift, every partner."
+      },
+      "2": {
+        "title": "Precision over guesswork",
+        "description": "Panel traceability and documented checks."
+      },
+      "3": {
+        "title": "Speed with discipline",
+        "description": "Shorter critical paths, not shortcuts."
+      },
+      "4": {
+        "title": "Ownership mindset",
+        "description": "We keep promises and close punchlists."
+      },
+      "5": {
+        "title": "Sustainability by design",
+        "description": "Recyclable steel and cleaner sites."
+      },
+      "6": {
+        "title": "Local partners, global standards",
+        "description": "Florida fabrication, world-class rigor."
+      }
+    }
+  },
+  "testimonials": {
+    "title": "Testimonials",
+    "button": "Subscribe to our Newsletter",
+    "cards": {
+      "1": {
+        "name": "Yahoo! Finance",
+        "description": "Miami-based leader in eco-friendly modular construction, announced a significant corporate milestone: a 200% year-over-year increase in inquiries for its patented hurricane-resistant, energy-efficient modular building systems."
+      },
+      "2": {
+        "name": "La Vanguardia",
+        "description": "The key is to combine accelerated construction with full financing"
+      },
+      "3": {
+        "name": "Tech Bullion",
+        "description": "By prefabricating these components off-site, DDC Developments streamlines on-site assembly, enabling projects to be completed in months rather than years."
+      },
+      "4": {
+        "name": "Business Insider",
+        "description": "In a region where hurricanes and climate challenges dominate headlines, DDC Developments emerges as a game-changer for South Florida’s real estate landscape."
+      },
+      "5": {
+        "name": "Barchart ",
+        "description": "Beyond resilience, DDC prioritizes energy efficiency. The panels’ superior insulation reduces heating and cooling demands by 30%, aligning with global green building certifications like LEED."
+      }
+    }
+  },
+  "investments_inside": {
+    "card": {
+      "title": "Plans",
+      "active": "Asset type",
+      "time": "Construction timeline",
+      "profile": "Investor profile",
+      "button": "Talk to an advisor",
+      "content": {
+        "1": {
+          "active": "Single family home",
+          "time": "12 months",
+          "profile": "Domestic / international investor"
+        },
+        "2": {
+          "active": "Single family home",
+          "time": "12 months",
+          "profile": "Domestic / international investor"
+        },
+        "3": {
+          "active": "Single family home",
+          "time": "12 months",
+          "profile": "Domestic / international investor"
+        },
+        "4": {
+          "active": "Single family home",
+          "time": "12 months",
+          "profile": "Domestic / international investor"
+        }
+      }
+    },
+    "form": {
+      "title": "Talk to an advisor",
+      "subtitle": "Selected Plan: ",
+      "name": "Name",
+      "name_placeholder": "Your Name",
+      "country_placeholder": "Select your country",
+      "country": "Country",
+      "mail": "Mail",
+      "mail_placeholder": "Your Mail",
+      "phone": "Phone",
+      "phone_placeholder": "Your phone number",
+      "button": "Send",
+      "button_sending": "Sending...",
+      "validation": {
+        "name": "Please enter your name (min. 2 characters)",
+        "email": {
+          "invalid": "Invalid email",
+          "required": "Email is required"
+        },
+        "phone": "Invalid phone number",
+        "select": "Select an option"
+      },
+      "first_select": "What is your current net budget for investing in real estate in Florida?",
+      "first_select_3": "More than $1,000,000",
+      "second_select": "Do you currently have the funds available?",
+      "second_select_1": "Yes, I have the capital available",
+      "second_select_2": "No, I'm looking for financing options",
+      "second_select_3": "I have a stake and am open to financing",
+      "third_select": "Do you have a company registered in the US?",
+      "third_select_1": "Yes",
+      "third_select_2": "No, but I'm interested in opening one",
+      "third_select_3": "I have no intention of opening one for now"
+    }
+  }
+}

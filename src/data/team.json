@@ -1,0 +1,114 @@
+[
+  {
+    "name": "Danilo Dominguez",
+    "id": "danilo_dominguez",
+    "role": "CEO and Founder",
+    "description": "Our CEO, Danilo Dominguez, has been dedicating his life to better understanding how we can better connect all real estate industries. From Real Estate Brokerage to Residential & Commercial construction. For him, it's all about the clients' experiences.",
+    "image": "assets/employees/danilo.jpg",
+    "class": "object-top"
+  },
+  {
+    "name": "Danilo Dominguez Catasus",
+    "id": "danilo_dominguez_catasus",
+    "role": "Chief Operating Officer",
+    "description": "A veteran builder, Danilo turns strategy into flawless execution. He fine-tunes procurement, scheduling, and on-site workflows so our modular builds rise faster and safer. His hands-on leadership safeguards cost, quality, and compliance, delivering the operational excellence clients and investors expect from DDC.",
+    "image": "assets/employees/danilo1.jpg"
+  },
+    {
+    "name": "Alejandro Gomez",
+    "id": "alejandro_gomez",
+    "role": "CEO Executive Assistant",
+    "description": " Alejandro is the right hand of our CEO, managing schedules, communications, and strategic priorities with precision. He ensures that every decision and initiative is executed seamlessly, supporting the leadership team in driving DDC’s vision forward.",
+    "image": "assets/employees/alejandro_gomez.jpg",
+    "class": ""
+  },
+  {
+    "name": "Javi Ferrer",
+    "id": "javi_ferrer",
+    "role": "Sales Director",
+    "description": "Javi turns ideas into stories people remember. Using clear data and fresh creativity, he builds campaigns that show why DDC’s modular projects stand out. From a social-post to an investor pitch, he keeps every detail polished so clients and partners feel the distinction and quality that define DDC.",
+    "image": "assets/employees/javi.jpg",
+    "class": "scale-[1.1] -translate-y-40"
+  },
+  {
+    "name": "Alex Olivares",
+    "id": "alex_olivares",
+    "role": "Senior General Contractor",
+    "description": "Alex is the on‑site force behind DDC’s precision builds. Drawing on deep field experience, he orchestrates crews, suppliers, and safety protocols so our modular structures rise flawlessly. His eye for detail and proactive problem‑solving keep timelines tight and quality uncompromised—delivering the craft clients expect.",
+    "image": "assets/employees/alex.jpg",
+    "class": ""
+  },
+  {
+    "name": "Liliana Patiño",
+    "id": "liliana_patiño",
+    "role": "Transaction Coordinator",
+    "description": "Liliana ensures every real estate transaction runs smoothly from start to finish. With strong attention to detail and client coordination, she bridges the gap between contracts, timelines, and closing processes. Her commitment to clarity and execution makes her a key player in delivering seamless deals at DDC.",
+    "image": "assets/employees/liliana.jpg",
+    "class": ""
+  },
+  {
+    "name": "Lorena Ardila",
+    "id": "lorena_ardila",
+    "role": "Marketing Planner",
+    "description": "Lorena leads the strategic coordination of our marketing efforts, ensuring every campaign aligns with DDC’s vision and brand identity. With a sharp eye for planning and a deep understanding of audience dynamics, she transforms ideas into structured actions that drive visibility, positioning, and growth. Her work connects every message with purpose.",
+    "image": "assets/employees/lorena.jpg",
+    "class": ""
+  },
+  {
+    "name": "Wilfredo Alvarado",
+    "id": "wilfredo_alvarado",
+    "role": "Creative Director",
+    "description": "Wilfredo turns concepts into immersive realities. As the mind behind DDC’s photorealistic renders, augmented-reality previews, and graphic identity, he lets clients walk through a project—feel its light, materials, and flow—long before construction begins, elevating every decision with clarity, beauty, and technical precision.",
+    "image": "assets/employees/wilfredo.jpg",
+    "class": ""
+  },
+  {
+    "name": "Esteban Villavicencio",
+    "id": "esteban_villavicencio",
+    "role": "Senior Civil Engineer",
+    "description": "Esteban turns vision into buildable, code-compliant reality. He leads the civil scope—from foundations, grading, and drainage to structural coordination for modular installs—so every project meets Florida Building Code and local requirements. Working closely with our COO, Project Manager, and Senior General Contractor, he streamlines submittals, inspections, and RFIs, value-engineering connections and site works to keep timelines tight without compromising safety or quality.",
+    "image": "assets/employees/esteban.jpg",
+    "class": ""
+  },
+  {
+    "name": "Anisleidy Valle",
+    "id": "anisleidy_valle",
+    "role": "Human Resources Lead",
+    "description": "Blanca transforms interest into well-informed decisions. She manages lead follow-up, property showings, and investor touchpoints with clarity and warmth, ensuring each step is organized and stress-free. Aligned with our Sales Director’s strategy, she maintains spotless pipelines and proactive communication so clients feel the distinction and quality that define DDC.",
+    "image": "assets/employees/anisleidy.jpg",
+    "class": ""
+  },
+
+  {
+    "name": "Rosario Gomez",
+    "id": "rosario_gomez",
+    "role": "Project Manager",
+    "description": "Rosario ensures every operation and real estate project runs smoothly from start to finish. With a strong focus on planning and control, she connects teams, processes, and execution, playing a key role in keeping DDC’s operations efficient, coordinated, and consistently reliable.",
+    "image": "assets/employees/rosario.jpg",
+    "class": "object-center"
+  },
+  {
+    "name": "Mateo Correa",
+    "id": "mateo_correa_hernandez",
+    "role": "Finance Manager",
+    "description": "Mateo strengthens DDC’s financial operations through accounting management, treasury oversight, and the coordination of disbursements with financial institutions. With a focus on efficiency and control, he helps optimize processes, ensure resource availability, and support key decision making, contributing to stronger results across every project.",
+    "image": "assets/employees/mateo.jpg",
+    "class": "object-center"
+  },
+  {
+    "name": "Daniela Marichal",
+    "id": "daniela_marichal",
+    "role": "Permit Runner",
+    "description": "Daniela is the vital link between our projects and local authorities. She navigates the complexities of municipal bureaucracy with speed and precision, ensuring all permits and documentation are processed without delay. Her proactive coordination keeps our construction timelines on track, allowing DDC to maintain its commitment to rapid and compliant modular delivery.",
+    "image": "assets/employees/daniela.jpg",
+    "class": "object-top"
+  },
+  {
+    "name": "Dany Rodriguez",
+    "id": "dany_rodriguez",
+    "role": "Superintendent",
+    "description": "Dany brings a keen, vigilant perspective to the construction site, transforming blueprints into physical structures with unwavering attention to detail. His watchful eyes oversee every trade, ensuring that the highest standards of quality are maintained at every phase.",
+    "image": "assets/employees/dany.jpg",
+    "class": "object-top"
+  }
+]
