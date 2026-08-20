@@ -78,23 +78,68 @@ test.describe('project detail', () => {
     await expect(page.locator('[data-photo-mode]')).toHaveCount(0);
   });
 
-  test('the lightbox opens, steps through and closes', async ({ page }) => {
+  test('the photo viewer opens and closes', async ({ page }) => {
     await page.goto('/projects/Villa_Perez');
-    const dialog = page.locator('[data-lightbox]');
-    await expect(dialog).toBeHidden();
+    await expect(page.locator('.PhotoView-Portal')).toHaveCount(0);
 
     await page.locator('[data-lightbox-open]').first().click();
-    await expect(dialog).toBeVisible();
-    await expect(page.locator('[data-lightbox-counter]')).toHaveText('1 / 20');
 
-    await page.locator('[data-lightbox-next]').click();
-    await expect(page.locator('[data-lightbox-counter]')).toHaveText('2 / 20');
-
-    await page.locator('[data-lightbox-prev]').click();
-    await page.locator('[data-lightbox-prev]').click();
-    await expect(page.locator('[data-lightbox-counter]')).toHaveText('20 / 20');
+    await expect(page.locator('.PhotoView-Slider__Counter')).toHaveText('1 / 20', { timeout: 10_000 });
+    // The React app opened the full-size original, not a card derivative.
+    await expect(page.locator('.PhotoView__Photo').first()).toHaveAttribute('src', /\.webp$/);
 
     await page.keyboard.press('Escape');
-    await expect(dialog).toBeHidden();
+    await expect(page.locator('.PhotoView-Portal')).toHaveCount(0, { timeout: 10_000 });
+  });
+
+  test('the arrows step through and wrap around', async ({ page, isMobile }) => {
+    // react-photo-view only renders arrows on pointer devices; touch swipes.
+    test.skip(!!isMobile, 'the viewer navigates by swipe on touch devices');
+
+    await page.goto('/projects/Villa_Perez');
+    await page.locator('[data-lightbox-open]').first().click();
+
+    const counter = page.locator('.PhotoView-Slider__Counter');
+    await expect(counter).toHaveText('1 / 20', { timeout: 10_000 });
+
+    await page.locator('.PhotoView-Slider__ArrowRight').click();
+    await expect(counter).toHaveText('2 / 20');
+
+    // Looping is on by default past three photos, so going back twice wraps.
+    await page.locator('.PhotoView-Slider__ArrowLeft').click();
+    await page.locator('.PhotoView-Slider__ArrowLeft').click();
+    await expect(counter).toHaveText('20 / 20');
+  });
+
+  test('the viewer opens the photo that was clicked', async ({ page }) => {
+    await page.goto('/projects/Villa_Perez');
+    await page.locator('[data-lightbox-open]').nth(4).click();
+    await expect(page.locator('.PhotoView-Slider__Counter')).toHaveText('5 / 20', { timeout: 10_000 });
+  });
+
+  test('the viewer follows the renders/real toggle', async ({ page }) => {
+    await page.goto('/projects/Villa_JH_II');
+    await page.locator('[data-photo-mode="reales"]').click();
+    await expect(page.locator('[data-gallery="reales"]')).toBeVisible();
+
+    await page.locator('[data-gallery="reales"] [data-lightbox-open]').first().click();
+    await expect(page.locator('.PhotoView-Slider__Counter')).toHaveText('1 / 44', { timeout: 10_000 });
+  });
+
+  test('the photo can be zoomed', async ({ page, isMobile }) => {
+    test.skip(!!isMobile, 'zoom is pinch-driven on touch devices');
+
+    await page.goto('/projects/Villa_Perez');
+    await page.locator('[data-lightbox-open]').first().click();
+
+    const photo = page.locator('.PhotoView__PhotoBox').first();
+    await expect(photo).toBeVisible({ timeout: 10_000 });
+
+    const before = await photo.evaluate((el) => getComputedStyle(el).transform);
+    await page.mouse.move(720, 450);
+    await page.mouse.wheel(0, -600);
+    await expect
+      .poll(async () => photo.evaluate((el) => getComputedStyle(el).transform), { timeout: 5000 })
+      .not.toBe(before);
   });
 });

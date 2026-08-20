@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectDetails from '../components/interior/ProjectDetails.astro';
-import Lightbox from '../components/Lightbox.astro';
 import { projectMeta } from '../lib/seo';
 import { useTranslations, type Lang } from '../i18n/ui';
 
@@ -27,5 +26,4 @@ const meta = projectMeta(
   <main class="w-full h-auto">
     <ProjectDetails lang={lang} project={project} />
   </main>
-  <Lightbox />
 </BaseLayout>

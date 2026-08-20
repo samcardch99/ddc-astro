@@ -1,6 +1,8 @@
 ---
 import { getImage } from 'astro:assets';
+import 'react-photo-view/dist/react-photo-view.css';
 import FooterBanner from '../FooterBanner.astro';
+import PhotoLightbox from '../PhotoLightbox';
 import AnimatedBackground from '../AnimatedBackground.astro';
 import { renderGallery, realGallery } from '../../lib/images';
 import { useTranslations, type Lang } from '../../i18n/ui';
@@ -24,18 +26,23 @@ interface Props {
 const { lang, project } = Astro.props;
 const t = useTranslations(lang);
 
-/** Two derivatives per photo: a 480 px card and a 1200 px lightbox source. */
+/**
+ * Three derivatives per photo: 480 and 960 for the card's srcset, and the full
+ * 1600 px original for the viewer — the size the React app opened, so the
+ * photo fills the screen rather than sitting small in the middle.
+ */
 async function toGallery(entries: ReturnType<typeof renderGallery>) {
   return Promise.all(
     entries.map(async ({ image, index }) => {
-      const [card, full] = await Promise.all([
+      const [card, retina, full] = await Promise.all([
         getImage({ src: image, width: 480, format: 'webp', quality: 72 }),
-        getImage({ src: image, width: 1200, format: 'webp', quality: 72 }),
+        getImage({ src: image, width: 960, format: 'webp', quality: 72 }),
+        getImage({ src: image, width: 1600, format: 'webp', quality: 78 }),
       ]);
       return {
         index,
         src: card.src,
-        srcset: `${card.src} 480w, ${full.src} 1200w`,
+        srcset: `${card.src} 480w, ${retina.src} 960w`,
         full: full.src,
         width: card.attributes.width ?? 480,
         height: card.attributes.height,
@@ -48,6 +55,11 @@ const renders = await toGallery(renderGallery(project.folder, project.total_imag
 const reales = project.total_real_images
   ? await toGallery(realGallery(project.folder, project.total_real_images))
   : [];
+
+const galleries = {
+  renders: renders.map((photo) => photo.full),
+  reales: reales.map((photo) => photo.full),
+};
 ---
 <section
   id="project-details"
@@ -153,7 +165,7 @@ const reales = project.total_real_images
                   <div class="overflow-hidden shadow-[0_18px_35px_-10px_rgba(0,0,0,.45)]">
                     <button
                       type="button"
-                      class="block w-full"
+                      class="block w-full cursor-pointer"
                       data-lightbox-open
                       data-full={photo.full}
                       data-gallery-mode={mode}
@@ -184,6 +196,10 @@ const reales = project.total_real_images
   <div class="project-footer sticky inset-x-0 bottom-0 mix-blend-difference">
     <FooterBanner lang={lang} />
   </div>
+
+  {/* `client:only` because the viewer renders into a portal and has no server
+      output of its own — the gallery above is the server-rendered part. */}
+  <PhotoLightbox client:only="preact" galleries={galleries} />
 </section>
 
 <style>

@@ -39,84 +39,24 @@ export function initProjectDetails(): void {
   else setMode('renders');
 }
 
-/** Full-screen image viewer (replaces react-photo-view). */
-export function initLightbox(): void {
-  const dialog = $<HTMLDialogElement>('[data-lightbox]');
-  if (!dialog) return;
-
-  const image = $<HTMLImageElement>('[data-lightbox-image]', dialog);
-  const counter = $<HTMLElement>('[data-lightbox-counter]', dialog);
-  const closeBtn = $<HTMLButtonElement>('[data-lightbox-close]', dialog);
-  const prevBtn = $<HTMLButtonElement>('[data-lightbox-prev]', dialog);
-  const nextBtn = $<HTMLButtonElement>('[data-lightbox-next]', dialog);
-  if (!image) return;
-
-  let group: HTMLElement[] = [];
-  let position = 0;
-
-  const render = () => {
-    const trigger = group[position];
-    if (!trigger) return;
-    image.dataset.loaded = 'false';
-    image.src = trigger.dataset.full ?? '';
-    image.alt = trigger.querySelector('img')?.alt ?? '';
-    if (counter) counter.textContent = `${position + 1} / ${group.length}`;
-  };
-
-  image.addEventListener('load', () => {
-    image.dataset.loaded = 'true';
-  });
-
-  const step = (delta: number) => {
-    if (!group.length) return;
-    position = (position + delta + group.length) % group.length;
-    render();
-  };
-
+/**
+ * Hands clicks to the `react-photo-view` island (see PhotoLightbox.tsx). The
+ * gallery markup stays server-rendered; this only tells the viewer which photo
+ * to open, so the island can hydrate lazily without holding up the page.
+ */
+export function initLightboxTriggers(): void {
   document.addEventListener('click', (event) => {
     const trigger = (event.target as HTMLElement | null)?.closest<HTMLElement>('[data-lightbox-open]');
     if (!trigger) return;
+
     event.preventDefault();
-
-    const mode = trigger.dataset.galleryMode;
-    group = $$<HTMLElement>(
-      mode ? `[data-lightbox-open][data-gallery-mode="${mode}"]` : '[data-lightbox-open]',
+    window.dispatchEvent(
+      new CustomEvent('ddc:lightbox', {
+        detail: {
+          mode: trigger.dataset.galleryMode ?? 'renders',
+          index: Number(trigger.dataset.position ?? 0),
+        },
+      }),
     );
-    position = group.indexOf(trigger);
-    if (position < 0) position = 0;
-
-    render();
-    if (!dialog.open) dialog.showModal();
   });
-
-  closeBtn?.addEventListener('click', () => dialog.close());
-  prevBtn?.addEventListener('click', () => step(-1));
-  nextBtn?.addEventListener('click', () => step(1));
-
-  dialog.addEventListener('click', (event) => {
-    if (event.target === dialog) dialog.close();
-  });
-
-  dialog.addEventListener('keydown', (event) => {
-    if (event.key === 'ArrowRight') step(1);
-    if (event.key === 'ArrowLeft') step(-1);
-  });
-
-  // Touch swipe
-  let startX = 0;
-  dialog.addEventListener(
-    'touchstart',
-    (event) => {
-      startX = event.changedTouches[0]?.clientX ?? 0;
-    },
-    { passive: true },
-  );
-  dialog.addEventListener(
-    'touchend',
-    (event) => {
-      const delta = (event.changedTouches[0]?.clientX ?? 0) - startX;
-      if (Math.abs(delta) > 50) step(delta < 0 ? 1 : -1);
-    },
-    { passive: true },
-  );
 }

@@ -12,7 +12,7 @@ import { initProcessAccordion } from './modules/process';
 import { initCarousels } from './modules/carousels';
 import { initTeam, initTeamAccordion } from './modules/team';
 import { initProjectsList } from './modules/projectsList';
-import { initProjectDetails, initLightbox } from './modules/gallery';
+import { initProjectDetails, initLightboxTriggers } from './modules/gallery';
 import { initTechCards } from './modules/techCards';
 import { initContactForm, initInvestmentDialog } from './modules/forms';
 
@@ -30,7 +30,7 @@ function boot(): void {
   initTeamAccordion();
   initProjectsList();
   initProjectDetails();
-  initLightbox();
+  initLightboxTriggers();
   initTechCards();
   initContactForm();
   initInvestmentDialog();
