@@ -29,7 +29,10 @@ const { class: className = '' } = Astro.props;
     overflow: hidden;
     pointer-events: none;
     z-index: -20;
-    opacity: 0.6;
+    /* The Three.js version drew five small spheres, so the blobs only ever
+       covered a fraction of the section. Matching that coverage keeps the
+       average tone of the section within a pixel value of the original. */
+    opacity: 0.34;
     filter: blur(66px) brightness(0.1);
     contain: strict;
   }
@@ -49,8 +52,8 @@ const { class: className = '' } = Astro.props;
   .ddc-blob {
     position: absolute;
     display: block;
-    width: 46vmin;
-    height: 46vmin;
+    width: 34vmin;
+    height: 34vmin;
     border-radius: 9999px;
     background: radial-gradient(circle at 50% 50%, #162d57 0%, #162d57 55%, rgba(22, 45, 87, 0) 72%);
     will-change: transform;
@@ -65,29 +68,29 @@ const { class: className = '' } = Astro.props;
   .ddc-blob--2 {
     top: 44%;
     left: 58%;
-    width: 54vmin;
-    height: 54vmin;
+    width: 40vmin;
+    height: 40vmin;
     animation: ddc-drift-2 31s ease-in-out infinite alternate;
   }
   .ddc-blob--3 {
     top: 62%;
     left: 14%;
-    width: 40vmin;
-    height: 40vmin;
+    width: 30vmin;
+    height: 30vmin;
     animation: ddc-drift-3 22s ease-in-out infinite alternate;
   }
   .ddc-blob--4 {
     top: 12%;
     left: 62%;
-    width: 38vmin;
-    height: 38vmin;
+    width: 28vmin;
+    height: 28vmin;
     animation: ddc-drift-4 35s ease-in-out infinite alternate;
   }
   .ddc-blob--5 {
     top: 34%;
     left: 30%;
-    width: 50vmin;
-    height: 50vmin;
+    width: 37vmin;
+    height: 37vmin;
     animation: ddc-drift-5 28s ease-in-out infinite alternate;
   }
 
