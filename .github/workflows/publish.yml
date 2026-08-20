@@ -7,6 +7,11 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# GITHUB_TOKEN is read-only by default on new repositories, so pushing the
+# built output to the `build` branch has to be granted explicitly.
+permissions:
+  contents: write
+
 jobs:
   build:
     name: Build and push
