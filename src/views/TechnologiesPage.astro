@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TechnologiesInside from '../components/interior/TechnologiesInside.astro';
+import { getMeta } from '../lib/seo';
+import type { Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const meta = getMeta('/technologies', lang);
+---
+<BaseLayout
+  lang={lang}
+  path="/technologies"
+  title={meta.title}
+  description={meta.description}
+  headerClass="text-secondary! is-dark2"
+>
+  <main class="w-full h-auto"><TechnologiesInside lang={lang} /></main>
+</BaseLayout>
