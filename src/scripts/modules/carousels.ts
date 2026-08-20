@@ -4,10 +4,18 @@ import { $, prefersReducedMotion } from '../utils';
 const EASE_OUT = 'cubic-bezier(0, 0, 0.58, 1)';
 
 /** Swiper is only fetched on pages that actually contain a carousel. */
+/** `offsetParent` is null for anything inside a `display: none` ancestor. */
+function isRendered(el: HTMLElement | null): el is HTMLElement {
+  return !!el && el.offsetParent !== null;
+}
+
 export async function initCarousels(): Promise<void> {
   const projects = $<HTMLElement>('[data-projects-swiper]');
   const testimonials = $<HTMLElement>('[data-testimonials-swiper]');
-  const culture = $<HTMLElement>('[data-culture-swiper]');
+  // Both responsive variants of the team section ship in the HTML; only the one
+  // the viewport actually renders should pull in Swiper or the video.
+  const cultureEl = $<HTMLElement>('[data-culture-swiper]');
+  const culture = isRendered(cultureEl) ? cultureEl : null;
 
   if (!projects && !testimonials && !culture) return;
 
@@ -96,6 +104,24 @@ export async function initCarousels(): Promise<void> {
   if (culture) {
     const video = $<HTMLVideoElement>('[data-culture-video]');
 
+    if (video?.dataset.src) {
+      const start = () => {
+        if (video.src) return;
+        video.src = video.dataset.src as string;
+        void video.play().catch(() => {});
+      };
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          observer.disconnect();
+          start();
+        },
+        { rootMargin: '200px' },
+      );
+      observer.observe(video);
+    }
+
     new Swiper(culture, {
       modules: [Autoplay],
       direction: 'vertical',
@@ -109,7 +135,5 @@ export async function initCarousels(): Promise<void> {
         : { disableOnInteraction: false, pauseOnMouseEnter: false },
       allowTouchMove: true,
     });
-
-    video?.play().catch(() => {});
   }
 }

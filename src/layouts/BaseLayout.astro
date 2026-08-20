@@ -33,6 +33,8 @@ interface Props {
   bodyClass?: string;
   /** Scroll-driven header colour switching (home page only). */
   headerScrollStates?: boolean;
+  /** Preloads the hero backdrop. Only the home page renders `.cover`. */
+  preloadCover?: boolean;
 }
 
 const {
@@ -45,6 +47,7 @@ const {
   headerClass = '',
   bodyClass = '',
   headerScrollStates = false,
+  preloadCover = false,
 } = Astro.props;
 
 const canonical = new URL(localizePath(path, lang), site.url).href;
@@ -99,6 +102,30 @@ const gtagSnippet = `window.dataLayer=window.dataLayer||[];function gtag(){dataL
     <link rel="preload" href={fontBold} as="font" type="font/woff" crossorigin />
     <link rel="preload" href={fontRegular} as="font" type="font/woff" crossorigin />
     <link rel="preload" href={fontLight} as="font" type="font/woff" crossorigin />
+
+    {
+      /* The hero backdrop is a CSS background, so the browser would only find
+         it after the stylesheet parses. Preloading the one variant the
+         viewport will use makes it the LCP candidate from the first byte. */
+      preloadCover && (
+        <>
+          <link rel="preload" as="image" href="/bg/bg-sm.webp" media="(max-width: 767px)" />
+          <link
+            rel="preload"
+            as="image"
+            href="/bg/bg-md.webp"
+            media="(min-width: 768px) and (max-width: 1023px)"
+          />
+          <link
+            rel="preload"
+            as="image"
+            href="/bg/bg-lg.webp"
+            media="(min-width: 1024px) and (max-width: 1279px)"
+          />
+          <link rel="preload" as="image" href="/bg/bg-xl.webp" media="(min-width: 1280px)" />
+        </>
+      )
+    }
 
     <link rel="preconnect" href="https://www.googletagmanager.com" />
 
