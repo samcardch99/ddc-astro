@@ -45,12 +45,34 @@ test.describe('header', () => {
     await page.goto('/');
     const header = page.locator('#header');
 
+    // Lenis keeps gliding after a wheel gesture; a second gesture fired into
+    // that momentum reads as the same direction, so each one is allowed to
+    // settle first.
+    const settle = () =>
+      page.evaluate(
+        () =>
+          new Promise<number>((resolve) => {
+            let last = -1;
+            let still = 0;
+            const tick = () => {
+              const y = Math.round(window.scrollY);
+              still = y === last ? still + 1 : 0;
+              last = y;
+              if (still > 8) resolve(y);
+              else requestAnimationFrame(tick);
+            };
+            requestAnimationFrame(tick);
+          }),
+      );
+
     await page.mouse.wheel(0, 2000);
+    await settle();
     await expect
       .poll(async () => (await header.boundingBox())?.y ?? 0, { timeout: 8000 })
       .toBeLessThan(-10);
 
     await page.mouse.wheel(0, -600);
+    await settle();
     await expect
       .poll(async () => (await header.boundingBox())?.y ?? -999, { timeout: 8000 })
       .toBeGreaterThanOrEqual(-1);

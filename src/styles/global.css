@@ -95,7 +95,10 @@
 }
 
 html {
-  @apply lg:text-[0.9rem] xl:text-[0.71rem] 2xl-prev:text-base 2xl:text-base 2xl-custom:text-[1.33rem] 3xl-custom:text-[2rem];
+  /* The design uses the root font size as a global zoom. Tablets sat at the
+     browser default while having far more room than a phone, so the type is
+     nudged up ~7% between 637px and lg to fill it. */
+  @apply md-custom:text-[1.07rem] lg:text-[0.9rem] xl:text-[0.71rem] 2xl-prev:text-base 2xl:text-base 2xl-custom:text-[1.33rem] 3xl-custom:text-[2rem];
   scroll-behavior: auto;
 }
 
@@ -114,6 +117,38 @@ body {
 #root,
 .app-root {
   width: 100vw;
+}
+
+/* ---------------------------------------------------------------------------
+   Full-height sections on tall screens
+
+   These sections anchor their content absolutely, so they need an explicit
+   height — they cannot shrink-wrap. At 100svh on a tall tablet that leaves
+   400-600px of nothing: the About copy sits at the vertical centre and the
+   rest is background. Trimming the height keeps the airy composition without
+   the dead space. The hero (#home) keeps its full bleed, and the height-keyed
+   query below leaves laptops, which are wide but short, untouched.
+   --------------------------------------------------------------------------- */
+@media (min-width: 39.8125rem) and (max-width: 63.9375rem) {
+  #about,
+  #technologies,
+  #projects,
+  #testimonials,
+  [data-team] {
+    height: 82svh;
+    min-height: 40rem;
+  }
+}
+
+@media (min-width: 64rem) and (max-width: 79.9375rem) and (min-height: 62.5rem) {
+  #about,
+  #technologies,
+  #projects,
+  #testimonials,
+  [data-team] {
+    height: 78svh;
+    min-height: 44rem;
+  }
 }
 
 /* ---------------------------------------------------------------------------
