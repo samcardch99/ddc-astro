@@ -12,6 +12,14 @@ on:
 permissions:
   contents: write
 
+# Two merges landing seconds apart start two runs that both try to push `build`,
+# and the loser fails on a non-fast-forward. Only one run may hold the branch at
+# a time; a third push supersedes the one still waiting, since it would build
+# from the same tip anyway.
+concurrency:
+  group: publish-build-branch
+  cancel-in-progress: false
+
 jobs:
   build:
     name: Build and push
