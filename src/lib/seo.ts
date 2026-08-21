@@ -56,13 +56,91 @@ const pages: Record<string, Record<Lang, Meta>> = {
   },
 };
 
+/**
+ * Breadcrumb labels live here rather than in the locale files, which are kept
+ * byte-identical to the React app's so the two stay diffable.
+ */
+const crumbLabels: Record<string, Record<Lang, string>> = {
+  '/': { en: 'Home', es: 'Inicio' },
+  '/team': { en: 'Team', es: 'Equipo' },
+  '/technologies': { en: 'Technologies', es: 'Tecnologías' },
+  '/investments': { en: 'Investments', es: 'Inversiones' },
+  '/projects': { en: 'Projects', es: 'Proyectos' },
+  '/privacy-policy': { en: 'Privacy Policy', es: 'Política de Privacidad' },
+};
+
+export function crumbLabel(path: string, lang: Lang): string {
+  return crumbLabels[path]?.[lang] ?? path;
+}
+
+/** `/technologies` -> Home > Technologies. The home page gets no trail. */
+export function trailFor(path: string, lang: Lang) {
+  if (path === '/') return [];
+  return [
+    { name: crumbLabel('/', lang), path: '/' },
+    { name: crumbLabel(path, lang) },
+  ];
+}
+
+/** `/projects/Villa_Sunset` -> Home > Projects > Villa Sunset. */
+export function projectTrail(name: string, lang: Lang) {
+  return [
+    { name: crumbLabel('/', lang), path: '/' },
+    { name: crumbLabel('/projects', lang), path: '/projects' },
+    { name },
+  ];
+}
+
 export function getMeta(path: string, lang: Lang): Meta {
   return pages[path]?.[lang] ?? pages['/'][lang];
 }
 
-export function projectMeta(name: string, description: string): Meta {
+/**
+ * Words that leave a snippet dangling if it ends on them. Both languages, since
+ * the same helper trims the Spanish copy.
+ */
+const STOP_WORDS = new Set([
+  'a', 'an', 'and', 'as', 'at', 'by', 'for', 'from', 'in', 'is', 'its', 'of', 'on', 'or', 'that',
+  'the', 'their', 'this', 'to', 'was', 'were', 'with',
+  'al', 'con', 'de', 'del', 'e', 'el', 'en', 'la', 'las', 'lo', 'los', 'o', 'para', 'por', 'que',
+  'se', 'su', 'sus', 'un', 'una', 'unos', 'unas', 'y',
+]);
+
+/** Google renders roughly 155 characters of a description before truncating. */
+const DESCRIPTION_LIMIT = 155;
+
+/**
+ * Trims to the last sentence or word that fits, so the snippet never ends
+ * mid-word. The source copy is a few paragraphs long; a hard `slice` cut it at
+ * 300 characters in the middle of whatever word happened to be there.
+ */
+export function truncate(text: string, limit = DESCRIPTION_LIMIT): string {
+  const clean = text.replace(/\s+/g, ' ').trim();
+  if (clean.length <= limit) return clean;
+
+  const window = clean.slice(0, limit + 1);
+  const sentence = Math.max(window.lastIndexOf('. '), window.lastIndexOf('? '), window.lastIndexOf('! '));
+  if (sentence >= limit * 0.6) return window.slice(0, sentence + 1);
+
+  let words = window.slice(0, window.lastIndexOf(' ') > 0 ? window.lastIndexOf(' ') : limit).split(' ');
+
+  // `…preserves the…` is a complete word and still a bad place to stop, so a
+  // trailing article or preposition goes with it.
+  while (words.length > 1 && STOP_WORDS.has(words[words.length - 1].toLowerCase().replace(/[^\p{L}]/gu, ''))) {
+    words = words.slice(0, -1);
+  }
+
+  return `${words.join(' ').replace(/[,;:—–-]$/, '')}…`;
+}
+
+/**
+ * `Villa Sunset — Miami, FL | DDC Developments`. The city is the part someone
+ * searching for a property actually types, and it comes straight out of
+ * `villas.json`.
+ */
+export function projectMeta(name: string, description: string, city?: string): Meta {
   return {
-    title: `${name} | DDC Developments`,
-    description: description.trim().slice(0, 300),
+    title: city ? `${name} — ${city}, FL | DDC Developments` : `${name} | DDC Developments`,
+    description: truncate(description),
   };
 }

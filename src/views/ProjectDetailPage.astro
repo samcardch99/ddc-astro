@@ -1,8 +1,12 @@
 ---
+import { getImage } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectDetails from '../components/interior/ProjectDetails.astro';
-import { projectMeta } from '../lib/seo';
-import { useTranslations, type Lang } from '../i18n/ui';
+import { projectMeta, projectTrail } from '../lib/seo';
+import { breadcrumbs, realEstateListing } from '../lib/schema';
+import { renderGallery, villaAssetFromPublicPath } from '../lib/images';
+import { site } from '../lib/site';
+import { localizePath, useTranslations, type Lang } from '../i18n/ui';
 
 interface Props {
   lang: Lang;
@@ -11,16 +15,60 @@ interface Props {
 
 const { lang, project } = Astro.props;
 const t = useTranslations(lang);
-const meta = projectMeta(
-  project.name,
-  t(`project_details.project_description.${project.folder}.description`),
-);
+const description = t(`project_details.project_description.${project.folder}.description`);
+const meta = projectMeta(project.name, description, project.city);
+
+const url = new URL(localizePath(`/projects/${project.folder}`, lang), site.url).href;
+
+// Sharing a villa should show the villa, not the company logo. `villas.json`
+// names a cover shot; the first gallery render stands in when it cannot be
+// resolved.
+const cover =
+  villaAssetFromPublicPath(project.image) ?? renderGallery(project.folder, project.total_images)[0]?.image;
+
+const share = cover
+  ? await getImage({ src: cover, width: 1200, height: 630, fit: 'cover', format: 'jpeg', quality: 80 })
+  : undefined;
+
+// Schema.org wants the same photo in a few crops so it can pick one per surface.
+const listingPhotos = cover
+  ? await Promise.all(
+      [
+        { width: 1200, height: 900 },
+        { width: 1200, height: 900 },
+        { width: 1200, height: 675 },
+      ].map((size, index) =>
+        getImage({
+          src: cover,
+          ...(index === 1 ? { width: 1200, height: 1200 } : size),
+          fit: 'cover',
+          format: 'jpeg',
+          quality: 80,
+        }),
+      ),
+    )
+  : [];
+
+const schema = [
+  breadcrumbs(projectTrail(project.name, lang), lang),
+  realEstateListing({
+    project,
+    description,
+    url,
+    images: listingPhotos.map((photo) => new URL(photo.src, site.url).href),
+    lang,
+  }),
+];
 ---
 <BaseLayout
   lang={lang}
   path={`/projects/${project.folder}`}
   title={meta.title}
   description={meta.description}
+  image={share?.src}
+  imageAlt={`${project.name}${project.city ? ` — ${project.city}, Florida` : ''}`}
+  ogType="article"
+  schema={schema}
   headerClass="is-clear"
 >
   <main class="w-full h-auto">

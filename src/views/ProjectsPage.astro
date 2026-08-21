@@ -1,16 +1,37 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectsInside from '../components/interior/ProjectsInside.astro';
-import { getMeta } from '../lib/seo';
-import type { Lang } from '../i18n/ui';
+import { getMeta, trailFor } from '../lib/seo';
+import { breadcrumbs } from '../lib/schema';
+import villas from '../data/villas.json';
+import { localizePath, type Lang } from '../i18n/ui';
+import { site } from '../lib/site';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const meta = getMeta('/projects', lang);
+
+// The index is a list of things Google can already crawl individually; naming
+// them here is what lets it treat the page as the collection rather than as
+// twenty-six unrelated links.
+const itemList = {
+  '@type': 'ItemList',
+  name: meta.title,
+  numberOfItems: villas.length,
+  itemListElement: villas.map((project, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: project.name,
+    url: new URL(localizePath(`/projects/${project.folder}`, lang), site.url).href,
+  })),
+};
+
+const schema = [breadcrumbs(trailFor('/projects', lang), lang), itemList];
 ---
 <BaseLayout
   lang={lang}
   path="/projects"
+  schema={schema}
   title={meta.title}
   description={meta.description}
   headerClass="is-clear"

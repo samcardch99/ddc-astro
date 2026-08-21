@@ -3,6 +3,7 @@ import '../styles/fonts.css';
 import '../styles/global.css';
 
 import { site } from '../lib/site';
+import { graph, organization, website } from '../lib/schema';
 import {
   locales,
   localizePath,
@@ -35,6 +36,16 @@ interface Props {
   headerScrollStates?: boolean;
   /** Preloads the hero backdrop. Only the home page renders `.cover`. */
   preloadCover?: boolean;
+  /** Absolute or root-relative share image. Defaults to the site-wide one. */
+  image?: string;
+  /** Alt text for the share image, read out by screen readers on some networks. */
+  imageAlt?: string;
+  /** `article` for a project, `website` everywhere else. */
+  ogType?: string;
+  /** Keeps a page out of the index — the 404 is the only one that needs it. */
+  noindex?: boolean;
+  /** Extra JSON-LD nodes merged into the page's `@graph`. */
+  schema?: unknown[];
 }
 
 const {
@@ -48,10 +59,25 @@ const {
   bodyClass = '',
   headerScrollStates = false,
   preloadCover = false,
+  image,
+  imageAlt,
+  ogType = 'website',
+  noindex = false,
+  schema = [],
 } = Astro.props;
 
 const canonical = new URL(localizePath(path, lang), site.url).href;
-const ogImage = new URL('/assets/og-image.jpg', site.url).href;
+const ogImage = new URL(image ?? '/assets/og-image.jpg', site.url).href;
+const ogImageAlt = imageAlt ?? `${site.name} — ${title}`;
+const ogImageType = ogImage.endsWith('.png') ? 'image/png' : 'image/jpeg';
+const alternateLocales = locales.filter((locale) => locale !== lang);
+
+// The default share image is the only one whose dimensions are known at build
+// time; a project photo is whatever the gallery holds, so the hint is dropped
+// rather than guessed at.
+const ogImageSize = image ? null : { width: 1200, height: 630 };
+
+const jsonLd = graph([organization(), website(lang), ...schema]);
 
 const gtmSnippet = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${site.gtmId}');`;
 
@@ -69,6 +95,16 @@ const gtagSnippet = `window.dataLayer=window.dataLayer||[];function gtag(){dataL
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+
+    {
+      /* `max-image-preview:large` is what lets a property photo run full width
+         in the results instead of a thumbnail — it is off by default. */
+      noindex ? (
+        <meta name="robots" content="noindex, follow" />
+      ) : (
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      )
+    }
     {
       locales.map((locale) => (
         <link
@@ -88,15 +124,25 @@ const gtagSnippet = `window.dataLayer=window.dataLayer||[];function gtag(){dataL
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta property="og:image:type" content={ogImageType} />
+    {ogImageSize && <meta property="og:image:width" content={String(ogImageSize.width)} />}
+    {ogImageSize && <meta property="og:image:height" content={String(ogImageSize.height)} />}
     <meta property="og:url" content={canonical} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:locale" content={ogLocale[lang]} />
+    {
+      alternateLocales.map((locale) => (
+        <meta property="og:locale:alternate" content={ogLocale[locale]} />
+      ))
+    }
     <meta property="og:site_name" content={site.name} />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
 
     <!-- Render-critical webfonts: fetched in parallel with the HTML parse. -->
     <link rel="preload" href={fontBold} as="font" type="font/woff" crossorigin />
@@ -139,6 +185,8 @@ const gtagSnippet = `window.dataLayer=window.dataLayer||[];function gtag(){dataL
       async
       src={`https://www.googletagmanager.com/gtag/js?id=${site.gtagId}`}></script>
     <script is:inline set:html={gtagSnippet} />
+
+    <script type="application/ld+json" is:inline set:html={jsonLd} />
   </head>
 
   <body class={bodyClass} data-lang={lang} data-path={path}>

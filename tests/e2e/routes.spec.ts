@@ -1,19 +1,23 @@
 import { expect, test, type Page } from '@playwright/test';
 
+// `www` 301-redirects to the bare host, so that is the origin every canonical,
+// hreflang and sitemap entry has to use.
+const ORIGIN = 'https://ddcdevelopments.com';
+
 const routes = [
   { path: '/', title: 'DDC Developments: Modular construction company in Miami', lang: 'en' },
   { path: '/team', title: 'Team | DDC Developments', lang: 'en' },
   { path: '/technologies', title: 'Technologies | DDC Developments', lang: 'en' },
   { path: '/investments', title: 'Investments | DDC Developments', lang: 'en' },
   { path: '/projects', title: 'DDC Developments | Projects', lang: 'en' },
-  { path: '/projects/Villa_Sunset', title: 'Villa Sunset | DDC Developments', lang: 'en' },
+  { path: '/projects/Villa_Sunset', title: 'Villa Sunset — Miami, FL | DDC Developments', lang: 'en' },
   { path: '/privacy-policy', title: 'Privacy Policy | DDC Developments', lang: 'en' },
   { path: '/es', title: 'DDC Developments: Constructora modular en Miami', lang: 'es' },
   { path: '/es/team', title: 'Equipo | DDC Developments', lang: 'es' },
   { path: '/es/technologies', title: 'Tecnologías | DDC Developments', lang: 'es' },
   { path: '/es/investments', title: 'Inversiones | DDC Developments', lang: 'es' },
   { path: '/es/projects', title: 'DDC Developments | Proyectos', lang: 'es' },
-  { path: '/es/projects/Villa_Sunset', title: 'Villa Sunset | DDC Developments', lang: 'es' },
+  { path: '/es/projects/Villa_Sunset', title: 'Villa Sunset — Miami, FL | DDC Developments', lang: 'es' },
   { path: '/es/privacy-policy', title: 'Política de Privacidad | DDC Developments', lang: 'es' },
 ];
 
@@ -74,7 +78,7 @@ test('every page links to its translated twin with hreflang', async ({ page }) =
     const hreflangs = alternates.map((a) => a.hreflang).sort();
     expect(hreflangs, route.path).toEqual(['en', 'es', 'x-default']);
     for (const alternate of alternates) {
-      expect(alternate.href, route.path).toMatch(/^https:\/\/www\.ddcdevelopments\.com/);
+      expect(alternate.href, route.path).toMatch(new RegExp(`^${ORIGIN}`));
     }
   }
 });
@@ -90,7 +94,7 @@ test('sitemap and robots are published', async ({ request }) => {
   const pages = await request.get('/sitemap-0.xml');
   const xml = await pages.text();
   for (const path of ['/team', '/technologies', '/investments', '/projects', '/es/team']) {
-    expect(xml, `sitemap should list ${path}`).toContain(`https://www.ddcdevelopments.com${path}`);
+    expect(xml, `sitemap should list ${path}`).toContain(`<loc>${ORIGIN}${path}</loc>`);
   }
 });
 

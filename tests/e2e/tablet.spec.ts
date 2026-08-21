@@ -131,12 +131,15 @@ test.describe('the call-to-action pills stay on one line', () => {
   }
 
   test('no pill button anywhere wraps at tablet widths', async ({ page }) => {
+    // Twenty-five navigations; it earns the longer budget rather than flaking
+    // whenever the rest of the suite is competing for the machine.
+    test.slow();
     const wrapped: string[] = [];
 
     for (const device of IPADS) {
       await page.setViewportSize({ width: device.width, height: device.height });
       for (const path of ['/', '/technologies', '/investments', '/projects', '/team']) {
-        await page.goto(path);
+        await page.goto(path, { waitUntil: 'domcontentloaded' });
         wrapped.push(
           ...(await page.evaluate(() =>
             Array.from(document.querySelectorAll('a, button'))
