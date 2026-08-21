@@ -3,10 +3,21 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { $$, prefersReducedMotion } from '../utils';
 
 /**
- * Below `lg` there is no hover, so TechnologiesInside replayed the hover as a
- * scroll-driven timeline: play when the card reaches the middle of the
- * viewport, reverse on the way out. Same 0.4s / `ease:none` / 0.05s + 0.1s
- * offsets as the React version.
+ * The card reveal has two triggers, and only ever one at a time.
+ *
+ * The React version chose between them by viewport width (`max-width: 1023px`),
+ * which breaks down on a tablet or a narrow laptop window with a pointer: below
+ * 1024px both the `group-hover` rules *and* this timeline were live, so the
+ * cards flipped as you scrolled and hovering did nothing. Keying on the input
+ * device instead means a touch screen gets the scroll reveal at any width and
+ * anything with a pointer gets hover at any width — and `(hover: none)` is the
+ * exact complement of the `@media (hover: hover)` Tailwind wraps `group-hover`
+ * in, so they can never overlap.
+ *
+ * `gsap.matchMedia` reverts the timeline if the query stops matching, e.g. when
+ * a keyboard case is attached to an iPad.
+ *
+ * The timeline itself is the React one: 0.4s, `ease: none`, offsets 0 / 0.05 / 0.1.
  */
 export function initTechCards(): void {
   const cards = $$<HTMLElement>('.tech-card');
@@ -14,7 +25,7 @@ export function initTechCards(): void {
 
   const mm = gsap.matchMedia();
 
-  mm.add('(max-width: 1023px)', () => {
+  mm.add('(hover: none)', () => {
     const triggers: ScrollTrigger[] = [];
 
     cards.forEach((card) => {

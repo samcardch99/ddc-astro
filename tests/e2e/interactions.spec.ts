@@ -18,6 +18,17 @@ test.describe('header', () => {
     await expect(menu).toBeHidden();
   });
 
+  test('the menu lists only the social links we keep', async ({ page }) => {
+    await page.goto('/');
+    await page.locator('#open-menu').click();
+    const menu = page.locator('#main-menu');
+    await expect(menu).toBeVisible();
+
+    await expect(menu.getByRole('link', { name: 'Instagram' }).first()).toBeVisible();
+    await expect(menu.getByRole('link', { name: 'Youtube' }).first()).toBeVisible();
+    await expect(menu.getByRole('link', { name: 'Portfolio' })).toHaveCount(0);
+  });
+
   test('the language switch keeps you on the same page', async ({ page, isMobile }) => {
     // The header shows "English | Spanish" above lg and "EN | ES" below it.
     const [toEs, toEn] = isMobile ? ['ES', 'EN'] : ['Spanish', 'English'];

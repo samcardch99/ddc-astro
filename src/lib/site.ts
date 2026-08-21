@@ -14,7 +14,6 @@ export const site = {
     'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3591.898282819486!2d-80.33319302573506!3d25.8069296067369!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88d9b97b64751fed%3A0xce335c3b7087bce8!2s3470%20NW%2082nd%20Ave%20suite%20790%2C%20Doral%2C%20FL%2033122%2C%20EE.%20UU.!5e0!3m2!1ses!2sca!4v1748334977167!5m2!1ses!2sca',
   instagram: 'https://www.instagram.com/ddc.developments',
   youtube: 'https://www.youtube.com/@DDC.Developments',
-  portfolio: 'https://theddcway.com',
   gtmId: 'GTM-PZNTNL5G',
   gtagId: 'AW-17126521966',
   gtagConversion: 'AW-17126521966/IC00CPbD5tcaEO74x-Y_',
