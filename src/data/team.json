@@ -96,6 +96,14 @@
     "class": "object-center"
   },
   {
+    "name": "Jorge H. Correa",
+    "id": "jorge_h_correa",
+    "role": "Financial Analyst",
+    "description": "Jorge brings analytical rigor to every financial decision at DDC. He builds project budgets, cash-flow projections, and cost analyses, tracking the variance between what was estimated and what is actually spent. By turning numbers into clear insight, he supports investment evaluation, margin control, and the reporting that keeps each development financially sound.",
+    "image": "assets/employees/jorge.jpg",
+    "class": "object-center"
+  },
+  {
     "name": "Daniela Marichal",
     "id": "daniela_marichal",
     "role": "Permit Runner",
