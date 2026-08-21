@@ -126,6 +126,36 @@ test.describe('project detail', () => {
     await expect(page.locator('.PhotoView-Slider__Counter')).toHaveText('1 / 44', { timeout: 10_000 });
   });
 
+  test('tapping the photo does not close the viewer', async ({ page }) => {
+    await page.goto('/projects/Villa_Perez');
+    await page.locator('[data-lightbox-open]').first().click();
+
+    const counter = page.locator('.PhotoView-Slider__Counter');
+    await expect(counter).toHaveText('1 / 20', { timeout: 10_000 });
+
+    // `photoClosable` is deliberately off, as in the original: with it on, a
+    // tap closes the viewer instead of letting you pan or zoom. Clicking by
+    // coordinate rather than by locator, since the neighbouring slides carry
+    // the same class and are mid-transition.
+    // Let the open animation finish; a click landing mid-zoom is treated as a
+    // backdrop click.
+    await page.waitForTimeout(900);
+    const viewport = page.viewportSize()!;
+    await page.mouse.click(viewport.width / 2, viewport.height / 2);
+    await page.waitForTimeout(700);
+    await expect(counter).toBeVisible();
+  });
+
+  test('the keyboard steps through on any device', async ({ page }) => {
+    await page.goto('/projects/Villa_Perez');
+    await page.locator('[data-lightbox-open]').nth(4).click();
+
+    const counter = page.locator('.PhotoView-Slider__Counter');
+    await expect(counter).toHaveText('5 / 20', { timeout: 10_000 });
+    await page.keyboard.press('ArrowRight');
+    await expect(counter).toHaveText('6 / 20');
+  });
+
   test('the photo can be zoomed', async ({ page, isMobile }) => {
     test.skip(!!isMobile, 'zoom is pinch-driven on touch devices');
 

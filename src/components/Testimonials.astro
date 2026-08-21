@@ -51,11 +51,16 @@ const corner = 'text-secondary opacity-40 text-2xl';
             cards.map((_, idx) => (
               <div class="swiper-slide w-full! h-full! flex items-center justify-center">
                 <article class="slide-content relative h-full w-full text-primary will-change-transform rounded-md overflow-hidden">
+                  {/* The texture is drawn at its intrinsic size and clipped by
+                      the card, so a responsive `srcset` leaves the card partly
+                      bare whenever the browser picks a variant smaller than it
+                      — at 1024px that was a 307x397 image in a 431x622 card.
+                      One fixed width, as the React app used; it costs ~3 kB. */}
                   <Image
                     src={cardBg}
                     alt=""
-                    widths={[480, 720]}
-                    sizes="(min-width: 1024px) 30vw, 60vw"
+                    width={718}
+                    height={928}
                     quality={70}
                     loading={idx === 0 ? 'eager' : 'lazy'}
                     decoding={idx === 0 ? 'sync' : 'async'}

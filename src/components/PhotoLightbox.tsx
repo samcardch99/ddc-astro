@@ -76,11 +76,12 @@ export default function PhotoLightbox({ galleries }: PhotoLightboxProps) {
         pointOriginAt(mode, next);
       }}
       onClose={() => setVisible(false)}
-      // The React app used <PhotoProvider> with its defaults, which loop once
-      // there are three or more photos — that is why the left arrow shows on
-      // the first slide.
+      // <PhotoProvider>'s defaults, which is what the React app used: looping
+      // past three photos (hence the left arrow on the first slide), a solid
+      // backdrop, and pull-to-close. Notably `photoClosable` stays off — with
+      // it on, tapping the photo closes the viewer instead of letting you pan
+      // or zoom, which makes it almost unusable on a touch screen.
       maskOpacity={1}
-      photoClosable
       pullClosable
       bannerVisible
     />
