@@ -169,6 +169,83 @@ test.describe('team photos', () => {
   });
 });
 
+/* ------------------------------------------------------------ testimonials */
+
+test.describe('testimonial cards', () => {
+  for (const [name, width, height] of [
+    ['iPad mini', 744, 1133],
+    ['iPad Air', 820, 1180],
+    ['iPad Pro 13"', 1024, 1366],
+    ['desktop', 1440, 900],
+  ] as const) {
+    test(`the texture covers the whole card on ${name}`, async ({ page }) => {
+      await page.setViewportSize({ width, height });
+      await page.goto('/');
+      await page.locator('#testimonials').scrollIntoViewIfNeeded();
+      await page.waitForTimeout(800);
+
+      // The texture is drawn at its intrinsic size and clipped by the card, so
+      // a responsive srcset left the card partly bare wherever the browser
+      // picked a variant smaller than it — a 307x397 image in a 431x622 card
+      // at 1024px.
+      const covered = await page.evaluate(() => {
+        const card = document.querySelector('#testimonials article.slide-content')!;
+        const img = card.querySelector('img')!;
+        const c = card.getBoundingClientRect();
+        const i = img.getBoundingClientRect();
+        return { cardW: c.width, cardH: c.height, imgW: i.width, imgH: i.height };
+      });
+
+      expect(covered.imgW).toBeGreaterThanOrEqual(covered.cardW);
+      expect(covered.imgH).toBeGreaterThanOrEqual(covered.cardH);
+    });
+  }
+
+  test('the copy stays inside the card', async ({ page }) => {
+    await page.setViewportSize({ width: 820, height: 1180 });
+    await page.goto('/');
+    await page.locator('#testimonials').scrollIntoViewIfNeeded();
+
+    const overflow = await page.evaluate(() => {
+      const card = document.querySelector('#testimonials article.slide-content')!;
+      const c = card.getBoundingClientRect();
+      return Array.from(card.querySelectorAll('h3, p'))
+        .map((el) => el.getBoundingClientRect())
+        .filter((b) => b.bottom > c.bottom + 1 || b.top < c.top - 1).length;
+    });
+    expect(overflow).toBe(0);
+  });
+});
+
+/* --------------------------------------------------------------- team layout */
+
+test.describe('team columns', () => {
+  for (const [name, width, height] of [
+    ['iPad Pro 13" portrait', 1024, 1366],
+    ['iPad Air landscape', 1180, 820],
+    ['desktop', 1440, 900],
+  ] as const) {
+    test(`the split does not move between modes on ${name}`, async ({ page }) => {
+      await page.setViewportSize({ width, height });
+      await page.goto('/team');
+
+      const widths = () =>
+        page.evaluate(() => ({
+          left: Math.round(document.querySelector('.team-left')!.getBoundingClientRect().width),
+          right: Math.round(document.querySelector('.team-right')!.getBoundingClientRect().width),
+        }));
+
+      const inTeamMode = await widths();
+      await page.locator('[data-team-toggle]').click();
+      await expect(page.locator('[data-team]')).toHaveAttribute('data-mode', 'culture');
+      await page.waitForTimeout(800);
+
+      // Both columns keep one width, so switching never reflows the layout.
+      expect(await widths()).toEqual(inTeamMode);
+    });
+  }
+});
+
 /* -------------------------------------------------------------- roster wheel */
 
 test.describe('team roster wheel', () => {

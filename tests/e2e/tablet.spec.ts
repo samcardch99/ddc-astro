@@ -72,7 +72,8 @@ test.describe('the page ends where the footer ends', () => {
     test(`no dead scroll under the footer on ${device.name}`, async ({ page }) => {
       await page.setViewportSize({ width: device.width, height: device.height });
       await page.goto('/');
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('load');
+      await page.waitForTimeout(1200);
 
       const trailing = await page.evaluate(() => {
         const footer = document.querySelector('#contact')!;
@@ -90,7 +91,8 @@ test.describe('the page ends where the footer ends', () => {
   test('the ambient background never outgrows its section', async ({ page }) => {
     await page.setViewportSize({ width: 820, height: 1180 });
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
+    await page.waitForTimeout(1200);
 
     const overflows = await page.evaluate(() =>
       Array.from(document.querySelectorAll('.ddc-blobs'))
