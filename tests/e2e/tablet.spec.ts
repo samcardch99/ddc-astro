@@ -108,6 +108,63 @@ test.describe('the page ends where the footer ends', () => {
   });
 });
 
+test.describe('the call-to-action pills stay on one line', () => {
+  for (const device of IPADS) {
+    test(`"Explore Technologies" does not wrap on ${device.name}`, async ({ page }) => {
+      await page.setViewportSize({ width: device.width, height: device.height });
+
+      for (const path of ['/', '/es']) {
+        await page.goto(path);
+        const pill = page.locator('.top-btn:visible, .mobile-btn:visible').first();
+        await expect(pill).toBeVisible();
+
+        // At exactly 1024px the `justify-between` row squeezed the pill to one
+        // pixel under its max-content width, so the label broke in two.
+        const lines = await pill.evaluate((el) => {
+          const range = document.createRange();
+          range.selectNodeContents(el);
+          return range.getClientRects().length;
+        });
+        expect(lines, `${path} at ${device.name}`).toBe(1);
+      }
+    });
+  }
+
+  test('no pill button anywhere wraps at tablet widths', async ({ page }) => {
+    const wrapped: string[] = [];
+
+    for (const device of IPADS) {
+      await page.setViewportSize({ width: device.width, height: device.height });
+      for (const path of ['/', '/technologies', '/investments', '/projects', '/team']) {
+        await page.goto(path);
+        wrapped.push(
+          ...(await page.evaluate(() =>
+            Array.from(document.querySelectorAll('a, button'))
+              .filter((el) => {
+                const style = getComputedStyle(el);
+                return (
+                  style.display !== 'none' &&
+                  style.borderRadius.includes('9999') &&
+                  el.textContent!.trim() &&
+                  el.children.length <= 1 &&
+                  el.getBoundingClientRect().width > 0
+                );
+              })
+              .filter((el) => {
+                const range = document.createRange();
+                range.selectNodeContents(el);
+                return range.getClientRects().length > 1;
+              })
+              .map((el) => el.textContent!.trim().slice(0, 40)),
+          )).map((text) => `${text} @ ${path} ${device.name}`),
+        );
+      }
+    }
+
+    expect(wrapped).toEqual([]);
+  });
+});
+
 test.describe('technology card reveal on a touch tablet', () => {
   test.use({ viewport: { width: 744, height: 1133 }, hasTouch: true, isMobile: false });
 

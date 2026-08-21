@@ -21,14 +21,14 @@ const plus = 'text-primary opacity-40 text-2xl lg:text-3xl';
   <div
     class="flex flex-col h-[65%] lg:h-[55%] justify-between absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 lg:-translate-y-[10%] w-full px-8 lg:py-8"
   >
-    <div class="flex justify-between w-full items-center">
-      <h2 data-tech-title class="text-[2.1rem] lg:text-6xl font-bold text-left">
+    <div class="flex justify-between w-full items-center gap-6">
+      <h2 data-tech-title class="text-[2.1rem] lg:text-6xl font-bold text-left min-w-0">
         {t('technology.title')}
       </h2>
 
       <PrimaryButton
         href={localizePath('/technologies', lang)}
-        class="top-btn hidden lg:block bg-primary p-3! hover:bg-white/10 hover:text-primary active:bg-white/10 active:text-primary text-lg text-secondary self-center"
+        class="top-btn hidden lg:block shrink-0 whitespace-nowrap bg-primary p-3! hover:bg-white/10 hover:text-primary active:bg-white/10 active:text-primary text-lg text-secondary self-center"
       >
         {t('technology.button')}
       </PrimaryButton>
@@ -83,7 +83,7 @@ const plus = 'text-primary opacity-40 text-2xl lg:text-3xl';
 
     <PrimaryButton
       href={localizePath('/technologies', lang)}
-      class="mobile-btn lg:hidden bg-primary hover:bg-white/10 hover:text-primary active:bg-white/10 active:text-primary text-secondary self-center"
+      class="mobile-btn lg:hidden whitespace-nowrap bg-primary hover:bg-white/10 hover:text-primary active:bg-white/10 active:text-primary text-secondary self-center"
     >
       {t('technology.button')}
     </PrimaryButton>
