@@ -39,7 +39,7 @@ const corner = 'opacity-40 text-2xl';
   <!-- The frame the caption, rule and corner marks hang off. It tracks the
        carousel's width (59/60 of it in the original), so widening one without
        the other drops the title on top of the photo. -->
-  <div class="relative w-full md-custom:w-[77%] lg:w-[35%] aspect-video text-secondary">
+  <div class="projects-frame relative w-full md-custom:w-[77%] lg:w-[35%] aspect-video text-secondary">
     <span class={`absolute -top-5 md-custom:-top-6 lg:-top-8 left-0 -translate-x-1/2 -translate-y-1/2 ${corner}`} aria-hidden="true">+</span>
     <span class={`absolute -top-5 md-custom:-top-6 lg:-top-8 right-0 translate-x-1/2 -translate-y-1/2 ${corner}`} aria-hidden="true">+</span>
     <span class={`absolute -bottom-5 md-custom:-bottom-6 lg:-bottom-8 left-0 -translate-x-1/2 translate-y-1/2 ${corner}`} aria-hidden="true">+</span>
@@ -149,6 +149,21 @@ const corner = 'opacity-40 text-2xl';
 
   .projects-cta-lg {
     bottom: calc(35% - ((60vw * 0.337) / 2));
+  }
+
+  /* An iPad Pro in portrait lands in the `lg` band, where the carousel is
+     tuned for a wide, short desktop and shrinks to a 338px slide on a 1024px
+     screen. Keyed on height so laptops, which are wide but short, keep the
+     desktop proportions. */
+  @media (min-width: 64rem) and (max-width: 79.9375rem) and (min-height: 62.5rem) {
+    .swiper-projects {
+      width: 72%;
+      max-height: 58svh;
+    }
+
+    .projects-frame {
+      width: 71%;
+    }
   }
 
   /* Without JS, Swiper never initialises — keep the first slide readable. */
