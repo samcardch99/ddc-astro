@@ -1,15 +1,18 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getMeta } from '../lib/seo';
+import { getMeta, trailFor } from '../lib/seo';
+import { breadcrumbs } from '../lib/schema';
 import type { Lang } from '../i18n/ui';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const meta = getMeta('/privacy-policy', lang);
+const schema = [breadcrumbs(trailFor('/privacy-policy', lang), lang)];
 ---
 <BaseLayout
   lang={lang}
   path="/privacy-policy"
+  schema={schema}
   title={meta.title}
   description={meta.description}
   header={false}

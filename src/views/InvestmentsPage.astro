@@ -1,16 +1,19 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import InvestmentsInside from '../components/interior/InvestmentsInside.astro';
-import { getMeta } from '../lib/seo';
+import { getMeta, trailFor } from '../lib/seo';
+import { breadcrumbs } from '../lib/schema';
 import type { Lang } from '../i18n/ui';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const meta = getMeta('/investments', lang);
+const schema = [breadcrumbs(trailFor('/investments', lang), lang)];
 ---
 <BaseLayout
   lang={lang}
   path="/investments"
+  schema={schema}
   title={meta.title}
   description={meta.description}
   headerClass="is-clear"

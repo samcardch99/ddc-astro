@@ -138,6 +138,47 @@ it stays server-rendered, and a three-line vanilla listener dispatches the
 clicked photo's index at the island. The photos are in the HTML whether or not
 the viewer ever loads.
 
+## Metadata and SEO
+
+Every page's head is assembled in `BaseLayout`, from `src/lib/seo.ts` (titles,
+descriptions, breadcrumb labels) and `src/lib/schema.ts` (structured data).
+
+**One spelling per URL.** `www.ddcdevelopments.com` 301-redirects to the bare
+host, so `site` is the bare host — otherwise every canonical, every `hreflang`
+and every sitemap entry would point at a redirect. `trailingSlash: 'never'`,
+and the sitemap's `serialize` hook normalises its output to match, so a page is
+never submitted under a URL that disagrees with its own `rel=canonical`.
+
+**Two languages, reciprocally linked.** Each page declares `hreflang` for `en`,
+`es` and `x-default`, in the head and in the sitemap alike — language-only codes
+in both, since `en` in one place and `en-US` in the other leaves Google
+reconciling two annotations for the same pair.
+
+**Structured data** ships as one `@graph` per page:
+
+| Node | Where | Why |
+| --- | --- | --- |
+| `GeneralContractor` | every page | Name, address, phone, geo and `sameAs`. A `LocalBusiness` subtype is what makes the company eligible for local results; a plain `Organization` is not. |
+| `WebSite` | every page | Carries the page's language and ties both trees to one publisher. |
+| `BreadcrumbList` | interior pages | The home page gets none — a one-item breadcrumb is noise. |
+| `RealEstateListing` | project pages | Price, beds, baths, floor area, lot size and address, all out of `villas.json`. |
+| `ItemList` | `/projects` | Names the twenty-six listings the index links to. |
+
+Everything shares one `@id` per entity, so the company on a villa page is the
+same node as the company on the home page.
+
+**Share cards.** A project page uses a 1200×630 crop of the villa's own cover
+shot rather than the site-wide card, with `og:image:alt`, dimensions and type.
+
+**Snippets.** `truncate()` cuts a description at the last sentence or word that
+fits inside ~155 characters, and drops a trailing article or preposition so a
+snippet never ends on `…preserves the…`.
+
+Three of the twenty-six addresses in `villas.json` are malformed — one reads
+`Florida, USA`, one has no city, one uses an em dash where the comma belongs —
+so `parseAddress` is forgiving and falls back to the `city` field. Worth fixing
+at the source; the markup no longer depends on it.
+
 ## Deployment
 
 `npm run build` emits a fully static `dist/`. The GitHub Actions workflow builds

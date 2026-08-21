@@ -23,6 +23,19 @@ const stats = technologies.map((tech, i) => ({
   description: t(`technology_statistics.${i + 1}.description`),
 }));
 
+// Alt text for the photography. Kept here rather than in the locale files,
+// which are held byte-identical to the React app's.
+const photoAlt = {
+  en: {
+    card: (n: string) => `DDC modular panel system in assembly — stage ${n}`,
+    site: (n: number) => `DDC modular construction site in Florida — photo ${n}`,
+  },
+  es: {
+    card: (n: string) => `Sistema de paneles modulares DDC en montaje — fase ${n}`,
+    site: (n: number) => `Obra de construcción modular de DDC en Florida — foto ${n}`,
+  },
+}[lang];
+
 const onSite = [1, 2, 3, 4, 5, 6].map((n) => ({ n, asset: technologyAsset(`obra${n}.jpeg`) }));
 const corner = 'text-secondary opacity-40 text-2xl';
 ---
@@ -74,7 +87,7 @@ const corner = 'text-secondary opacity-40 text-2xl';
             {card.asset && (
               <Image
                 src={card.asset}
-                alt=""
+                alt={photoAlt.card(card.number)}
                 widths={[480, 960]}
                 sizes="(min-width: 768px) 30vw, 90vw"
                 quality={72}
@@ -148,7 +161,7 @@ const corner = 'text-secondary opacity-40 text-2xl';
               {item.asset && (
                 <Image
                   src={item.asset}
-                  alt={`Obra ${item.n}`}
+                  alt={photoAlt.site(item.n)}
                   widths={[480, 960]}
                   sizes="(min-width: 768px) 30vw, 90vw"
                   quality={72}

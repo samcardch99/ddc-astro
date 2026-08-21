@@ -1,22 +1,4 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import PrimaryButton from '../components/PrimaryButton.astro';
-import { getMeta } from '../lib/seo';
-import { localizePath } from '../i18n/ui';
-
-const meta = getMeta('/404', 'en');
+import NotFoundPage from '../views/NotFoundPage.astro';
 ---
-<BaseLayout
-  lang="en"
-  path="/404"
-  title={meta.title}
-  description={meta.description}
-  contactFooter={false}
-  headerClass="is-clear"
->
-  <main class="w-full min-h-screen flex flex-col items-center justify-center gap-8 px-8 text-center">
-    <h1 class="text-6xl lg:text-8xl font-bold">404</h1>
-    <p class="text-lg lg:text-xl max-w-xl">{meta.description}</p>
-    <PrimaryButton href={localizePath('/', 'en')} class="text-primary">Back to home</PrimaryButton>
-  </main>
-</BaseLayout>
+<NotFoundPage lang="en" />

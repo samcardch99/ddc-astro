@@ -12,9 +12,13 @@ const t = useTranslations(lang);
     data-cover-words
     class="relative grid grid-flow-col grid-cols-3 items-center w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-full h-auto font-bold text-primary lg:text-5xl"
   >
+    {/* The spaces are load-bearing: without them the heading's text content is
+        the single token `FasterStrongerSmarter`. Whitespace-only runs inside a
+        grid container are not wrapped in anonymous items, so the three columns
+        are unaffected. */}
     <h1 class="contents">
-      <span data-cover-left class="justify-self-start z-10">{t('cover.faster')}</span>
-      <span data-cover-center class="justify-self-center z-10">{t('cover.stronger')}</span>
+      <span data-cover-left class="justify-self-start z-10">{t('cover.faster')}</span>{' '}
+      <span data-cover-center class="justify-self-center z-10">{t('cover.stronger')}</span>{' '}
       <span data-cover-right class="justify-self-end z-10">{t('cover.smarter')}</span>
     </h1>
 

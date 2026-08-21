@@ -1,7 +1,7 @@
 /** Single source of truth for the contact details repeated across the site. */
 export const site = {
   name: 'DDC Developments',
-  url: 'https://www.ddcdevelopments.com',
+  url: 'https://ddcdevelopments.com',
   phone: '305-915-0002',
   phoneHref: 'tel:305-915-0002',
   email: 'info@ddcdevelopments.com',
