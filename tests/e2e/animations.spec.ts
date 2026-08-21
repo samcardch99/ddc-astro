@@ -74,6 +74,86 @@ test.describe('technology card reveal', () => {
   });
 });
 
+test.describe('our-process accordion', () => {
+  const row = (page: import('@playwright/test').Page, index: number) =>
+    page.locator('[data-process-accordion] details').nth(index);
+
+  test('a closed row shows only its summary', async ({ page }) => {
+    await page.goto('/');
+    const first = row(page, 0);
+    await first.scrollIntoViewIfNeeded();
+
+    const summaryHeight = (await first.locator('summary').boundingBox())!.height;
+    const rowHeight = (await first.boundingBox())!.height;
+    // The row adds its 1px bottom rule on top of the summary.
+    expect(rowHeight - summaryHeight).toBeLessThanOrEqual(2);
+  });
+
+  test('the arrow rotates 180 degrees when the row opens', async ({ page }) => {
+    await page.goto('/');
+    const target = row(page, 1);
+    await target.scrollIntoViewIfNeeded();
+
+    const arrow = target.locator('.process-arrow');
+    // The arrow is rendered by <ArrowCircle>, so it carries that component's
+    // scope id — a plain scoped rule here would silently never match.
+    await expect(arrow).toHaveCSS('transition-duration', '0.3s');
+    await expect(arrow).toHaveCSS('transform', 'none');
+
+    await target.locator('summary').click();
+    await expect
+      .poll(async () => arrow.evaluate((el) => getComputedStyle(el).transform), { timeout: 4000 })
+      .toBe('matrix(-1, 0, 0, -1, 0, 0)');
+  });
+
+  test('the step number lifts from 30% to full opacity', async ({ page }) => {
+    await page.goto('/');
+    const target = row(page, 1);
+    await target.scrollIntoViewIfNeeded();
+
+    const number = target.locator('.process-number');
+    await expect(number).toHaveCSS('opacity', '0.3');
+    await expect(number).toHaveCSS('transition-duration', '0.3s');
+
+    await target.locator('summary').click();
+    await expect(number).toHaveCSS('opacity', '1', { timeout: 4000 });
+  });
+
+  test('the panel fades in over 500ms and gains its bottom margin', async ({ page }) => {
+    await page.goto('/');
+    const target = row(page, 1);
+    await target.scrollIntoViewIfNeeded();
+
+    const panel = target.locator('.process-panel');
+    await expect(panel).toHaveCSS('transition-duration', '0.5s, 0.5s');
+
+    await target.locator('summary').click();
+    await expect(panel).toHaveCSS('opacity', '1', { timeout: 4000 });
+    await expect(panel).toHaveCSS('margin-bottom', '32px');
+  });
+
+  test('opening a row closes the one before it and swaps the backdrop', async ({ page }) => {
+    await page.goto('/');
+    const second = row(page, 1);
+    const fourth = row(page, 3);
+    await second.scrollIntoViewIfNeeded();
+
+    await second.locator('summary').click();
+    await expect(second).toHaveAttribute('open', '');
+
+    await fourth.locator('summary').click();
+    await expect(second).not.toHaveAttribute('open', '');
+    await expect(fourth).toHaveAttribute('open', '');
+    await expect(second.locator('.process-arrow')).toHaveCSS('transform', 'none');
+    await expect(page.locator('[data-backdrop-index="3"]')).toHaveClass(/opacity-100/);
+  });
+
+  test('the backdrop cross-fades over 700ms', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('[data-backdrop-index="0"]')).toHaveCSS('transition-duration', '0.7s');
+  });
+});
+
 test.describe('transition timings match the original', () => {
   const cases = [
     { path: '/', selector: '#header', property: 'transition-duration', value: '0.5s' },

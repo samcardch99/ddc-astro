@@ -112,7 +112,7 @@ const cityLabels: Record<string, string> = { 'Lehigh Acres': 'Lehigh' };
     <div
       data-projects-list
       data-view="grid"
-      class="projects-collection grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10"
+      class="projects-collection grid grid-cols-1 md-custom:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10"
     >
       {
         items.map((item, index) => (
@@ -142,7 +142,7 @@ const cityLabels: Record<string, string> = { 'Lehigh Acres': 'Lehigh' };
                   src={item.asset}
                   alt={item.name}
                   widths={[480, 960]}
-                  sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 90vw"
+                  sizes="(min-width: 1024px) 33vw, (min-width: 637px) 50vw, 90vw"
                   format="webp"
                   quality={72}
                   loading={index < 3 ? 'eager' : 'lazy'}

@@ -146,7 +146,10 @@ const steps = items.map((item, i) => ({
     opacity: 1;
   }
 
-  details[open] > .process-summary .process-arrow {
+  /* The arrow is rendered by <ArrowCircle>, so it carries that component's
+     scope id rather than this one's — Astro would rewrite this to a selector
+     that can never match. `:global()` targets the class as written. */
+  details[open] > .process-summary :global(.process-arrow) {
     transform: rotate(180deg);
   }
 

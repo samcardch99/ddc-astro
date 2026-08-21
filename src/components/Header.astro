@@ -22,6 +22,17 @@ const t = useTranslations(lang);
 const currentPath = stripLangFromPath(Astro.url.pathname.replace(/\/$/, '') || '/');
 const hrefFor = (locale: Lang) => localizePath(currentPath, locale);
 
+/**
+ * The active language is emphasised with weight *and* colour. Weight alone was
+ * nearly invisible — Noirden has no 100, so `font-thin` renders as its 300 —
+ * and dimming with opacity keeps the emphasis correct in both header states,
+ * light-on-dark over the hero and dark-on-light over the pale sections.
+ */
+const languageClass = (locale: Lang) =>
+  locale === lang
+    ? 'font-bold opacity-100 transition-opacity duration-200'
+    : 'font-thin opacity-50 hover:opacity-100 transition-opacity duration-200';
+
 const home = localizePath('/', lang);
 const menu = [
   { key: 'main_menu.home', href: localizePath('/', lang) },
@@ -35,7 +46,6 @@ const menu = [
 const social = [
   { label: 'Instagram', href: site.instagram },
   { label: 'Youtube', href: site.youtube },
-  { label: 'Portfolio', href: site.portfolio },
 ];
 ---
 
@@ -51,9 +61,19 @@ const social = [
     </a>
 
     <p class="font-light lg:hidden whitespace-nowrap">
-      <a href={hrefFor('en')} class={lang === 'en' ? 'font-bold' : 'font-thin'} hreflang="en">EN</a>
-      <span aria-hidden="true"> | </span>
-      <a href={hrefFor('es')} class={lang === 'es' ? 'font-bold' : 'font-thin'} hreflang="es">ES</a>
+      <a
+        href={hrefFor('en')}
+        class={languageClass('en')}
+        hreflang="en"
+        aria-current={lang === 'en' ? 'true' : undefined}>EN</a
+      >
+      <span class="opacity-50" aria-hidden="true"> | </span>
+      <a
+        href={hrefFor('es')}
+        class={languageClass('es')}
+        hreflang="es"
+        aria-current={lang === 'es' ? 'true' : undefined}>ES</a
+      >
     </p>
   </div>
 
@@ -66,12 +86,18 @@ const social = [
   <!-- Right: language switch + menu trigger -->
   <div class="flex gap-10 justify-self-end items-center">
     <p class="hidden lg:block whitespace-nowrap">
-      <a href={hrefFor('en')} class={lang === 'en' ? 'font-bold' : 'font-thin'} hreflang="en"
-        >{languageLabels.en}</a
+      <a
+        href={hrefFor('en')}
+        class={languageClass('en')}
+        hreflang="en"
+        aria-current={lang === 'en' ? 'true' : undefined}>{languageLabels.en}</a
       >
-      <span aria-hidden="true"> | </span>
-      <a href={hrefFor('es')} class={lang === 'es' ? 'font-bold' : 'font-thin'} hreflang="es"
-        >Spanish</a
+      <span class="opacity-50" aria-hidden="true"> | </span>
+      <a
+        href={hrefFor('es')}
+        class={languageClass('es')}
+        hreflang="es"
+        aria-current={lang === 'es' ? 'true' : undefined}>Spanish</a
       >
     </p>
     <button

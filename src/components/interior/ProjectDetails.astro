@@ -147,7 +147,7 @@ const galleries = {
         ([mode, list]) =>
           list.length > 0 && (
             <div
-              class="project-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10"
+              class="project-grid grid grid-cols-1 md-custom:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10"
               data-gallery={mode}
               hidden={mode !== 'renders'}
             >
@@ -175,7 +175,7 @@ const galleries = {
                       <img
                         src={photo.src}
                         srcset={photo.srcset}
-                        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 90vw"
+                        sizes="(min-width: 1024px) 33vw, (min-width: 637px) 50vw, 90vw"
                         alt={`${project.name} ${i + 1}`}
                         width={photo.width}
                         height={photo.height}
