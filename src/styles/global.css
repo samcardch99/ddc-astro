@@ -320,6 +320,15 @@ body {
   @apply text-secondary;
 }
 
+/* Validation messages are server-rendered as empty placeholders and filled in
+   by script. An empty inline element still counts as a flex item, so each one
+   was contributing a `gap` — 32px of dead space at the bottom of the contact
+   footer, and the same inside the investor dialog. React only mounted them
+   when there was an error. */
+[data-error-for]:empty {
+  display: none;
+}
+
 /* ---------------------------------------------------------------------------
    Placeholder contrast
 

@@ -24,8 +24,13 @@ const { class: className = '' } = Astro.props;
 <style is:global>
   .ddc-blobs {
     position: absolute;
+    /* `inset: 0` alone sizes the layer to its section. The React component set
+       an inline `height: 100svh` on touch devices to stop the WebGL canvas
+       resizing when the mobile URL bar hides; a gradient layer has no such
+       cost, and pinning it to the viewport made it hang below any section
+       shorter than the screen — 317px of dead scroll under the contact footer
+       on an iPad Air, 598px on an iPad Pro. */
     inset: 0;
-    height: 100svh;
     overflow: hidden;
     pointer-events: none;
     z-index: -20;

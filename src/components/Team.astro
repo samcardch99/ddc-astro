@@ -123,7 +123,7 @@ const people = members.map((m, i) => ({
   </button>
 
   <!-- RIGHT: member detail / culture video -->
-  <div class="absolute h-full w-1/4 top-0 right-0 shadow-[inset_5px_0_45px_rgba(0,0,0,0.5)]">
+  <div class="team-right absolute h-full w-1/4 top-0 right-0 shadow-[inset_5px_0_45px_rgba(0,0,0,0.5)]">
     <div class="relative h-full w-full overflow-hidden">
       <div class="team-panels absolute inset-0 w-full h-full" data-team-panels>
         {
@@ -191,6 +191,16 @@ const people = members.map((m, i) => ({
   [data-team][data-mode='culture'] .team-roster {
     opacity: 0;
     pointer-events: none;
+  }
+
+  /* The right column holds a square headshot in team mode, where a quarter of
+     the screen is plenty. In culture mode it holds a 9:16 video, and a quarter
+     of a 1024px tablet is a 256px slit that crops away two thirds of the frame.
+     The roster is already hidden here, so the column can take the room. */
+  @media (max-width: 79.9375rem) {
+    [data-team][data-mode='culture'] .team-right {
+      width: 42%;
+    }
   }
 
   [data-team][data-mode='culture'] .team-next {

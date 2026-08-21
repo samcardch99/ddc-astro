@@ -67,6 +67,45 @@ test.describe('project grids on tablets', () => {
   });
 });
 
+test.describe('the page ends where the footer ends', () => {
+  for (const device of IPADS) {
+    test(`no dead scroll under the footer on ${device.name}`, async ({ page }) => {
+      await page.setViewportSize({ width: device.width, height: device.height });
+      await page.goto('/');
+      await page.waitForLoadState('networkidle');
+
+      const trailing = await page.evaluate(() => {
+        const footer = document.querySelector('#contact')!;
+        const bottom = footer.getBoundingClientRect().bottom + window.scrollY;
+        return Math.round(document.documentElement.scrollHeight - bottom);
+      });
+
+      // The ambient layer used to be pinned to 100svh, so on any section
+      // shorter than the viewport it hung below and extended the document —
+      // 317px under the footer on an iPad Air, 598px on an iPad Pro.
+      expect(trailing).toBeLessThanOrEqual(1);
+    });
+  }
+
+  test('the ambient background never outgrows its section', async ({ page }) => {
+    await page.setViewportSize({ width: 820, height: 1180 });
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+
+    const overflows = await page.evaluate(() =>
+      Array.from(document.querySelectorAll('.ddc-blobs'))
+        .map((layer) => {
+          const parent = layer.parentElement!;
+          return Math.round(
+            layer.getBoundingClientRect().bottom - parent.getBoundingClientRect().bottom,
+          );
+        })
+        .filter((delta) => delta > 1),
+    );
+    expect(overflows).toEqual([]);
+  });
+});
+
 test.describe('technology card reveal on a touch tablet', () => {
   test.use({ viewport: { width: 744, height: 1133 }, hasTouch: true, isMobile: false });
 
@@ -129,32 +168,71 @@ test.describe('technology card reveal on a tablet with a pointer', () => {
 });
 
 test.describe('language switch', () => {
-  test('the active language is emphasised in colour, not just weight', async ({ page }) => {
+  const toggle = (page: import('@playwright/test').Page) =>
+    page.locator('[data-language-toggle]:visible').first();
+
+  test('it is a single control that flips the language', async ({ page }) => {
     await page.goto('/');
 
-    const english = page.locator('#header a[hreflang="en"]').last();
-    const spanish = page.locator('#header a[hreflang="es"]').last();
+    // One control, like the React button — clicking anywhere on it switches.
+    const control = toggle(page);
+    await expect(control).toHaveAttribute('href', '/es');
+    await expect(control).toHaveAttribute('hreflang', 'es');
+    await expect(control).toHaveAttribute('aria-label', 'Cambiar a español');
 
-    await expect(english).toHaveCSS('opacity', '1');
-    await expect(english).toHaveCSS('font-weight', '700');
-    await expect(english).toHaveAttribute('aria-current', 'true');
+    await control.click();
+    await expect(page).toHaveURL(/\/es$/);
 
-    await expect(spanish).toHaveCSS('opacity', '0.5');
-    await expect(spanish).not.toHaveAttribute('aria-current', 'true');
+    const back = toggle(page);
+    await expect(back).toHaveAttribute('href', '/');
+    await expect(back).toHaveAttribute('aria-label', 'Switch to English');
+    await back.click();
+    await expect(page).toHaveURL(/\/$/);
+  });
+
+  test('clicking the label of the current language still switches', async ({ page }) => {
+    await page.goto('/');
+    // The point of a toggle: any part of it flips.
+    await toggle(page).locator('[data-language="en"]').click();
+    await expect(page).toHaveURL(/\/es$/);
+  });
+
+  test('the active language is emphasised in colour, not just weight', async ({ page }) => {
+    await page.goto('/');
+    const control = toggle(page);
+
+    await expect(control.locator('[data-language="en"]')).toHaveCSS('opacity', '1');
+    await expect(control.locator('[data-language="en"]')).toHaveCSS('font-weight', '700');
+    await expect(control.locator('[data-language="es"]')).toHaveCSS('opacity', '0.5');
   });
 
   test('the emphasis follows the page locale', async ({ page }) => {
     await page.goto('/es');
-
-    await expect(page.locator('#header a[hreflang="es"]').last()).toHaveCSS('opacity', '1');
-    await expect(page.locator('#header a[hreflang="en"]').last()).toHaveCSS('opacity', '0.5');
+    const control = toggle(page);
+    await expect(control.locator('[data-language="es"]')).toHaveCSS('opacity', '1');
+    await expect(control.locator('[data-language="en"]')).toHaveCSS('opacity', '0.5');
   });
 
-  test('both variants of the switch agree', async ({ page }) => {
-    await page.goto('/es');
-    const opacities = await page
-      .locator('#header a[hreflang="es"]')
-      .evaluateAll((links) => links.map((l) => getComputedStyle(l).opacity));
-    expect(new Set(opacities).size).toBe(1);
+  test('it keeps you on the same page across the site', async ({ page }) => {
+    for (const [from, to] of [
+      ['/team', '/es/team'],
+      ['/technologies', '/es/technologies'],
+      ['/projects', '/es/projects'],
+      ['/projects/Villa_Sunset', '/es/projects/Villa_Sunset'],
+      ['/investments', '/es/investments'],
+    ]) {
+      await page.goto(from);
+      await toggle(page).click();
+      await expect(page).toHaveURL(new RegExp(`${to.replace(/\//g, '\\/')}$`));
+    }
+  });
+
+  test('the toggle works at tablet and phone widths too', async ({ page }) => {
+    for (const width of [390, 744, 820, 1024, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto('/');
+      await toggle(page).click();
+      await expect(page, `width ${width}`).toHaveURL(/\/es$/);
+    }
   });
 });

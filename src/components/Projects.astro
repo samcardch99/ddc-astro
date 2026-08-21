@@ -36,7 +36,10 @@ const corner = 'opacity-40 text-2xl';
     {t('projects.title')}
   </h2>
 
-  <div class="relative w-full md-custom:w-[59%] lg:w-[35%] aspect-video text-secondary">
+  <!-- The frame the caption, rule and corner marks hang off. It tracks the
+       carousel's width (59/60 of it in the original), so widening one without
+       the other drops the title on top of the photo. -->
+  <div class="relative w-full md-custom:w-[77%] lg:w-[35%] aspect-video text-secondary">
     <span class={`absolute -top-5 md-custom:-top-6 lg:-top-8 left-0 -translate-x-1/2 -translate-y-1/2 ${corner}`} aria-hidden="true">+</span>
     <span class={`absolute -top-5 md-custom:-top-6 lg:-top-8 right-0 translate-x-1/2 -translate-y-1/2 ${corner}`} aria-hidden="true">+</span>
     <span class={`absolute -bottom-5 md-custom:-bottom-6 lg:-bottom-8 left-0 -translate-x-1/2 translate-y-1/2 ${corner}`} aria-hidden="true">+</span>
@@ -80,7 +83,7 @@ const corner = 'opacity-40 text-2xl';
 
   <div
     data-projects-swiper
-    class="swiper w-[90%] md-custom:w-[60%] md-custom:max-h-[50vh] lg:max-h-max lg:w-[55%] 2xl-custom:w-[50%] absolute! top-1/2! left-1/2! -translate-x-1/2! -translate-y-1/2 swiper-projects"
+    class="swiper w-[90%] md-custom:w-[78%] md-custom:max-h-[62vh] lg:max-h-max lg:w-[55%] 2xl-custom:w-[50%] absolute! top-1/2! left-1/2! -translate-x-1/2! -translate-y-1/2 swiper-projects"
   >
     <div class="swiper-wrapper">
       {
@@ -135,9 +138,12 @@ const corner = 'opacity-40 text-2xl';
     bottom: calc(30% - ((90vw * 0.506) / 2));
   }
 
+  /* Between 637px and lg the carousel was pinned at 60% of a tablet's width,
+     which left a 443px slide floating in a 1180px-tall section — small against
+     a 36px heading. 78% fills the space without outgrowing the type. */
   @media (min-width: 637px) {
     .projects-cta {
-      bottom: calc(30% - ((60vw * 0.506) / 2));
+      bottom: calc(30% - ((78vw * 0.506) / 2));
     }
   }
 

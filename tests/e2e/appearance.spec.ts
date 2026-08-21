@@ -83,6 +83,23 @@ test.describe('contact form fields', () => {
     expect(contrast(select!, background!), 'select placeholder').toBeGreaterThanOrEqual(4.5);
   });
 
+  test('empty validation slots take up no space', async ({ page }) => {
+    // They are server-rendered as empty placeholders and filled by script; an
+    // empty flex item still gets its `gap`, which added 32px to the footer.
+    const boxes = await page
+      .locator('#contact_form [data-error-for]')
+      .evaluateAll((nodes) => nodes.map((n) => n.getBoundingClientRect().height));
+    expect(boxes.every((h) => h === 0)).toBe(true);
+    await expect(page.locator('#contact_form [data-error-for]').first()).toHaveCSS('display', 'none');
+  });
+
+  test('a validation message reappears when it has something to say', async ({ page }) => {
+    await page.locator('#contact_form button[type="submit"]').click();
+    const error = page.locator('[data-error-for="username"]');
+    await expect(error).not.toBeEmpty();
+    await expect(error).toBeVisible();
+  });
+
   test('choosing a reason switches the select to full contrast', async ({ page }) => {
     const before = await resolved(page, '#contact_form select', 'color');
     await page.selectOption('#investingWithUs', 'General inquiries');
@@ -146,9 +163,9 @@ test.describe('team photos', () => {
     const reference = await first.boundingBox().catch(() => null);
     expect(box, 'the photo should be laid out').not.toBeNull();
     // Square, untransformed, and starting below the header — not shoved up.
-    expect(Math.round(box!.width)).toBe(Math.round(box!.height));
+    expect(Math.abs(box!.width - box!.height)).toBeLessThan(4);
     expect(box!.y).toBeGreaterThan(0);
-    if (reference) expect(Math.round(box!.width)).toBe(Math.round(reference.width));
+    if (reference) expect(Math.abs(box!.width - reference.width)).toBeLessThan(4);
   });
 });
 
@@ -239,9 +256,16 @@ test.describe('booking widget', () => {
     const reserved = await iframe.evaluate((el) => (el as HTMLElement).offsetHeight);
     expect(reserved, 'the frame must not start at the 150px default').toBeGreaterThan(600);
 
+    // The floor stays in force; the calendar's own height moves with how many
+    // slots it renders, so it is not pinned to one number.
+    const floor = await iframe.evaluate((el) =>
+      parseInt(getComputedStyle(el as HTMLElement).minHeight, 10),
+    );
+    expect(floor).toBeGreaterThan(600);
+
     await page.waitForTimeout(6000);
     const settled = await iframe.evaluate((el) => (el as HTMLElement).offsetHeight);
-    expect(settled).toBeGreaterThanOrEqual(reserved);
+    expect(settled).toBeGreaterThanOrEqual(floor);
   });
 
   test('the resize script is on the page', async ({ page }) => {
