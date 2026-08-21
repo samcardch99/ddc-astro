@@ -4,6 +4,7 @@ import LogoCircle from './LogoCircle.astro';
 import HoverAnimatedLink from './HoverAnimatedLink.astro';
 import { site } from '../lib/site';
 import {
+  alternateLanguage,
   languageLabels,
   localizePath,
   stripLangFromPath,
@@ -23,15 +24,19 @@ const currentPath = stripLangFromPath(Astro.url.pathname.replace(/\/$/, '') || '
 const hrefFor = (locale: Lang) => localizePath(currentPath, locale);
 
 /**
- * The active language is emphasised with weight *and* colour. Weight alone was
- * nearly invisible — Noirden has no 100, so `font-thin` renders as its 300 —
- * and dimming with opacity keeps the emphasis correct in both header states,
- * light-on-dark over the hero and dark-on-light over the pale sections.
+ * One control that flips the language, like the React button did — clicking
+ * anywhere on "English | Spanish" switches. Both labels stay visible so you can
+ * see which one you are on, emphasised with weight *and* colour: weight alone
+ * was nearly invisible, since Noirden has no 100 and `font-thin` renders as its
+ * 300, and dimming with opacity keeps the emphasis correct in both header
+ * states, light-on-dark over the hero and dark-on-light over the pale sections.
  */
+const other = alternateLanguage(lang);
+const toggleHref = hrefFor(other);
+const toggleLabel = other === 'es' ? 'Cambiar a español' : 'Switch to English';
+
 const languageClass = (locale: Lang) =>
-  locale === lang
-    ? 'font-bold opacity-100 transition-opacity duration-200'
-    : 'font-thin opacity-50 hover:opacity-100 transition-opacity duration-200';
+  locale === lang ? 'font-bold opacity-100' : 'font-thin opacity-50';
 
 const home = localizePath('/', lang);
 const menu = [
@@ -60,21 +65,17 @@ const social = [
       <LogoLetters class="h-4 w-auto text-white transition-colors duration-300" />
     </a>
 
-    <p class="font-light lg:hidden whitespace-nowrap">
-      <a
-        href={hrefFor('en')}
-        class={languageClass('en')}
-        hreflang="en"
-        aria-current={lang === 'en' ? 'true' : undefined}>EN</a
-      >
+    <a
+      href={toggleHref}
+      hreflang={other}
+      aria-label={toggleLabel}
+      data-language-toggle
+      class="font-light lg:hidden whitespace-nowrap transition-opacity duration-200"
+    >
+      <span class={languageClass('en')} data-language="en">EN</span>
       <span class="opacity-50" aria-hidden="true"> | </span>
-      <a
-        href={hrefFor('es')}
-        class={languageClass('es')}
-        hreflang="es"
-        aria-current={lang === 'es' ? 'true' : undefined}>ES</a
-      >
-    </p>
+      <span class={languageClass('es')} data-language="es">ES</span>
+    </a>
   </div>
 
   <!-- Center: monogram -->
@@ -85,21 +86,17 @@ const social = [
 
   <!-- Right: language switch + menu trigger -->
   <div class="flex gap-10 justify-self-end items-center">
-    <p class="hidden lg:block whitespace-nowrap">
-      <a
-        href={hrefFor('en')}
-        class={languageClass('en')}
-        hreflang="en"
-        aria-current={lang === 'en' ? 'true' : undefined}>{languageLabels.en}</a
-      >
+    <a
+      href={toggleHref}
+      hreflang={other}
+      aria-label={toggleLabel}
+      data-language-toggle
+      class="hidden lg:block whitespace-nowrap transition-opacity duration-200"
+    >
+      <span class={languageClass('en')} data-language="en">{languageLabels.en}</span>
       <span class="opacity-50" aria-hidden="true"> | </span>
-      <a
-        href={hrefFor('es')}
-        class={languageClass('es')}
-        hreflang="es"
-        aria-current={lang === 'es' ? 'true' : undefined}>Spanish</a
-      >
-    </p>
+      <span class={languageClass('es')} data-language="es">Spanish</span>
+    </a>
     <button
       type="button"
       id="open-menu"

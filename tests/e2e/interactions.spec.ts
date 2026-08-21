@@ -29,16 +29,15 @@ test.describe('header', () => {
     await expect(menu.getByRole('link', { name: 'Portfolio' })).toHaveCount(0);
   });
 
-  test('the language switch keeps you on the same page', async ({ page, isMobile }) => {
-    // The header shows "English | Spanish" above lg and "EN | ES" below it.
-    const [toEs, toEn] = isMobile ? ['ES', 'EN'] : ['Spanish', 'English'];
-
+  test('the language switch keeps you on the same page', async ({ page }) => {
+    // A single toggle, at every width — the label reads "English | Spanish"
+    // above lg and "EN | ES" below it.
     await page.goto('/technologies');
-    await page.getByRole('link', { name: toEs, exact: true }).click();
+    await page.locator('[data-language-toggle]:visible').first().click();
     await expect(page).toHaveURL(/\/es\/technologies$/);
     await expect(page).toHaveTitle('Tecnologías | DDC Developments');
 
-    await page.getByRole('link', { name: toEn, exact: true }).click();
+    await page.locator('[data-language-toggle]:visible').first().click();
     await expect(page).toHaveURL(/\/technologies$/);
   });
 

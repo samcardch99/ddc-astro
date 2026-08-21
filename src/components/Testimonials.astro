@@ -20,7 +20,7 @@ const corner = 'text-secondary opacity-40 text-2xl';
 >
   <h2 class="text-4xl lg:text-5xl font-bold absolute left-8 top-20">{t('testimonials.title')}</h2>
 
-  <div class="relative h-[60%] lg:h-[65%] aspect-[9/13]">
+  <div class="relative h-[60%] md-custom:h-[68%] lg:h-[65%] aspect-[9/13]">
     <span class={`absolute -top-8 left-0 lg:-left-8 -translate-x-1/2 ${corner}`} aria-hidden="true">+</span>
     <span class={`absolute -top-8 right-0 lg:-right-8 translate-x-1/2 ${corner}`} aria-hidden="true">+</span>
     <span class={`absolute -bottom-8 left-0 lg:-left-8 -translate-x-1/2 ${corner}`} aria-hidden="true">+</span>
@@ -66,7 +66,7 @@ const corner = 'text-secondary opacity-40 text-2xl';
                     <h3 class="text-2xl lg:text-xl font-bold tracking-wide mb-4">
                       {t(`testimonials.cards.${idx + 1}.name`)}
                     </h3>
-                    <p class="text-xs">{t(`testimonials.cards.${idx + 1}.description`)}</p>
+                    <p class="text-xs md-custom:text-sm lg:text-xs">{t(`testimonials.cards.${idx + 1}.description`)}</p>
                   </div>
                 </article>
               </div>
