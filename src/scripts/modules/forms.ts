@@ -61,10 +61,12 @@ export function initContactForm(): void {
 
     setSubmitting(form, true, messages.sending, messages.send);
 
+    // Two independent delivery paths. One succeeding is enough to tell the
+    // visitor we have their message; both failing must not.
     let delivered = false;
 
     try {
-      await fetch(webhook, {
+      const response = await fetch(webhook, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -76,9 +78,13 @@ export function initContactForm(): void {
           message: values.message,
         }),
       });
-      delivered = true;
-    } catch {
-      toast.error(messages.fail_title);
+      // A 4xx or 5xx is a lead that never arrived. Reading the status is the
+      // difference between knowing that and telling the visitor "we'll be in
+      // touch" over a message nobody received.
+      if (response.ok) delivered = true;
+      else console.warn(`[ddc] lead webhook responded ${response.status}`);
+    } catch (error) {
+      console.warn('[ddc] lead webhook unreachable', error);
     }
 
     const serviceId = import.meta.env.PUBLIC_EMAILJS_SERVICE_ID;
@@ -90,8 +96,8 @@ export function initContactForm(): void {
         const emailjs = (await import('@emailjs/browser')).default;
         await emailjs.sendForm(serviceId, templateId, form, { publicKey });
         delivered = true;
-      } catch {
-        if (!delivered) toast.error(messages.fail_title);
+      } catch (error) {
+        console.warn('[ddc] EmailJS delivery failed', error);
       }
     }
 
@@ -99,6 +105,10 @@ export function initContactForm(): void {
       form.reset();
       showErrors(form, {});
       toast.success(messages.success_title, { description: messages.success });
+    } else {
+      // The fields keep their values, so the visitor can retry without
+      // retyping — or reach us by the phone number and email above.
+      toast.error(messages.fail_title);
     }
 
     setSubmitting(form, false, messages.sending, messages.send);
@@ -127,7 +137,8 @@ export function initInvestmentDialog(): void {
     );
     if (!trigger) return;
 
-    const title = trigger.dataset.openInvestmentDialog ?? '';
+    // `investments.json` stores `"Miami Premium "`; the CRM should not.
+    const title = (trigger.dataset.openInvestmentDialog ?? '').trim();
     if (titleEl) titleEl.textContent = title;
     if (titleInput) titleInput.value = title;
     form?.reset();

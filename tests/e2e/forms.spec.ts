@@ -1,6 +1,17 @@
 import { expect, test } from '@playwright/test';
 
 const WEBHOOK = /services\.leadconnectorhq\.com\/hooks/;
+const EMAILJS = /emailjs/;
+
+async function fillContact(page: import('@playwright/test').Page) {
+  await page.fill('#contact-username', 'Jane Smith');
+  await page.fill('#contact-email', 'jane@example.com');
+  await page.fill('#contact-phone', '305-555-1234');
+  await page.fill('#contact-findus', 'Instagram');
+  await page.selectOption('#investingWithUs', { index: 1 });
+  await page.fill('#contact-message', 'I would like more information about your modular homes.');
+  await page.check('#contact-terms');
+}
 
 test.describe('contact form', () => {
   test('reports every invalid field instead of submitting', async ({ page }) => {
@@ -60,6 +71,51 @@ test.describe('contact form', () => {
     await expect(page.locator('#contact-username')).toHaveValue('');
   });
 
+  test('does not claim success when the lead never arrived', async ({ page }) => {
+    // The React app assigned `response` and never read it, so a 500 from the
+    // CRM produced "Thanks, we'll be in touch." over a lead nobody received.
+    await page.route(WEBHOOK, (route) => route.fulfill({ status: 500, body: 'Internal Server Error' }));
+    await page.route(EMAILJS, (route) => route.abort());
+
+    await page.goto('/');
+    await page.locator('#contact_form').scrollIntoViewIfNeeded();
+    await fillContact(page);
+    await page.locator('#contact_form button[type="submit"]').click();
+
+    await expect(page.locator('.ddc-toast')).toContainText('Error sending form');
+    await expect(page.locator('.ddc-toast')).not.toContainText('Thanks');
+    // The visitor should not have to retype anything to try again.
+    await expect(page.locator('#contact-username')).toHaveValue('Jane Smith');
+    await expect(page.locator('#contact_form button[type="submit"]')).toBeEnabled();
+  });
+
+  test('a rejected webhook is survivable when the email still goes out', async ({ page }) => {
+    await page.route(WEBHOOK, (route) => route.fulfill({ status: 500, body: '' }));
+    await page.route(EMAILJS, (route) => route.fulfill({ status: 200, body: 'OK' }));
+
+    await page.goto('/');
+    await page.locator('#contact_form').scrollIntoViewIfNeeded();
+    await fillContact(page);
+    await page.locator('#contact_form button[type="submit"]').click();
+
+    // One path delivering is enough to have the visitor's message.
+    await expect(page.locator('.ddc-toast')).toContainText('Form send');
+    await expect(page.locator('#contact-username')).toHaveValue('');
+  });
+
+  test('an unreachable network is reported, not swallowed', async ({ page }) => {
+    await page.route(WEBHOOK, (route) => route.abort());
+    await page.route(EMAILJS, (route) => route.abort());
+
+    await page.goto('/');
+    await page.locator('#contact_form').scrollIntoViewIfNeeded();
+    await fillContact(page);
+    await page.locator('#contact_form button[type="submit"]').click();
+
+    await expect(page.locator('.ddc-toast')).toContainText('Error sending form');
+    await expect(page.locator('#contact-email')).toHaveValue('jane@example.com');
+  });
+
   test('shows Spanish validation copy on the Spanish page', async ({ page }) => {
     await page.goto('/es');
     await page.locator('#contact_form').scrollIntoViewIfNeeded();
@@ -117,6 +173,11 @@ test.describe('investor dialog', () => {
       country: 'Spain',
     });
     expect(String((payload as any).investment_title)).toContain('Miami');
+    // `investments.json` stores `"Miami Premium "`; the CRM should not see the
+    // trailing space.
+    expect(String((payload as any).investment_title)).toBe(
+      String((payload as any).investment_title).trim(),
+    );
   });
 
   test('closes on Escape', async ({ page }) => {
