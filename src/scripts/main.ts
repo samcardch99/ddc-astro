@@ -15,6 +15,8 @@ import { initProjectsList } from './modules/projectsList';
 import { initProjectDetails, initLightboxTriggers } from './modules/gallery';
 import { initTechCards } from './modules/techCards';
 import { initContactForm, initInvestmentDialog } from './modules/forms';
+import { initEstimate } from './modules/estimate';
+import { initEstimateSuccess } from './modules/estimateSuccess';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -34,6 +36,8 @@ function boot(): void {
   initTechCards();
   initContactForm();
   initInvestmentDialog();
+  initEstimate();
+  initEstimateSuccess();
   void initCarousels();
 }
 

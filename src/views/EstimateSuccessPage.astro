@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AnimatedBackground from '../components/AnimatedBackground.astro';
+import LogoLetters from '../components/LogoLetters.astro';
+import UiButton from '../components/estimate/UiButton.astro';
+import { getMeta } from '../lib/seo';
+import { localizePath, useTranslations, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const meta = getMeta('/estimate/success', lang);
+---
+<BaseLayout
+  lang={lang}
+  path="/estimate/success"
+  title={meta.title}
+  description={meta.description}
+  header={false}
+  contactFooter={false}
+  whatsapp={false}
+  noindex
+>
+  <main class="w-full h-auto">
+    <section
+      data-estimate-success
+      data-home={localizePath('/', lang)}
+      class="relative z-20 flex min-h-screen w-full flex-col items-center bg-primary px-6 pb-16 pt-8"
+    >
+      <div class="absolute inset-0 -z-10 bg-black/80"></div>
+      <AnimatedBackground />
+
+      <a href={localizePath('/', lang)} aria-label="DDC Developments" class="self-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60">
+        <LogoLetters class="h-4 w-auto text-primary" />
+      </a>
+
+      <div class="flex w-full max-w-xl flex-1 flex-col items-center justify-center text-center">
+        <!-- send icon morphs into a checkmark (GSAP MorphSVG) -->
+        <svg viewBox="0 0 120 120" class="h-28 w-28 md:h-32 md:w-32" aria-hidden="true">
+          <circle
+            data-success-ring
+            cx="60" cy="60" r="52"
+            fill="none" stroke="var(--color-primary, #c2c7cf)" stroke-width="2" stroke-linecap="round"
+            transform="rotate(-90 60 60)"
+          ></circle>
+          <path
+            data-success-icon
+            fill="var(--color-primary, #c2c7cf)"
+            d="M31.1 60.9 L88.9 33.7 L68.5 86.4 L56.6 66 L31.1 60.9 Z"
+          ></path>
+        </svg>
+
+        <h1 data-success-item class="mt-8 text-3xl font-bold uppercase tracking-[0.08em] md:text-4xl">
+          {t('estimate.success.title')}
+        </h1>
+        <p data-success-item class="mt-4 max-w-[46ch] text-base font-light text-grey">
+          {t('estimate.success.sub')}
+        </p>
+        <p data-success-item class="mt-2 text-xs font-light uppercase tracking-[0.22em] text-grey/80">
+          {t('estimate.success.redirect')}
+        </p>
+        <div data-success-item class="mt-8">
+          <UiButton as="a" href={localizePath('/', lang)} variant="outline">{t('estimate.success.home')}</UiButton>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

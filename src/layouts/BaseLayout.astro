@@ -28,6 +28,8 @@ interface Props {
   description: string;
   /** The site-wide contact form. Hidden on /projects and /privacy-policy. */
   contactFooter?: boolean;
+  /** The floating WhatsApp button. Hidden on standalone pages like /estimate. */
+  whatsapp?: boolean;
   /** Renders the fixed site header. Interior pages pass extra classes. */
   header?: boolean;
   headerClass?: string;
@@ -54,6 +56,7 @@ const {
   title,
   description,
   contactFooter = true,
+  whatsapp = true,
   header = true,
   headerClass = '',
   bodyClass = '',
@@ -205,7 +208,7 @@ const gtagSnippet = `window.dataLayer=window.dataLayer||[];function gtag(){dataL
       {contactFooter && <ContactFooter lang={lang} />}
     </div>
 
-    <WhatsappButton />
+    {whatsapp && <WhatsappButton />}
     <Toaster />
 
     <script>

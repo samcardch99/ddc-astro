@@ -1,0 +1,79 @@
+---
+/**
+ * Real, navigable map for the zone step: CARTO Dark Matter basemap under the
+ * actual municipal boundaries of the three zones (Census TIGERweb for
+ * Pinecrest and Sunset; the union of the City of Miami GIS sub-neighbourhoods
+ * for Coconut Grove — see `data/zoneGeometry.json`). Leaflet loads lazily from
+ * `scripts/modules/estimateMap.ts`, only on this page; without JavaScript the
+ * zone cards beside the map remain the selection path.
+ */
+import { useTranslations, type Lang } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  class?: string;
+}
+const { lang, class: className = '' } = Astro.props;
+const t = useTranslations(lang);
+---
+<div class={`estimate-map relative overflow-hidden border border-white/15 ${className}`}>
+  <div
+    data-zone-leaflet
+    class="aspect-[4/3] w-full bg-[linear-gradient(160deg,rgba(22,45,87,0.3),rgba(10,17,34,0.55))]"
+    role="application"
+    aria-label={t('estimate.map_aria')}
+  ></div>
+  <p class="map-hint px-3 pb-2 pt-2 text-[10px] font-light uppercase tracking-[0.24em] text-grey">
+    {t('estimate.map_hint')}
+  </p>
+</div>
+
+<style is:global>
+  /* Leaflet chrome, recoloured to the DDC palette. Global on purpose —
+     Leaflet injects this DOM at runtime, out of reach of scoped styles. */
+  .estimate-map .leaflet-container {
+    background: #0c1730;
+    font-family: 'Noirden', sans-serif;
+    cursor: default;
+  }
+  .estimate-map .estimate-zone-path {
+    cursor: pointer;
+    transition: fill-opacity 0.25s ease, stroke-width 0.25s ease;
+  }
+  .estimate-map .estimate-zone-tip {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    color: #c2c7cf;
+    font-family: 'Noirden', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-shadow: 0 1px 4px rgba(6, 10, 20, 0.9);
+    pointer-events: none;
+  }
+  .estimate-map .estimate-zone-tip.is-selected {
+    color: #ffffff;
+  }
+  .estimate-map .estimate-zone-tip::before {
+    display: none;
+  }
+  .estimate-map .leaflet-control-zoom a {
+    background: rgba(15, 25, 49, 0.9);
+    color: #c2c7cf;
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+  .estimate-map .leaflet-control-zoom a:hover {
+    background: rgba(22, 45, 87, 0.95);
+    color: #ffffff;
+  }
+  .estimate-map .leaflet-control-attribution {
+    background: rgba(15, 25, 49, 0.75);
+    color: rgba(186, 192, 198, 0.75);
+    font-size: 9px;
+  }
+  .estimate-map .leaflet-control-attribution a {
+    color: rgba(194, 199, 207, 0.9);
+  }
+</style>

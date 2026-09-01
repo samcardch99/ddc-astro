@@ -1,0 +1,348 @@
+---
+import AnimatedBackground from '../AnimatedBackground.astro';
+import LogoLetters from '../LogoLetters.astro';
+import ZoneMap from '../estimate/ZoneMap.astro';
+import UiButton from '../estimate/UiButton.astro';
+import zones from '../../data/zones.json';
+import { localizePath, useTranslations, useTransHtml, type Lang } from '../../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const transHtml = useTransHtml(lang);
+
+const zoneKeys = ['pinecrest', 'grove', 'sunset'] as const;
+
+/** Cost ledger rows: [key, isDebtRow]. Values are filled client-side. */
+/** Strings the client-side wizard needs beyond the server-rendered markup. */
+const messages = {
+  step_label: t('estimate.step_label'),
+  coc_tag: t('estimate.coc_tag'),
+  leverage_note: t('estimate.leverage_note'),
+  breakeven: t('estimate.results.breakeven'),
+  on_budget: t('estimate.results.on_budget'),
+  overrun: t('estimate.results.overrun'),
+  target: t('estimate.results.target'),
+  sale_col: t('estimate.results.sale_col'),
+  cap_loan: t('estimate.results.cap_loan'),
+  cap_down: t('estimate.results.cap_down'),
+  cap_extra: t('estimate.results.cap_extra'),
+  cap_cash_only: t('estimate.results.cap_cash_only'),
+  context_financed: t('estimate.results.context_financed'),
+  context_cash: t('estimate.results.context_cash'),
+  context_resident: t('estimate.results.context_resident'),
+  context_foreign: t('estimate.results.context_foreign'),
+  net_f: t('estimate.results.net_f'),
+  total_f_financed: t('estimate.results.rows.total_f_financed'),
+  total_f_cash: t('estimate.results.rows.total_f_cash'),
+  construction_f: t('estimate.results.rows.construction_f'),
+  zone_names: Object.fromEntries(zoneKeys.map((key) => [key, t(`estimate.zones.${key}.name`)])),
+  invalid: t('estimate.lead.invalid'),
+  sending: t('estimate.lead.sending'),
+  fail_title: t('form_send.fail_title'),
+};
+
+/**
+ * Cost ledger rows: [key, isDebtRow, tier].
+ * 'major' — the numbers that decide the deal (land, construction): larger, bold.
+ * 'debt'  — financing costs: amber, so the cost of leverage reads as one block.
+ * 'minor' — fees and holding: quieter, smaller.
+ */
+const costRows: Array<[string, boolean, 'major' | 'minor' | 'debt']> = [
+  ['land', false, 'major'], ['acq', false, 'minor'], ['construction', false, 'major'],
+  ['contingency', false, 'minor'], ['soft', false, 'minor'], ['closing', true, 'debt'],
+  ['reserve', true, 'debt'], ['beyond', true, 'debt'], ['holding', false, 'minor'],
+];
+
+const rowLabelClass = {
+  major: 'text-[15px] font-bold',
+  minor: 'text-[13px]',
+  debt: 'text-[13px]',
+} as const;
+const rowValueClass = {
+  major: 'text-[15px] font-bold',
+  minor: 'text-[13px] text-grey',
+  debt: 'text-[13px] est-debt',
+} as const;
+---
+<section
+  data-estimate
+  data-lang={lang}
+  data-zones={JSON.stringify(zones)}
+  data-messages={JSON.stringify(messages)}
+  data-success-url={localizePath('/estimate/success', lang)}
+  class="relative z-20 min-h-screen w-full bg-primary px-6 pb-28 pt-8 md:px-10"
+>
+  <div class="absolute inset-0 -z-10 bg-black/80"></div>
+  <AnimatedBackground />
+
+  <div class="mx-auto w-full max-w-5xl">
+    <!-- standalone top bar: wordmark + language switch (no site chrome here) -->
+    <div class="mb-14 flex items-center justify-between">
+      <a href={localizePath('/', lang)} aria-label="DDC Developments" class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60">
+        <LogoLetters class="h-4 w-auto text-primary" />
+      </a>
+      <p class="text-xs tracking-[0.2em]">
+        <a href={localizePath('/estimate', 'en')} class={lang === 'en' ? 'font-bold' : 'font-light text-grey hover:text-primary'}>EN</a>
+        <span class="text-grey"> | </span>
+        <a href={localizePath('/estimate', 'es')} class={lang === 'es' ? 'font-bold' : 'font-light text-grey hover:text-primary'}>ES</a>
+      </p>
+    </div>
+    <!-- intro -->
+    <header data-est-intro>
+      <p class="text-xs font-bold uppercase tracking-[0.32em] text-grey">{t('estimate.eyebrow')}</p>
+      <h1
+        class="mt-4 text-5xl font-bold uppercase leading-[1.04] tracking-[0.04em] md:text-7xl"
+        data-est-title
+        set:html={transHtml('estimate.title', '<br />')}
+      />
+      <p class="mt-6 max-w-[58ch] text-base font-light text-grey">{t('estimate.intro')}</p>
+    </header>
+
+    <!-- progress -->
+    <div class="mt-12 flex items-center gap-5" data-est-progresswrap>
+      <p class="whitespace-nowrap text-[11px] font-bold uppercase tracking-[0.26em] text-grey" data-est-step-label>
+        {t('estimate.step_label').replace('{n}', '1')}
+      </p>
+      <div class="h-px flex-1 bg-white/10">
+        <div class="h-px w-1/4 bg-primary transition-none" data-est-progress></div>
+      </div>
+      <UiButton variant="ghost" size="sm" data-est-restart class="invisible">{t('estimate.restart')}</UiButton>
+    </div>
+
+    <!-- panels -->
+    <div class="relative mt-10" data-est-shell>
+
+      <!-- 01 · zone -->
+      <div data-est-panel="zone">
+        <h2 class="text-2xl font-bold uppercase tracking-[0.08em] md:text-3xl">{t('estimate.step_zone_title')}</h2>
+        <p class="mt-2 max-w-[64ch] text-sm font-light text-grey">{t('estimate.step_zone_hint')}</p>
+        <div class="mt-8 grid gap-8 lg:grid-cols-[1.05fr_1fr] lg:items-start">
+          <ZoneMap lang={lang} />
+          <div class="flex flex-col gap-3.5">
+            {zoneKeys.map((key) => (
+              <button
+                type="button"
+                class="est-option group relative w-full border border-white/15 bg-white/[0.03] p-5 text-left transition-colors duration-200 hover:bg-white/[0.07] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+                data-zone-option={key}
+                aria-pressed="false"
+              >
+                <span class="absolute right-4 top-3.5 text-[10px] font-bold uppercase tracking-[0.22em] opacity-60">
+                  {zones[key].benchmark ? t('estimate.benchmark') : t('estimate.preliminary')}
+                </span>
+                <span class="block text-base font-bold uppercase tracking-[0.1em]">{t(`estimate.zones.${key}.name`)}</span>
+                <span class="est-option-sub mt-1.5 block text-[13px] font-light tracking-[0.04em] text-grey">
+                  {t(`estimate.zones.${key}.sub`)}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- 02 · profile -->
+      <div data-est-panel="profile" hidden>
+        <h2 class="text-2xl font-bold uppercase tracking-[0.08em] md:text-3xl">{t('estimate.step_profile_title')}</h2>
+        <div class="mt-8 grid gap-4 sm:grid-cols-2">
+          {(['resident', 'foreign'] as const).map((key) => (
+            <button
+              type="button"
+              class="est-option group relative w-full border border-white/15 bg-white/[0.03] p-5 text-left transition-colors duration-200 hover:bg-white/[0.07] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+              data-profile-option={key}
+              aria-pressed="false"
+            >
+              <span class="block text-base font-bold uppercase tracking-[0.1em]">{t(`estimate.${key}_title`)}</span>
+              <span class="est-option-sub mt-1.5 block text-[13px] font-light tracking-[0.04em] text-grey">
+                {t(`estimate.${key}_sub`)}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <!-- 03 · funding -->
+      <div data-est-panel="funding" hidden>
+        <h2 class="text-2xl font-bold uppercase tracking-[0.08em] md:text-3xl">{t('estimate.step_funding_title')}</h2>
+        <div class="mt-8 grid gap-4 sm:grid-cols-2">
+          {(['financed', 'cash'] as const).map((key) => (
+            <button
+              type="button"
+              class="est-option group relative w-full border border-white/15 bg-white/[0.03] p-5 text-left transition-colors duration-200 hover:bg-white/[0.07] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+              data-funding-option={key}
+              aria-pressed="false"
+            >
+              <span class="absolute right-4 top-3.5 text-[10px] font-bold uppercase tracking-[0.18em] opacity-70 tabular-nums" data-coc-tag={key}></span>
+              <span class="block text-base font-bold uppercase tracking-[0.1em]">{t(`estimate.${key}_title`)}</span>
+              <span class="est-option-sub mt-1.5 block text-[13px] font-light tracking-[0.04em] text-grey">
+                {t(`estimate.${key}_sub`)}
+              </span>
+            </button>
+          ))}
+        </div>
+        <p class="mt-6 hidden max-w-[70ch] border-l-2 border-primary bg-white/[0.04] px-5 py-4 text-[13px] font-light text-grey" data-leverage-note></p>
+      </div>
+
+      <!-- 04 · results -->
+      <div data-est-panel="results" hidden>
+        <p class="text-xs font-bold uppercase tracking-[0.32em] text-grey">
+          <span data-est-context></span>
+        </p>
+        <h2 class="mt-3 text-2xl font-bold uppercase tracking-[0.08em] md:text-3xl">{t('estimate.results.title')}</h2>
+
+        <div class="mt-10 grid grid-cols-2 gap-5 md:grid-cols-4">
+          {([
+            ['cash', 'estimate.results.cash_required', 'est-cash'],
+            ['profit', 'estimate.results.profit', 'est-pos'],
+            ['coc', 'estimate.results.coc', 'est-pos'],
+            ['mult', 'estimate.results.multiple', 'est-pos'],
+          ] as const).map(([key, label, tone]) => (
+            <div class="border-t border-white/15 pt-3.5">
+              <p class={`${tone} text-3xl font-bold tabular-nums tracking-[0.02em] md:text-4xl`} data-m={key}>—</p>
+              <p class="mt-1 text-[10.5px] font-bold uppercase tracking-[0.22em] text-grey">{t(label)}</p>
+            </div>
+          ))}
+        </div>
+
+        <div class="mt-12">
+          <p class="mb-3.5 text-xs font-bold uppercase tracking-[0.26em] text-grey">{t('estimate.results.capital')}</p>
+          <div class="flex h-14 overflow-hidden border border-white/15">
+            <div class="flex items-center justify-center overflow-hidden whitespace-nowrap bg-tertiary text-[11px] font-bold uppercase tracking-[0.12em] transition-[width] duration-700 ease-out tabular-nums" data-cap="loan"></div>
+            <div class="flex items-center justify-center overflow-hidden whitespace-nowrap bg-primary text-[11px] font-bold uppercase tracking-[0.12em] text-secondary transition-[width] duration-700 ease-out tabular-nums" data-cap="down"></div>
+            <div class="flex items-center justify-center overflow-hidden whitespace-nowrap bg-primary/25 text-[11px] font-bold uppercase tracking-[0.12em] transition-[width] duration-700 ease-out tabular-nums" data-cap="extra"></div>
+          </div>
+          <div class="mt-3 flex flex-wrap gap-x-6 gap-y-1.5 text-[11px] uppercase tracking-[0.14em] text-grey" data-cap-legend></div>
+        </div>
+
+        <div class="mt-14 grid gap-11 lg:grid-cols-2">
+          <table class="w-full border-collapse" aria-live="polite">
+            <caption class="pb-2.5 text-left text-xs font-bold uppercase tracking-[0.26em] text-grey">
+              {t('estimate.results.cost_title')}
+            </caption>
+            <tbody class="text-sm">
+              {costRows.map(([key, debt, tier]) => (
+                <tr data-debt-row={debt ? '' : undefined}>
+                  <td class={`border-t border-white/10 py-2.5 pr-2 align-top ${rowLabelClass[tier]}`}>
+                    {t(`estimate.results.rows.${key}`)}
+                    <span class="mt-0.5 block text-[11px] font-light tracking-[0.06em] text-grey tabular-nums" data-f={key}>
+                      {t(`estimate.results.rows.${key}_f`, '')}
+                    </span>
+                  </td>
+                  <td class={`whitespace-nowrap border-t border-white/10 py-2.5 text-right tabular-nums ${rowValueClass[tier]}`} data-cell={key}></td>
+                </tr>
+              ))}
+              <tr>
+                <td class="border-t border-primary py-3 pr-2 text-[15px] font-bold">
+                  {t('estimate.results.rows.total')}
+                  <span class="mt-0.5 block text-[11px] font-light tracking-[0.06em] text-grey" data-f="total"></span>
+                </td>
+                <td class="est-cash whitespace-nowrap border-t border-primary py-3 text-right text-lg font-bold tabular-nums md:text-xl" data-cell="total"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="flex flex-col gap-10">
+            <table class="w-full border-collapse">
+              <caption class="pb-2.5 text-left text-xs font-bold uppercase tracking-[0.26em] text-grey">
+                {t('estimate.results.waterfall_title')}
+              </caption>
+              <tbody class="text-sm">
+                <tr>
+                  <td class="border-t border-white/10 py-2.5 pr-2 text-[15px] font-bold">{t('estimate.results.sale')}</td>
+                  <td class="whitespace-nowrap border-t border-white/10 py-2.5 text-right text-[15px] font-bold tabular-nums" data-cell="sale"></td>
+                </tr>
+                <tr>
+                  <td class="border-t border-white/10 py-2.5 pr-2 text-[13px]">
+                    {t('estimate.results.selling')}
+                    <span class="mt-0.5 block text-[11px] font-light tracking-[0.06em] text-grey">{t('estimate.results.selling_f')}</span>
+                  </td>
+                  <td class="est-neg whitespace-nowrap border-t border-white/10 py-2.5 text-right text-[13px] tabular-nums" data-cell="selling"></td>
+                </tr>
+                <tr data-debt-row>
+                  <td class="border-t border-white/10 py-2.5 pr-2 text-[13px]">{t('estimate.results.payoff')}</td>
+                  <td class="est-debt whitespace-nowrap border-t border-white/10 py-2.5 text-right text-[13px] tabular-nums" data-cell="payoff"></td>
+                </tr>
+                <tr>
+                  <td class="border-t border-white/10 py-2.5 pr-2 text-[13px]">{t('estimate.results.capital_back')}</td>
+                  <td class="est-cash whitespace-nowrap border-t border-white/10 py-2.5 text-right text-[13px] tabular-nums" data-cell="capitalBack"></td>
+                </tr>
+                <tr>
+                  <td class="border-t border-primary py-3 pr-2 text-[15px] font-bold">
+                    {t('estimate.results.net')}
+                    <span class="mt-0.5 block text-[11px] font-light tracking-[0.06em] text-grey tabular-nums" data-f="net"></span>
+                  </td>
+                  <td class="est-pos whitespace-nowrap border-t border-primary py-3 text-right text-lg font-bold tabular-nums md:text-xl" data-cell="net"></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div>
+              <p class="mb-3 text-xs font-bold uppercase tracking-[0.26em] text-grey">{t('estimate.results.sense_title')}</p>
+              <div class="overflow-x-auto">
+                <table class="w-full border-collapse text-[13px]" data-sense></table>
+              </div>
+              <p class="mt-3.5 max-w-[70ch] text-[13px] font-light text-grey tabular-nums" data-sense-caption></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- lead capture -->
+        <div class="mt-16 bg-primary p-7 text-secondary shadow-[0_8px_30px_rgba(0,0,0,0.25)] ring-1 ring-white/15 md:p-11">
+          <p class="text-[11px] font-bold uppercase tracking-[0.28em] text-secondary/65">{t('estimate.lead.eyebrow')}</p>
+          <h3 class="mt-2.5 text-2xl font-bold tracking-[0.04em] md:text-3xl">{t('estimate.lead.title')}</h3>
+          <p class="mt-2.5 max-w-[62ch] text-sm font-light text-secondary/80">{t('estimate.lead.sub')}</p>
+          <form class="mt-7 grid gap-4 sm:grid-cols-2" data-lead-form novalidate>
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-bold uppercase tracking-[0.16em] opacity-80" for="est-name">{t('estimate.lead.name')}</label>
+              <input id="est-name" name="name" type="text" autocomplete="name" required
+                class="w-full rounded-none border border-secondary/40 bg-transparent p-3 text-secondary outline-none focus:border-secondary" />
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-bold uppercase tracking-[0.16em] opacity-80" for="est-email">{t('estimate.lead.email')}</label>
+              <input id="est-email" name="email" type="email" autocomplete="email" required
+                class="w-full rounded-none border border-secondary/40 bg-transparent p-3 text-secondary outline-none focus:border-secondary" />
+            </div>
+            <div class="flex flex-col gap-1.5 sm:col-span-2">
+              <label class="text-[11px] font-bold uppercase tracking-[0.16em] opacity-80" for="est-phone">{t('estimate.lead.phone')}</label>
+              <input id="est-phone" name="phone" type="tel" autocomplete="tel"
+                class="w-full rounded-none border border-secondary/40 bg-transparent p-3 text-secondary outline-none focus:border-secondary" />
+            </div>
+            <div class="flex flex-wrap items-center gap-5 sm:col-span-2">
+              <button type="submit"
+                class="inline-flex h-11 items-center justify-center rounded-md bg-[#1E1F20] px-7 text-sm tracking-[0.1em] text-primary shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] ring-1 ring-white/20 transition-colors duration-200 hover:bg-secondary/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary">
+                {t('estimate.lead.submit')}
+              </button>
+              <span class="max-w-[40ch] text-[11px] font-light tracking-[0.06em] text-secondary/60">{t('estimate.lead.note')}</span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- prev / next -->
+    <nav class="mt-12 flex items-center justify-between gap-4" aria-label="Wizard" data-est-nav>
+      <UiButton variant="outline" data-est-prev disabled>{t('estimate.back')}</UiButton>
+      <UiButton variant="default" data-est-next data-label-results={t('estimate.see_results')} disabled>{t('estimate.next')}</UiButton>
+    </nav>
+
+  </div>
+</section>
+
+<style>
+  /* Semantic number tones — muted steps of green (returns), amber (debt costs),
+     steel (the investor's own cash) and clay (deductions); all >=7:1 on the navy. */
+  [data-estimate] .est-pos { color: #9cbfa8; }
+  [data-estimate] .est-debt { color: #d4b483; }
+  [data-estimate] .est-cash { color: #97b4de; }
+  [data-estimate] .est-neg { color: #d3a49e; }
+  [data-estimate] [data-coc-tag] { color: #9cbfa8; opacity: 1; }
+  [data-estimate] .est-option[aria-pressed='true'] [data-coc-tag] { color: #355440; }
+
+  [data-estimate] .est-option[aria-pressed='true'] {
+    background-color: var(--color-primary, #c2c7cf);
+    border-color: var(--color-primary, #c2c7cf);
+    color: var(--color-secondary, #0f1931);
+  }
+  [data-estimate] .est-option[aria-pressed='true'] .est-option-sub {
+    color: rgba(15, 25, 49, 0.75);
+  }
+</style>

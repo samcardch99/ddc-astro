@@ -46,6 +46,22 @@ const pages: Record<string, Record<Lang, Meta>> = {
     en: { title: 'DDC Developments | Projects', description: 'Villas and developments delivered by DDC Developments across Miami, Punta Gorda and Lehigh Acres.' },
     es: { title: 'DDC Developments | Proyectos', description: 'Villas y desarrollos entregados por DDC Developments en Miami, Punta Gorda y Lehigh Acres.' },
   },
+  '/estimate': {
+    en: {
+      title: 'Investment Estimator | DDC Developments',
+      description:
+        'Model your ground-up development in Pinecrest, Coconut Grove or Sunset: pick a zone, your investor profile and funding, and watch the numbers build live.',
+    },
+    es: {
+      title: 'Estimador de Inversión | DDC Developments',
+      description:
+        'Modela tu desarrollo en Pinecrest, Coconut Grove o Sunset: elige zona, perfil de inversionista y fondeo, y mira los números construirse en vivo.',
+    },
+  },
+  '/estimate/success': {
+    en: { title: 'Request sent | DDC Developments', description: 'Your estimate request was sent. We will follow up with the full proposal.' },
+    es: { title: 'Solicitud enviada | DDC Developments', description: 'Tu solicitud de estimado fue enviada. Te haremos llegar la propuesta completa.' },
+  },
   '/privacy-policy': {
     en: { title: 'Privacy Policy | DDC Developments', description: 'How DDC Developments collects, uses and protects your personal information.' },
     es: { title: 'Política de Privacidad | DDC Developments', description: 'Cómo DDC Developments recoge, usa y protege tu información personal.' },
@@ -66,6 +82,7 @@ const crumbLabels: Record<string, Record<Lang, string>> = {
   '/technologies': { en: 'Technologies', es: 'Tecnologías' },
   '/investments': { en: 'Investments', es: 'Inversiones' },
   '/projects': { en: 'Projects', es: 'Proyectos' },
+  '/estimate': { en: 'Investment Estimator', es: 'Estimador de Inversión' },
   '/privacy-policy': { en: 'Privacy Policy', es: 'Política de Privacidad' },
 };
 

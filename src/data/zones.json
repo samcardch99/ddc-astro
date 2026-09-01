@@ -1,0 +1,26 @@
+{
+  "pinecrest": {
+    "key": "pinecrest",
+    "land": 1500000,
+    "sqft": 6000,
+    "rate": 320,
+    "arv": 5800000,
+    "benchmark": true
+  },
+  "grove": {
+    "key": "grove",
+    "land": 1750000,
+    "sqft": 5500,
+    "rate": 320,
+    "arv": 5900000,
+    "benchmark": false
+  },
+  "sunset": {
+    "key": "sunset",
+    "land": 780000,
+    "sqft": 4500,
+    "rate": 300,
+    "arv": 3600000,
+    "benchmark": false
+  }
+}

@@ -45,7 +45,9 @@ export default defineConfig({
         // different annotations for the same pair of pages.
         locales: { en: 'en', es: 'es' },
       },
-      filter: (page) => !page.includes('/404'),
+      // The 404 has no business in a sitemap; neither does the estimate's
+      // post-submit confirmation, which is noindex.
+      filter: (page) => !page.includes('/404') && !page.includes('/estimate/success'),
       // The integration emits directory-style URLs; the canonical link does
       // not. One form has to win or every page is submitted under a URL that
       // disagrees with its own canonical.
