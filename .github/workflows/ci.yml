@@ -1,10 +1,11 @@
 name: CI
 
+# Tests gate pull requests only; a push to main goes straight to the
+# Publish workflow without re-running the suite.
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.ref }}
