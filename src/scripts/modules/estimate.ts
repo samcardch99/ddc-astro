@@ -8,6 +8,7 @@ import {
   calcEstimate,
   monthlyDelayCost,
   profitAt,
+  ratePerSqft,
   RULES,
   type Estimate,
   type Funding,
@@ -358,7 +359,7 @@ export function initEstimate(): void {
     if (constructionFormula)
       constructionFormula.textContent = fill(msg.construction_f ?? '', {
         sqft: nf0.format(zone.sqft),
-        rate: String(zone.rate),
+        rate: nf0.format(Math.round(ratePerSqft(zone))),
       });
     const totalFormula = $<HTMLElement>('[data-f="total"]', scope);
     if (totalFormula) totalFormula.textContent = financed ? (msg.total_f_financed ?? '') : (msg.total_f_cash ?? '');
@@ -467,7 +468,7 @@ export function initEstimate(): void {
         acquisition_fee: usd(est.acquisitionFee),
         construction: usd(est.construction),
         sqft: nf0.format(zone.sqft),
-        rate: String(zone.rate),
+        rate: nf0.format(Math.round(ratePerSqft(zone))),
         contingency: usd(est.contingency),
         soft_costs: usd(est.soft),
         loan: financed ? usd(est.loan) : dash,
