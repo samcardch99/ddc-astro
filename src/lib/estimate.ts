@@ -9,8 +9,8 @@
  * - Loan closing costs decompose into 1.5% origination + 2% broker on the loan
  *   plus $41,617 of fixed fees (underwriting $6,440, draw inspections $2,800,
  *   title & other $32,377): 3.5% × $2,979,700 + $41,617 = $145,906.
- * - Soft costs scale with the construction budget at the model's ratio
- *   ($200,000 per $1.9M of construction).
+ * - Soft costs are a flat $200,000 allowance in every zone — the model
+ *   project's figure, applied unscaled.
  *
  * Pure functions only — the DOM wiring lives in scripts/modules/estimate.ts.
  */
@@ -46,8 +46,8 @@ export const RULES = {
   interestBeyondPctOfLoan: 0.0114,
   /** DDC acquisition fee on the land price. */
   acquisitionPct: 0.03,
-  /** Soft costs per construction dollar ($200K per $1.9M in the model). */
-  softPerConstructionDollar: 200000 / 1900000,
+  /** Design, engineering and permits — a flat allowance, same in every zone. */
+  softCosts: 200000,
   /** Taxes, insurance and utilities while the project holds. */
   holdingPerMonth: 3000,
   /** Sale at Certificate of Occupancy, 12 months after permits. */
@@ -83,7 +83,7 @@ export function calcEstimate(zone: ZoneParams, funding: Funding): Estimate {
   const construction = zone.sqft * zone.rate;
   const contingency = RULES.contingency * construction;
   const basis = zone.land + construction + contingency;
-  const soft = RULES.softPerConstructionDollar * construction;
+  const soft = RULES.softCosts;
   const acquisitionFee = RULES.acquisitionPct * zone.land;
   const holding = RULES.holdingPerMonth * RULES.months;
 

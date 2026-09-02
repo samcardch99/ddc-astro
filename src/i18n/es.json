@@ -619,7 +619,7 @@
       },
       "grove": {
         "name": "Coconut Grove",
-        "sub": "≈ 5,500 ft² de residencia · $320/ft² · terreno prom. $1,750,000 · venta objetivo $5.9M",
+        "sub": "≈ 5,000 ft² de residencia · $320/ft² · terreno prom. $1,750,000 · venta objetivo $5.0M",
         "aria": "Coconut Grove — terreno promedio $1,750,000"
       },
       "sunset": {
@@ -667,7 +667,7 @@
         "contingency": "Contingencia",
         "contingency_f": "= 10% × construcción",
         "soft": "Costos suaves — diseño, ingeniería, permisos",
-        "soft_f": "≈ 10.5% × presupuesto de construcción",
+        "soft_f": "Importe fijo — igual en todas las zonas",
         "closing": "Costos de cierre del préstamo",
         "closing_f": "= 3.5% × préstamo + $41,617 en tarifas fijas",
         "reserve": "Reserva de intereses — cobrada al cierre",
