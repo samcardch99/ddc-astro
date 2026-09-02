@@ -10,9 +10,9 @@
   "grove": {
     "key": "grove",
     "land": 1750000,
-    "sqft": 5500,
+    "sqft": 5000,
     "rate": 320,
-    "arv": 5900000,
+    "arv": 5000000,
     "benchmark": false
   },
   "sunset": {

@@ -668,7 +668,7 @@
       },
       "grove": {
         "name": "Coconut Grove",
-        "sub": "≈ 5,500 ft² residence · $320/ft² · land avg $1,750,000 · target sale $5.9M",
+        "sub": "≈ 5,000 ft² residence · $320/ft² · land avg $1,750,000 · target sale $5.0M",
         "aria": "Coconut Grove — land average $1,750,000"
       },
       "sunset": {
@@ -716,7 +716,7 @@
         "contingency": "Contingency",
         "contingency_f": "= 10% × construction",
         "soft": "Soft costs — design, engineering, permits",
-        "soft_f": "≈ 10.5% × construction budget",
+        "soft_f": "Flat allowance — same in every zone",
         "closing": "Loan closing costs",
         "closing_f": "= 3.5% × loan + $41,617 fixed fees",
         "reserve": "Interest reserve — charged at closing",

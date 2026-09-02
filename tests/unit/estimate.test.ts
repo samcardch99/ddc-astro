@@ -38,8 +38,8 @@ describe('calcEstimate — financed, Pinecrest (RBI LOI #19890 calibration)', ()
   });
 
   it('lands near the LOI economics: ~$1.22M cash in, ~96% cash-on-cash', () => {
-    expect(est.cashRequired).toBeCloseTo(1220271, 0);
-    expect(est.netProfit).toBeCloseTo(1175769, 0);
+    expect(est.cashRequired).toBeCloseTo(1218165, 0);
+    expect(est.netProfit).toBeCloseTo(1177875, 0);
     expect(est.cashOnCash).toBeGreaterThan(0.9);
     expect(est.cashOnCash).toBeLessThan(1.05);
     expect(est.equityMultiple).toBeCloseTo(1 + est.cashOnCash, 6);
