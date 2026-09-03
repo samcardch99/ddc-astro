@@ -593,6 +593,7 @@
     }
   },
   "estimate": {
+    "disclosure": "Importante: Todos los estimados y precios mostrados son aproximados y están sujetos a cambios.",
     "eyebrow": "Estimador de inversión",
     "title": "¿Dónde vas<0/> a construir?",
     "intro": "Responde tres preguntas — zona, perfil de inversionista y fondeo — y mira cómo los números del proyecto se construyen solos, con las fórmulas a la vista.",

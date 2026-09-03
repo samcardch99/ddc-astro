@@ -642,6 +642,7 @@
     }
   },
   "estimate": {
+    "disclosure": "Important: All estimates and prices shown are approximate and subject to change.",
     "eyebrow": "Investment estimator",
     "title": "Where will<0/> you build?",
     "intro": "Answer three questions — zone, investor profile and funding — and watch the project's numbers build themselves, formulas in plain sight.",
