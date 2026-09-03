@@ -38,6 +38,8 @@ interface Messages {
   net_f: string;
   total_f_financed: string;
   total_f_cash: string;
+  upfront_financed: string;
+  upfront_cash: string;
   construction_f: string;
   zone_names: Record<string, string>;
   invalid: string;
@@ -305,7 +307,9 @@ export function initEstimate(): void {
       context.textContent = `${msg.zone_names?.[state.zone] ?? zone.key} · ${profile ?? ''} · ${funding ?? ''}`;
     }
 
-    countMetric('cash', est.cashRequired, usdCompact);
+    countMetric('cash', est.upfront, usdCompact);
+    const cashLabel = $<HTMLElement>('[data-m-label="cash"]', scope);
+    if (cashLabel) cashLabel.textContent = financed ? msg.upfront_financed : msg.upfront_cash;
     countMetric('profit', est.netProfit, usdCompact);
     countMetric('coc', est.cashOnCash, pct);
     const mult = $<HTMLElement>('[data-m="mult"]', scope);
@@ -461,6 +465,8 @@ export function initEstimate(): void {
         profile: state.profile === 'foreign' ? msg.context_foreign : msg.context_resident,
         funding: financed ? msg.context_financed : msg.context_cash,
         cash_required: usd(est.cashRequired),
+        upfront_payment: usd(est.upfront),
+        staged_contributions: usd(est.staged),
         net_profit: usd(est.netProfit),
         cash_on_cash: pct(est.cashOnCash),
         equity_multiple: nf2.format(Math.round(est.equityMultiple * 100) / 100) + 'x',

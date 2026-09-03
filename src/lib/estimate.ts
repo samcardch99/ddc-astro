@@ -37,6 +37,9 @@ export interface ZoneParams {
 }
 
 export const RULES = {
+  /** Share of the investor's total cash commitment due as the initial payment. */
+  upfrontCashPct: 0.83,
+  upfrontFinancedPct: 0.73,
   /** Lender-required contingency on the construction budget. */
   contingency: 0.1,
   /** RBI's binding constraint — max loan-to-cost on land + build + contingency. */
@@ -79,6 +82,10 @@ export interface Estimate {
   interestBeyond: number;
   /** Everything the investor wires — the cash-on-cash denominator. */
   cashRequired: number;
+  /** Portion of cashRequired due in the initial, lump-sum payment. */
+  upfront: number;
+  /** Remaining investor contribution, paid as the project advances. */
+  staged: number;
   netProfit: number;
   cashOnCash: number;
   equityMultiple: number;
@@ -111,6 +118,9 @@ export function calcEstimate(zone: ZoneParams, funding: Funding): Estimate {
   }
 
   const netProfit = zone.arv * (1 - RULES.sellingPct) - loan - cashRequired;
+  const upfrontPct = funding === 'financed' ? RULES.upfrontFinancedPct : RULES.upfrontCashPct;
+  const upfront = cashRequired * upfrontPct;
+  const staged = cashRequired - upfront;
 
   return {
     zone,
@@ -127,6 +137,8 @@ export function calcEstimate(zone: ZoneParams, funding: Funding): Estimate {
     reserve,
     interestBeyond,
     cashRequired,
+    upfront,
+    staged,
     netProfit,
     cashOnCash: netProfit / cashRequired,
     equityMultiple: (netProfit + cashRequired) / cashRequired,

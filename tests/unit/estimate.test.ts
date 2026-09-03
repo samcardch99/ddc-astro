@@ -47,6 +47,12 @@ describe('calcEstimate — financed, Pinecrest (RBI LOI #19890 calibration)', ()
     expect(est.cashOnCash).toBeLessThan(1.45);
     expect(est.equityMultiple).toBeCloseTo(1 + est.cashOnCash, 6);
   });
+
+  it('requires 73% of investor cash up front and stages the remaining 27%', () => {
+    expect(est.upfront).toBeCloseTo(est.cashRequired * 0.73, 6);
+    expect(est.staged).toBeCloseTo(est.cashRequired * 0.27, 6);
+    expect(est.upfront + est.staged).toBeCloseTo(est.cashRequired, 6);
+  });
 });
 
 describe('calcEstimate — all cash', () => {
@@ -61,6 +67,12 @@ describe('calcEstimate — all cash', () => {
 
   it('cash required is basis + soft + acquisition fee + holding', () => {
     expect(est.cashRequired).toBeCloseTo(est.basis + est.soft + est.acquisitionFee + est.holding, 6);
+  });
+
+  it('requires 83% of investor cash up front and stages the remaining 17%', () => {
+    expect(est.upfront).toBeCloseTo(est.cashRequired * 0.83, 6);
+    expect(est.staged).toBeCloseTo(est.cashRequired * 0.17, 6);
+    expect(est.upfront + est.staged).toBeCloseTo(est.cashRequired, 6);
   });
 
   it('returns less per dollar than the financed deal', () => {

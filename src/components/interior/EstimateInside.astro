@@ -35,6 +35,8 @@ const messages = {
   net_f: t('estimate.results.net_f'),
   total_f_financed: t('estimate.results.rows.total_f_financed'),
   total_f_cash: t('estimate.results.rows.total_f_cash'),
+  upfront_financed: t('estimate.results.upfront_financed'),
+  upfront_cash: t('estimate.results.upfront_cash'),
   construction_f: t('estimate.results.rows.construction_f'),
   zone_names: Object.fromEntries(zoneKeys.map((key) => [key, t(`estimate.zones.${key}.name`)])),
   invalid: t('estimate.lead.invalid'),
@@ -198,7 +200,7 @@ const rowValueClass = {
           ] as const).map(([key, label, tone]) => (
             <div class="border-t border-white/15 pt-3.5">
               <p class={`${tone} text-3xl font-bold tabular-nums tracking-[0.02em] md:text-4xl`} data-m={key}>—</p>
-              <p class="mt-1 text-[10.5px] font-bold uppercase tracking-[0.22em] text-grey">{t(label)}</p>
+              <p class="mt-1 text-[10.5px] font-bold uppercase tracking-[0.22em] text-grey" data-m-label={key}>{t(label)}</p>
             </div>
           ))}
         </div>
