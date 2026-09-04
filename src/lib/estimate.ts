@@ -12,10 +12,10 @@
  * - Soft costs are a flat $200,000 allowance in every zone — the model
  *   project's figure, applied unscaled.
  *
- * Construction is a fixed per-zone budget, not sqft × rate, so a zone's
- * implied $/ft² falls out of the budget rather than driving it. The rules above
- * still come from the LOI, but no zone reproduces the model project's own deal
- * any more — it built for $1.92M where Pinecrest now budgets $1.6M.
+ * Construction is sqft × DDC's flat rate for the zone — $320/ft² for new
+ * builds, $300/ft² in Sunset — so the buildable area drives the budget. At
+ * 6,000 ft² × $320 Pinecrest budgets $1,920,000, which is the model project's
+ * own build: the zone reproduces the LOI deal it is calibrated on.
  *
  * Pure functions only — the DOM wiring lives in scripts/modules/estimate.ts.
  */
@@ -28,8 +28,8 @@ export interface ZoneParams {
   land: number;
   /** Buildable area assumed for the zone, ft². */
   sqft: number;
-  /** Fixed construction budget for the zone, USD. */
-  construction: number;
+  /** DDC construction rate for the zone, USD per ft². */
+  rate: number;
   /** Target sale price (after-repair value), USD. */
   arv: number;
   /** True when the figures come from the RBI LOI model project. */
@@ -92,7 +92,7 @@ export interface Estimate {
 }
 
 export function calcEstimate(zone: ZoneParams, funding: Funding): Estimate {
-  const construction = zone.construction;
+  const construction = zone.sqft * zone.rate;
   const contingency = RULES.contingency * construction;
   const basis = zone.land + construction + contingency;
   const soft = RULES.softCosts;
@@ -143,11 +143,6 @@ export function calcEstimate(zone: ZoneParams, funding: Funding): Estimate {
     cashOnCash: netProfit / cashRequired,
     equityMultiple: (netProfit + cashRequired) / cashRequired,
   };
-}
-
-/** Build cost per ft² implied by the zone's fixed budget — display only. */
-export function ratePerSqft(zone: ZoneParams): number {
-  return zone.construction / zone.sqft;
 }
 
 /** Profit and cash-on-cash at a given sale price and construction overrun. */
