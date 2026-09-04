@@ -3,7 +3,7 @@
     "key": "pinecrest",
     "land": 1500000,
     "sqft": 6000,
-    "construction": 1600000,
+    "rate": 320,
     "arv": 5800000,
     "benchmark": true
   },
@@ -11,15 +11,15 @@
     "key": "grove",
     "land": 1750000,
     "sqft": 5000,
-    "construction": 1600000,
-    "arv": 5000000,
+    "rate": 320,
+    "arv": 5300000,
     "benchmark": false
   },
   "sunset": {
     "key": "sunset",
-    "land": 780000,
+    "land": 1000000,
     "sqft": 4500,
-    "construction": 1000000,
+    "rate": 300,
     "arv": 3800000,
     "benchmark": false
   }

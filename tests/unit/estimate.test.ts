@@ -15,13 +15,13 @@ describe('calcEstimate — financed, Pinecrest (RBI LOI #19890 calibration)', ()
   const est = calcEstimate(pinecrest, 'financed');
 
   it('builds the lender cost basis from land + construction + 10% contingency', () => {
-    expect(est.construction).toBe(1600000);
-    expect(est.contingency).toBeCloseTo(160000, 0);
-    expect(est.basis).toBeCloseTo(3260000, 0);
+    expect(est.construction).toBe(6000 * 320);
+    expect(est.contingency).toBeCloseTo(192000, 0);
+    expect(est.basis).toBeCloseTo(3612000, 0);
   });
 
   it('sizes the loan at 83% LTC and the down payment at 17%', () => {
-    expect(est.loan).toBeCloseTo(0.83 * 3260000, 0);
+    expect(est.loan).toBeCloseTo(0.83 * 3612000, 0);
     expect(est.down + est.loan).toBeCloseTo(est.basis, 6);
   });
 
@@ -37,14 +37,15 @@ describe('calcEstimate — financed, Pinecrest (RBI LOI #19890 calibration)', ()
     expect(est.closing).toBeCloseTo(0.035 * est.loan + 41617, 6);
   });
 
-  // The rules above still come from the LOI, but Pinecrest no longer reproduces
-  // the model project's own deal: construction is a fixed $1.6M budget, where
-  // the LOI built for $1.92M and borrowed $2,979,700 against it.
-  it('puts ~$1.13M of cash in and returns it about 2.4x over', () => {
-    expect(est.cashRequired).toBeCloseTo(1130892, 0);
-    expect(est.netProfit).toBeCloseTo(1557308, 0);
-    expect(est.cashOnCash).toBeGreaterThan(1.3);
-    expect(est.cashOnCash).toBeLessThan(1.45);
+  // 6,000 ft² × $320 is the model project's own $1.92M build, so Pinecrest
+  // reproduces the LOI deal it is calibrated on: the report's $1,212,730 of
+  // cash and $1,201,570 of profit, to within the $19 the rounded
+  // interest-beyond-reserve rate accounts for.
+  it('lands on the LOI economics: ~$1.22M cash in, ~97% cash-on-cash', () => {
+    expect(est.cashRequired).toBeCloseTo(1218165, 0);
+    expect(est.netProfit).toBeCloseTo(1177875, 0);
+    expect(est.cashOnCash).toBeGreaterThan(0.9);
+    expect(est.cashOnCash).toBeLessThan(1.05);
     expect(est.equityMultiple).toBeCloseTo(1 + est.cashOnCash, 6);
   });
 
@@ -108,10 +109,16 @@ describe('sensitivity helpers', () => {
 });
 
 describe('zone assumptions', () => {
-  it('every zone carries a $1.6M build budget except Sunset at $1.0M', () => {
-    expect((zones.sunset as ZoneParams).construction).toBe(1000000);
-    expect((zones.pinecrest as ZoneParams).construction).toBe(1600000);
-    expect((zones.grove as ZoneParams).construction).toBe(1600000);
+  it('Sunset builds at $300/ft², the others at $320/ft²', () => {
+    expect((zones.sunset as ZoneParams).rate).toBe(300);
+    expect((zones.pinecrest as ZoneParams).rate).toBe(320);
+    expect((zones.grove as ZoneParams).rate).toBe(320);
+  });
+
+  it('derives every build budget as buildable area × the zone rate', () => {
+    for (const zone of Object.values(zones) as ZoneParams[]) {
+      expect(calcEstimate(zone, 'financed').construction).toBe(zone.sqft * zone.rate);
+    }
   });
 
   it('every zone clears RBI’s 65% loan-to-ARV cap', () => {
