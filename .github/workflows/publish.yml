@@ -1,7 +1,9 @@
 name: Publish
 
 # Mirrors the deployment the React project used: build on main, push the static
-# output to the `build` branch.
+# output to the `build` branch — and upload the same output to Hostinger over
+# FTPS, so the live site moves with the merge instead of waiting for a manual
+# pull. The `build` branch stays as the deployment record and rollback source.
 on:
   push:
     branches: [main]
@@ -22,7 +24,7 @@ concurrency:
 
 jobs:
   build:
-    name: Build and push
+    name: Build, push and deploy
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -59,3 +61,21 @@ jobs:
           FOLDER: dist
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MESSAGE: "Build: ({sha}) {msg}"
+
+      # The action keeps a manifest on the server and uploads only what changed,
+      # so a routine copy edit moves a handful of files rather than the whole
+      # site. Set the FTP_SERVER_DIR repository variable if the FTP account
+      # lands somewhere other than public_html — an account scoped to the domain
+      # root wants './' instead.
+      - name: Deploy to Hostinger over FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: ./dist/
+          server-dir: ${{ vars.FTP_SERVER_DIR || 'public_html/' }}
+          # Astro fingerprints its assets, so stale files are inert rather than
+          # wrong; leaving them costs disk but never serves the wrong bundle.
+          dangerous-clean-slate: false
