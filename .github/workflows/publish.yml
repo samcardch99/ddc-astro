@@ -62,13 +62,22 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MESSAGE: "Build: ({sha}) {msg}"
 
-      # The action keeps a manifest on the server and uploads only what changed,
-      # so a routine copy edit moves a handful of files rather than the whole
-      # site. Set the FTP_SERVER_DIR repository variable if the FTP account
-      # lands somewhere other than public_html — an account scoped to the domain
-      # root wants './' instead.
+      # Port 21 currently times out from the runner — the control socket never
+      # opens — so the host either speaks only SFTP or refuses FTP from
+      # datacentre addresses. Until the hPanel connection details settle that,
+      # this step must not fail the job: pushing `build` above is the
+      # deployment that works today, and burying it under a red run helps
+      # nobody. Drop `continue-on-error` the moment an upload succeeds, so a
+      # later breakage is visible again.
+      #
+      # The action keeps a manifest on the server and uploads only what
+      # changed, so a routine copy edit moves a handful of files rather than
+      # the whole site. Set the FTP_SERVER_DIR repository variable if the
+      # account lands somewhere other than public_html — one scoped to the
+      # domain root wants './' instead.
       - name: Deploy to Hostinger over FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        continue-on-error: true
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
