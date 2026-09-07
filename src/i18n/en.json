@@ -660,21 +660,21 @@
     "benchmark": "Benchmark",
     "preliminary": "Preliminary",
     "step_zone_title": "Pick your zone",
-    "step_zone_hint": "Construction is DDC's flat rate — $320/ft² for new builds ($300/ft² in Sunset).",
+    "step_zone_hint": "Construction costs are estimated for each zone.",
     "zones": {
       "pinecrest": {
         "name": "Pinecrest",
-        "sub": "≈ 6,000 ft² residence · $320/ft² = $1.92M build · land avg $1,500,000 · target sale $5.8M",
+        "sub": "≈ 6,000 ft² residence · $1.92M build · land avg $1,500,000 · target sale $5.8M",
         "aria": "Pinecrest — land average $1,500,000"
       },
       "grove": {
         "name": "Coconut Grove",
-        "sub": "≈ 5,000 ft² residence · $320/ft² = $1.6M build · land avg $1,750,000 · target sale $5.3M",
+        "sub": "≈ 5,000 ft² residence · $1.6M build · land avg $1,750,000 · target sale $5.3M",
         "aria": "Coconut Grove — land average $1,750,000"
       },
       "sunset": {
         "name": "Sunset",
-        "sub": "≈ 4,500 ft² residence · $300/ft² = $1.35M build · land avg $1,000,000 · target sale $3.8M",
+        "sub": "≈ 4,500 ft² residence · $1.35M build · land avg $1,000,000 · target sale $3.8M",
         "aria": "Sunset — land average $1,000,000"
       }
     },
@@ -715,7 +715,7 @@
         "acq": "Acquisition fee",
         "acq_f": "= 3% × land",
         "construction": "Construction",
-        "construction_f": "= {sqft} ft² × ${rate}/ft²",
+        "construction_f": "{sqft} ft²",
         "contingency": "Contingency",
         "contingency_f": "= 10% × construction",
         "soft": "Soft costs — design, engineering, permits (non-financed)",

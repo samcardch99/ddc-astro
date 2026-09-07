@@ -611,21 +611,21 @@
     "benchmark": "Modelo base",
     "preliminary": "Preliminar",
     "step_zone_title": "Elige tu zona",
-    "step_zone_hint": "La construcción es tarifa fija de DDC — $320/ft² en obra nueva ($300/ft² en Sunset).",
+    "step_zone_hint": "Los costos de construcción se estiman para cada zona.",
     "zones": {
       "pinecrest": {
         "name": "Pinecrest",
-        "sub": "≈ 6,000 ft² de residencia · $320/ft² = $1.92M de obra · terreno prom. $1,500,000 · venta objetivo $5.8M",
+        "sub": "≈ 6,000 ft² de residencia · $1.92M de obra · terreno prom. $1,500,000 · venta objetivo $5.8M",
         "aria": "Pinecrest — terreno promedio $1,500,000"
       },
       "grove": {
         "name": "Coconut Grove",
-        "sub": "≈ 5,000 ft² de residencia · $320/ft² = $1.6M de obra · terreno prom. $1,750,000 · venta objetivo $5.3M",
+        "sub": "≈ 5,000 ft² de residencia · $1.6M de obra · terreno prom. $1,750,000 · venta objetivo $5.3M",
         "aria": "Coconut Grove — terreno promedio $1,750,000"
       },
       "sunset": {
         "name": "Sunset",
-        "sub": "≈ 4,500 ft² de residencia · $300/ft² = $1.35M de obra · terreno prom. $1,000,000 · venta objetivo $3.8M",
+        "sub": "≈ 4,500 ft² de residencia · $1.35M de obra · terreno prom. $1,000,000 · venta objetivo $3.8M",
         "aria": "Sunset — terreno promedio $1,000,000"
       }
     },
@@ -666,7 +666,7 @@
         "acq": "Tarifa de adquisición",
         "acq_f": "= 3% × terreno",
         "construction": "Construcción",
-        "construction_f": "= {sqft} ft² × ${rate}/ft²",
+        "construction_f": "{sqft} ft²",
         "contingency": "Contingencia",
         "contingency_f": "= 10% × construcción",
         "soft": "Costos suaves — diseño, ingeniería, permisos (no financiados)",
