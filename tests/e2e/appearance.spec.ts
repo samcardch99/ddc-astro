@@ -110,21 +110,6 @@ test.describe('contact form fields', () => {
   });
 });
 
-test.describe('investor dialog fields', () => {
-  test('placeholders meet WCAG AA on the grey panel', async ({ page }) => {
-    await page.goto('/investments');
-    await page.locator('[data-open-investment-dialog]:visible').first().click();
-    await expect(page.locator('[data-investment-dialog]')).toBeVisible();
-
-    const background = await resolved(page, '[data-investment-dialog] > div, [data-investment-dialog]', 'background-color');
-    const placeholder = await resolved(page, '#inv-name', 'color', '::placeholder');
-    expect(contrast(placeholder!, background!)).toBeGreaterThanOrEqual(4.5);
-
-    const country = await resolved(page, '#inv-country', 'color');
-    expect(contrast(country!, background!)).toBeGreaterThanOrEqual(4.5);
-  });
-});
-
 /* ------------------------------------------------------------------- framing */
 
 test.describe('team photos', () => {
@@ -317,41 +302,5 @@ test.describe('team roster wheel', () => {
       return row.getBoundingClientRect().top - list.getBoundingClientRect().top;
     });
     expect(Math.abs(offset)).toBeLessThan(6);
-  });
-});
-
-/* ------------------------------------------------------------ booking widget */
-
-test.describe('booking widget', () => {
-  test('its height is reserved before the embed script replies', async ({ page }) => {
-    await page.goto('/investments');
-
-    const iframe = page.locator('#appointment iframe');
-    await expect(iframe).toHaveCount(1);
-
-    // Measured before LeadConnector's postMessage can have arrived.
-    const reserved = await iframe.evaluate((el) => (el as HTMLElement).offsetHeight);
-    expect(reserved, 'the frame must not start at the 150px default').toBeGreaterThan(600);
-
-    // The floor stays in force; the calendar's own height moves with how many
-    // slots it renders, so it is not pinned to one number.
-    const floor = await iframe.evaluate((el) =>
-      parseInt(getComputedStyle(el as HTMLElement).minHeight, 10),
-    );
-    expect(floor).toBeGreaterThan(600);
-
-    await page.waitForTimeout(6000);
-    const settled = await iframe.evaluate((el) => (el as HTMLElement).offsetHeight);
-    expect(settled).toBeGreaterThanOrEqual(floor);
-  });
-
-  test('the resize script is on the page', async ({ page }) => {
-    await page.goto('/investments');
-    const scripts = await page.evaluate(() =>
-      Array.from(document.scripts)
-        .map((s) => s.src)
-        .filter((src) => src.includes('msgsndr')),
-    );
-    expect(scripts.length, 'form_embed.js resizes the iframe to fit the calendar').toBe(1);
   });
 });

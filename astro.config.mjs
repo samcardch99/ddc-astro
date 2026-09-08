@@ -27,6 +27,13 @@ export default defineConfig({
   // HTML-first: everything is prerendered at build time.
   output: 'static',
 
+  redirects: {
+    '/estimate': '/investments',
+    '/es/estimate': '/es/investments',
+    '/estimate/success': '/investments/success',
+    '/es/estimate/success': '/es/investments/success',
+  },
+
   i18n: {
     locales: ['en', 'es'],
     defaultLocale: 'en',
@@ -47,7 +54,7 @@ export default defineConfig({
       },
       // The 404 has no business in a sitemap; neither does the estimate's
       // post-submit confirmation, which is noindex.
-      filter: (page) => !page.includes('/404') && !page.includes('/estimate/success'),
+      filter: (page) => !page.includes('/404') && !page.includes('/investments/success') && !page.includes('/estimate'),
       // The integration emits directory-style URLs; the canonical link does
       // not. One form has to win or every page is submitted under a URL that
       // disagrees with its own canonical.

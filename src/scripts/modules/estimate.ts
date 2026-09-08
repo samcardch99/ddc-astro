@@ -491,7 +491,7 @@ export function initEstimate(): void {
         const emailjs = (await import('@emailjs/browser')).default;
         await emailjs.send(serviceId, templateId, params, { publicKey });
         /* Delivered — the success page is the confirmation. */
-        window.location.assign(scope.dataset.successUrl ?? '/estimate/success');
+        window.location.assign(scope.dataset.successUrl ?? '/investments/success');
       } catch (error) {
         console.warn('[ddc] estimate EmailJS delivery failed', error);
         toast.error(msg.fail_title ?? 'Error');

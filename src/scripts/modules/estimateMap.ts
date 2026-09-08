@@ -1,5 +1,5 @@
 /**
- * Leaflet map for the /estimate zone step — loaded lazily, only on that page,
+ * Leaflet map for the /investments zone step — loaded lazily, only on that page,
  * following the countup.js/swiper pattern. CARTO's Dark Matter basemap sits
  * close to the site's navy; the three zone polygons are the same real
  * municipal boundaries as `data/zoneGeometry.json` documents.

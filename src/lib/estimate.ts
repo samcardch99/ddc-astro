@@ -1,5 +1,5 @@
 /**
- * Deal model for the /estimate wizard.
+ * Deal model for the /investments wizard.
  *
  * Every constant is calibrated against DDC's model project at 13325 SW 84th
  * Ave, Pinecrest (RBI Private Lending LOI #19890, Aug 27 2026):

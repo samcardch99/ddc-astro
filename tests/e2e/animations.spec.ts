@@ -165,7 +165,7 @@ test.describe('transition timings match the original', () => {
     { path: '/', selector: '[data-backdrop-index="0"]', property: 'transition-duration', value: '0.7s' },
     { path: '/', selector: '.process-panel', property: 'transition-duration', value: '0.5s, 0.5s' },
     { path: '/projects', selector: '#our-projects img', property: 'transition-duration', value: '0.3s' },
-    { path: '/investments', selector: 'article button', property: 'transition-duration', value: '0.2s' },
+    { path: '/investments', selector: '[data-zone-option]', property: 'transition-duration', value: '0.2s' },
   ];
 
   for (const testCase of cases) {

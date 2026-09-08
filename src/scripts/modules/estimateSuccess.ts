@@ -7,7 +7,7 @@ const CHECK_PATH = 'M33.7 64.3 L42.2 55.8 L52.4 66 L77.9 37.1 L86.4 45.6 L52.4 8
 const REDIRECT_AFTER_MS = 6000;
 
 /**
- * /estimate/success — draws the ring, morphs the paper plane into a checkmark
+ * /investments/success — draws the ring, morphs the paper plane into a checkmark
  * (GSAP MorphSVG, bundled free since 3.13), reveals the copy, then sends the
  * visitor home.
  */

@@ -35,30 +35,18 @@ const pages: Record<string, Record<Lang, Meta>> = {
   '/investments': {
     en: {
       title: 'Investments | DDC Developments',
-      description: 'Invest with DDC Developments: an end-to-end platform from land acquisition to pre-sale, with construction-first modular delivery in Florida.',
+      description: 'Model your ground-up development in Pinecrest, Coconut Grove or Sunset: pick a zone, your investor profile and funding, and watch the numbers build live.',
     },
     es: {
       title: 'Inversiones | DDC Developments',
-      description: 'Invierte con DDC Developments: plataforma integral desde la adquisición hasta la preventa, con construcción modular en Florida.',
+      description: 'Modela tu desarrollo en Pinecrest, Coconut Grove o Sunset: elige zona, perfil de inversionista y fondeo, y mira los números construirse en vivo.',
     },
   },
   '/projects': {
     en: { title: 'DDC Developments | Projects', description: 'Villas and developments delivered by DDC Developments across Miami, Punta Gorda and Lehigh Acres.' },
     es: { title: 'DDC Developments | Proyectos', description: 'Villas y desarrollos entregados por DDC Developments en Miami, Punta Gorda y Lehigh Acres.' },
   },
-  '/estimate': {
-    en: {
-      title: 'Investment Estimator | DDC Developments',
-      description:
-        'Model your ground-up development in Pinecrest, Coconut Grove or Sunset: pick a zone, your investor profile and funding, and watch the numbers build live.',
-    },
-    es: {
-      title: 'Estimador de Inversión | DDC Developments',
-      description:
-        'Modela tu desarrollo en Pinecrest, Coconut Grove o Sunset: elige zona, perfil de inversionista y fondeo, y mira los números construirse en vivo.',
-    },
-  },
-  '/estimate/success': {
+  '/investments/success': {
     en: { title: 'Request sent | DDC Developments', description: 'Your estimate request was sent. We will follow up with the full proposal.' },
     es: { title: 'Solicitud enviada | DDC Developments', description: 'Tu solicitud de estimado fue enviada. Te haremos llegar la propuesta completa.' },
   },
@@ -82,7 +70,6 @@ const crumbLabels: Record<string, Record<Lang, string>> = {
   '/technologies': { en: 'Technologies', es: 'Tecnologías' },
   '/investments': { en: 'Investments', es: 'Inversiones' },
   '/projects': { en: 'Projects', es: 'Proyectos' },
-  '/estimate': { en: 'Investment Estimator', es: 'Estimador de Inversión' },
   '/privacy-policy': { en: 'Privacy Policy', es: 'Política de Privacidad' },
 };
 

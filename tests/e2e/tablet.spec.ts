@@ -284,7 +284,11 @@ test.describe('language switch', () => {
       ['/investments', '/es/investments'],
     ]) {
       await page.goto(from);
-      await toggle(page).click();
+      if (from === '/investments') {
+        await page.getByRole('link', { name: 'ES', exact: true }).click();
+      } else {
+        await toggle(page).click();
+      }
       await expect(page).toHaveURL(new RegExp(`${to.replace(/\//g, '\\/')}$`));
     }
   });
