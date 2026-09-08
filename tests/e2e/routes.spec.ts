@@ -102,3 +102,18 @@ test('unknown paths render the 404 page', async ({ page }) => {
   await page.goto('/404');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('404');
 });
+
+for (const prefix of ['', '/es']) {
+  test(`${prefix}/estimate redirects to the new investments page`, async ({ page }) => {
+    await page.goto(`${prefix}/estimate`);
+    await expect(page).toHaveURL(new RegExp(`${prefix}/investments$`));
+    await expect(page.locator('[data-estimate]')).toBeVisible();
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', `${ORIGIN}${prefix}/investments`);
+  });
+
+  test(`${prefix}/investments/success confirms the request`, async ({ page }) => {
+    await page.goto(`${prefix}/investments/success`);
+    await expect(page.locator('[data-estimate-success]')).toBeVisible();
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+  });
+}

@@ -72,7 +72,7 @@ const rowValueClass = {
   data-lang={lang}
   data-zones={JSON.stringify(zones)}
   data-messages={JSON.stringify(messages)}
-  data-success-url={localizePath('/estimate/success', lang)}
+  data-success-url={localizePath('/investments/success', lang)}
   class="relative z-20 min-h-screen w-full bg-primary px-6 pb-28 pt-8 md:px-10"
 >
   <div class="absolute inset-0 -z-10 bg-black/80"></div>
@@ -85,9 +85,9 @@ const rowValueClass = {
         <LogoLetters class="h-4 w-auto text-primary" />
       </a>
       <p class="text-xs tracking-[0.2em]">
-        <a href={localizePath('/estimate', 'en')} class={lang === 'en' ? 'font-bold' : 'font-light text-grey hover:text-primary'}>EN</a>
+        <a href={localizePath('/investments', 'en')} class={lang === 'en' ? 'font-bold' : 'font-light text-grey hover:text-primary'}>EN</a>
         <span class="text-grey"> | </span>
-        <a href={localizePath('/estimate', 'es')} class={lang === 'es' ? 'font-bold' : 'font-light text-grey hover:text-primary'}>ES</a>
+        <a href={localizePath('/investments', 'es')} class={lang === 'es' ? 'font-bold' : 'font-light text-grey hover:text-primary'}>ES</a>
       </p>
     </div>
     <!-- intro -->

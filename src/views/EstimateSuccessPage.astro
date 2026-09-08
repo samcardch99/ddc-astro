@@ -9,11 +9,11 @@ import { localizePath, useTranslations, type Lang } from '../i18n/ui';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const meta = getMeta('/estimate/success', lang);
+const meta = getMeta('/investments/success', lang);
 ---
 <BaseLayout
   lang={lang}
-  path="/estimate/success"
+  path="/investments/success"
   title={meta.title}
   description={meta.description}
   header={false}

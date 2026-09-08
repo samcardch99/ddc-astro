@@ -66,11 +66,12 @@ test.describe('without JavaScript', () => {
     await expect(page.locator('#contact_form input[name="email"]')).toHaveAttribute('type', 'email');
   });
 
-  test('the investment country picker is prerendered', async ({ page }) => {
+  test('the investment estimator is prerendered', async ({ page }) => {
     await page.goto('/investments');
-    const options = page.locator('#inv-country option');
-    expect(await options.count()).toBeGreaterThan(200);
-    await expect(page.locator('#inv-country')).toContainText('Spain');
+    await expect(page.locator('[data-est-title]')).not.toBeEmpty();
+    await expect(page.locator('[data-zone-option]')).toHaveCount(3);
+    await expect(page.locator('[data-zone-option="pinecrest"]')).toContainText('Pinecrest');
+    await expect(page.getByRole('link', { name: 'ES', exact: true })).toHaveAttribute('href', '/es/investments');
   });
 
   test('Spanish pages carry Spanish copy', async ({ page }) => {

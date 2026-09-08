@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import InvestmentsInside from '../components/interior/InvestmentsInside.astro';
+import EstimateInside from '../components/interior/EstimateInside.astro';
 import { getMeta, trailFor } from '../lib/seo';
 import { breadcrumbs } from '../lib/schema';
 import type { Lang } from '../i18n/ui';
@@ -16,7 +16,9 @@ const schema = [breadcrumbs(trailFor('/investments', lang), lang)];
   schema={schema}
   title={meta.title}
   description={meta.description}
-  headerClass="is-clear"
+  header={false}
+  contactFooter={false}
+  whatsapp={false}
 >
-  <main class="w-full h-auto"><InvestmentsInside lang={lang} /></main>
+  <main class="w-full h-auto"><EstimateInside lang={lang} /></main>
 </BaseLayout>

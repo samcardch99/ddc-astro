@@ -126,65 +126,26 @@ test.describe('contact form', () => {
   });
 });
 
-test.describe('investor dialog', () => {
-  test('opens with the selected plan and validates', async ({ page }) => {
-    await page.goto('/investments');
-    const dialog = page.locator('[data-investment-dialog]');
-    await expect(dialog).toBeHidden();
-
-    await page.locator('[data-open-investment-dialog]:visible').first().click();
-    await expect(dialog).toBeVisible();
-    await expect(page.locator('[data-investment-title]')).not.toBeEmpty();
-
-    await dialog.locator('button[type="submit"]').click();
-    await expect(page.locator('[data-error-for="name"]')).not.toBeEmpty();
-    await expect(page.locator('[data-error-for="country"]')).not.toBeEmpty();
-    await expect(page.locator('[data-error-for="budget"]')).not.toBeEmpty();
-  });
-
-  test('posts the enquiry and hands off to WhatsApp', async ({ page, context }) => {
-    let payload: Record<string, unknown> | null = null;
-    await page.route(WEBHOOK, async (route) => {
-      payload = route.request().postDataJSON();
-      await route.fulfill({ status: 200, body: '{}' });
+test.describe('investment estimator', () => {
+  for (const prefix of ['', '/es']) {
+    test(`completes the estimator at ${prefix}/investments`, async ({ page }) => {
+      await page.goto(`${prefix}/investments`);
+      const next = page.locator('[data-est-next]');
+      await expect(next).toBeDisabled();
+      await page.locator('[data-zone-option="pinecrest"]').click();
+      await next.click();
+      await expect(page.locator('[data-est-panel="profile"]')).toBeVisible();
+      await page.locator('[data-profile-option="resident"]').click();
+      await next.click();
+      await page.locator('[data-funding-option="financed"]').click();
+      await next.click();
+      await expect(page.locator('[data-est-panel="results"]')).toBeVisible();
+      await expect(page.locator('[data-m="profit"]')).not.toHaveText('—');
+      await expect(page.locator('#est-email')).toHaveAttribute('required', '');
+      await expect(page.locator('[data-estimate]')).toHaveAttribute('data-success-url', `${prefix}/investments/success`);
+      await page.locator('[data-est-restart]').click();
+      await expect(page.locator('[data-est-panel="zone"]')).toBeVisible();
+      await expect(next).toBeDisabled();
     });
-    // Stop the browser from actually leaving for wa.me.
-    await context.route(/wa\.me/, (route) =>
-      route.fulfill({ status: 200, contentType: 'text/html', body: '<html><body>whatsapp</body></html>' }),
-    );
-
-    await page.goto('/investments');
-    await page.locator('[data-open-investment-dialog]:visible').first().click();
-
-    await page.fill('#inv-name', 'Jane Smith');
-    await page.fill('#inv-email', 'jane@example.com');
-    await page.selectOption('#inv-country', 'Spain');
-    await page.fill('#inv-phone', '+1 786 566 1632');
-    await page.locator('input[name="budget"]').first().check();
-    await page.locator('input[name="funds"]').first().check();
-    await page.locator('input[name="company"]').first().check();
-
-    await page.locator('[data-investment-form] button[type="submit"]').click();
-
-    await expect.poll(() => payload, { timeout: 10_000 }).not.toBeNull();
-    expect(payload).toMatchObject({
-      from_name: 'Jane Smith',
-      email: 'jane@example.com',
-      country: 'Spain',
-    });
-    expect(String((payload as any).investment_title)).toContain('Miami');
-    // `investments.json` stores `"Miami Premium "`; the CRM should not see the
-    // trailing space.
-    expect(String((payload as any).investment_title)).toBe(
-      String((payload as any).investment_title).trim(),
-    );
-  });
-
-  test('closes on Escape', async ({ page }) => {
-    await page.goto('/investments');
-    await page.locator('[data-open-investment-dialog]:visible').first().click();
-    await expect(page.locator('[data-investment-dialog]')).toBeVisible();
-    await page.keyboard.press('Escape');
-    await expect(page.locator('[data-investment-dialog]')).toBeHidden();
-  });
+  }
 });
