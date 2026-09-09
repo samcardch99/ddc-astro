@@ -325,7 +325,7 @@ export function initEstimate(): void {
     const legend = $<HTMLElement>('[data-cap-legend]', scope);
     if (financed) {
       seg('loan', est.loan, `${usdCompact(est.loan)}`);
-      seg('down', est.down, '17%');
+      seg('down', est.down, pct(1 - RULES.ltc));
       seg('extra', est.cashRequired - est.down, '');
       if (legend)
         legend.innerHTML = [
