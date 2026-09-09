@@ -20,8 +20,9 @@ describe('calcEstimate — financed, Pinecrest (RBI LOI #19890 calibration)', ()
     expect(est.basis).toBeCloseTo(3612000, 0);
   });
 
-  it('sizes the loan at 83% LTC and the down payment at 17%', () => {
-    expect(est.loan).toBeCloseTo(0.83 * 3612000, 0);
+  it('sizes the loan at 80% LTC and the down payment at 20% for both profiles', () => {
+    expect(est.loan).toBeCloseTo(0.8 * 3612000, 0);
+    expect(est.down).toBeCloseTo(0.2 * 3612000, 0);
     expect(est.down + est.loan).toBeCloseTo(est.basis, 6);
   });
 
@@ -37,15 +38,10 @@ describe('calcEstimate — financed, Pinecrest (RBI LOI #19890 calibration)', ()
     expect(est.closing).toBeCloseTo(0.035 * est.loan + 41617, 6);
   });
 
-  // 6,000 ft² × $320 is the model project's own $1.92M build, so Pinecrest
-  // reproduces the LOI deal it is calibrated on: the report's $1,212,730 of
-  // cash and $1,201,570 of profit, to within the $19 the rounded
-  // interest-beyond-reserve rate accounts for.
-  it('lands on the LOI economics: ~$1.22M cash in, ~97% cash-on-cash', () => {
-    expect(est.cashRequired).toBeCloseTo(1218165, 0);
-    expect(est.netProfit).toBeCloseTo(1177875, 0);
-    expect(est.cashOnCash).toBeGreaterThan(0.9);
-    expect(est.cashOnCash).toBeLessThan(1.05);
+  it('applies 80% LTC to the model project: ~$1.32M cash in, ~90% cash-on-cash', () => {
+    expect(est.cashRequired).toBeCloseTo(1316350.44, 2);
+    expect(est.netProfit).toBeCloseTo(1188049.56, 2);
+    expect(est.cashOnCash).toBeCloseTo(0.90253, 5);
     expect(est.equityMultiple).toBeCloseTo(1 + est.cashOnCash, 6);
   });
 

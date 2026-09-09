@@ -1,7 +1,7 @@
 /**
  * Deal model for the /investments wizard.
  *
- * Every constant is calibrated against DDC's model project at 13325 SW 84th
+ * Cost assumptions are calibrated against DDC's model project at 13325 SW 84th
  * Ave, Pinecrest (RBI Private Lending LOI #19890, Aug 27 2026):
  *
  * - The interest reserve charged at closing equals exactly six months of
@@ -15,7 +15,7 @@
  * Construction is sqft × DDC's flat rate for the zone — $320/ft² for new
  * builds, $300/ft² in Sunset — so the buildable area drives the budget. At
  * 6,000 ft² × $320 Pinecrest budgets $1,920,000, which is the model project's
- * own build: the zone reproduces the LOI deal it is calibrated on.
+ * own build. Financing uses 80% LTC for both U.S. residents and foreign nationals.
  *
  * Pure functions only — the DOM wiring lives in scripts/modules/estimate.ts.
  */
@@ -42,8 +42,8 @@ export const RULES = {
   upfrontFinancedPct: 0.73,
   /** Lender-required contingency on the construction budget. */
   contingency: 0.1,
-  /** RBI's binding constraint — max loan-to-cost on land + build + contingency. */
-  ltc: 0.83,
+  /** Loan-to-cost for both profiles, on land + build + contingency. */
+  ltc: 0.8,
   /** Interest-only, non-Dutch: charged on the drawn balance. */
   interestRate: 0.095,
   /** Origination 1.5% + broker 2%, both on the loan amount. */
