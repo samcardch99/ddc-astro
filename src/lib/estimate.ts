@@ -15,12 +15,15 @@
  * Construction is sqft × DDC's flat rate for the zone — $320/ft² for new
  * builds, $300/ft² in Sunset — so the buildable area drives the budget. At
  * 6,000 ft² × $320 Pinecrest budgets $1,920,000, which is the model project's
- * own build. Financing uses 80% LTC for both U.S. residents and foreign nationals.
+ * own build. Financing follows the investor's profile: a U.S. resident is
+ * underwritten on RBI's standard terms at 83% LTC, a foreign national at 80%.
  *
  * Pure functions only — the DOM wiring lives in scripts/modules/estimate.ts.
  */
 
 export type Funding = 'financed' | 'cash';
+
+export type Profile = 'resident' | 'foreign';
 
 export interface ZoneParams {
   key: string;
@@ -42,8 +45,13 @@ export const RULES = {
   upfrontFinancedPct: 0.73,
   /** Lender-required contingency on the construction budget. */
   contingency: 0.1,
-  /** Loan-to-cost for both profiles, on land + build + contingency. */
-  ltc: 0.8,
+  /**
+   * RBI's binding constraint — max loan-to-cost on land + build + contingency.
+   * A resident is underwritten on standard terms; a foreign national's file is
+   * reviewed and sized tighter, which is the same distinction the profile step
+   * already draws on withholding at sale.
+   */
+  ltc: { resident: 0.83, foreign: 0.8 },
   /** Interest-only, non-Dutch: charged on the drawn balance. */
   interestRate: 0.095,
   /** Origination 1.5% + broker 2%, both on the loan amount. */
@@ -67,6 +75,9 @@ export const RULES = {
 export interface Estimate {
   zone: ZoneParams;
   funding: Funding;
+  profile: Profile;
+  /** Loan-to-cost this profile is underwritten at. Only bites when financed. */
+  ltc: number;
   construction: number;
   contingency: number;
   /** Lender cost basis: land + construction + contingency. */
@@ -91,7 +102,8 @@ export interface Estimate {
   equityMultiple: number;
 }
 
-export function calcEstimate(zone: ZoneParams, funding: Funding): Estimate {
+export function calcEstimate(zone: ZoneParams, funding: Funding, profile: Profile): Estimate {
+  const ltc = RULES.ltc[profile];
   const construction = zone.sqft * zone.rate;
   const contingency = RULES.contingency * construction;
   const basis = zone.land + construction + contingency;
@@ -107,7 +119,7 @@ export function calcEstimate(zone: ZoneParams, funding: Funding): Estimate {
   let cashRequired: number;
 
   if (funding === 'financed') {
-    loan = RULES.ltc * basis;
+    loan = ltc * basis;
     down = basis - loan;
     closing = RULES.closingPctOfLoan * loan + RULES.closingFixed;
     reserve = (loan * RULES.interestRate) / 2;
@@ -125,6 +137,8 @@ export function calcEstimate(zone: ZoneParams, funding: Funding): Estimate {
   return {
     zone,
     funding,
+    profile,
+    ltc,
     construction,
     contingency,
     basis,

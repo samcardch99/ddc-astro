@@ -11,8 +11,10 @@ import {
   RULES,
   type Estimate,
   type Funding,
+  type Profile,
   type ZoneParams,
 } from '../../lib/estimate';
+import { fill } from '../../lib/tokens';
 
 type Step = 'zone' | 'profile' | 'funding' | 'results';
 const STEPS: Step[] = ['zone', 'profile', 'funding', 'results'];
@@ -20,6 +22,7 @@ const STEPS: Step[] = ['zone', 'profile', 'funding', 'results'];
 interface Messages {
   step_label: string;
   coc_tag: string;
+  financed_sub: string;
   leverage_note: string;
   breakeven: string;
   on_budget: string;
@@ -50,11 +53,6 @@ interface Messages {
 type LeadField = 'name' | 'email' | 'phone' | 'description';
 const LEAD_FIELDS: LeadField[] = ['name', 'email', 'phone', 'description'];
 
-/** `"{a} of {b}"` → token replacement without a template engine. */
-function fill(template: string, tokens: Record<string, string>): string {
-  return template.replace(/\{(\w+)\}/g, (_, key: string) => tokens[key] ?? `{${key}}`);
-}
-
 export function initEstimate(): void {
   const root = $<HTMLElement>('[data-estimate]');
   if (!root) return;
@@ -81,7 +79,7 @@ export function initEstimate(): void {
   const state: {
     step: number;
     zone: string | null;
-    profile: 'resident' | 'foreign' | null;
+    profile: Profile | null;
     funding: Funding | null;
   } = {
     step: 0,
@@ -252,11 +250,23 @@ export function initEstimate(): void {
   });
 
   /* ---------------- step content ---------------- */
+  /** `{ ltc: '83%', down: '17%' }` for the profile in play. */
+  const ltcTokens = (profile: Profile): Record<string, string> => ({
+    ltc: pct(RULES.ltc[profile]),
+    down: pct(1 - RULES.ltc[profile]),
+  });
+
   function renderFundingTags(): void {
-    if (!state.zone) return;
+    if (!state.zone || !state.profile) return;
     const zone = zones[state.zone];
-    const financed = calcEstimate(zone, 'financed');
-    const cash = calcEstimate(zone, 'cash');
+    const financed = calcEstimate(zone, 'financed', state.profile);
+    const cash = calcEstimate(zone, 'cash', state.profile);
+
+    // The card's prose quotes the LTC, and the profile just chosen may not be
+    // the resident terms the markup shipped with.
+    const sub = $<HTMLElement>('[data-funding-sub="financed"]', scope);
+    if (sub) sub.textContent = fill(msg.financed_sub ?? '', ltcTokens(state.profile));
+
     const tagF = $<HTMLElement>('[data-coc-tag="financed"]', scope);
     const tagC = $<HTMLElement>('[data-coc-tag="cash"]', scope);
     if (tagF) tagF.textContent = fill(msg.coc_tag ?? '{pct}', { pct: pct(financed.cashOnCash) });
@@ -298,15 +308,16 @@ export function initEstimate(): void {
   }
 
   function renderResults(): void {
-    if (!state.zone || !state.funding) return;
+    if (!state.zone || !state.funding || !state.profile) return;
     const zone = zones[state.zone];
-    const est: Estimate = calcEstimate(zone, state.funding);
+    const est: Estimate = calcEstimate(zone, state.funding, state.profile);
     const financed = est.funding === 'financed';
+    const tokens = ltcTokens(est.profile);
 
     const context = $<HTMLElement>('[data-est-context]', scope);
     if (context) {
       const profile = state.profile === 'foreign' ? msg.context_foreign : msg.context_resident;
-      const funding = financed ? msg.context_financed : msg.context_cash;
+      const funding = financed ? fill(msg.context_financed ?? '', tokens) : msg.context_cash;
       context.textContent = `${msg.zone_names?.[state.zone] ?? zone.key} · ${profile ?? ''} · ${funding ?? ''}`;
     }
 
@@ -329,11 +340,11 @@ export function initEstimate(): void {
     const legend = $<HTMLElement>('[data-cap-legend]', scope);
     if (financed) {
       seg('loan', est.loan, `${usdCompact(est.loan)}`);
-      seg('down', est.down, pct(1 - RULES.ltc));
+      seg('down', est.down, pct(1 - est.ltc));
       seg('extra', est.cashRequired - est.down, '');
       if (legend)
         legend.innerHTML = [
-          `<span>■ ${msg.cap_loan ?? ''} · ${usdCompact(est.loan)}</span>`,
+          `<span>■ ${fill(msg.cap_loan ?? '', tokens)} · ${usdCompact(est.loan)}</span>`,
           `<span>■ ${msg.cap_down ?? ''} · ${usdCompact(est.down)}</span>`,
           `<span>■ ${msg.cap_extra ?? ''} · ${usdCompact(est.cashRequired - est.down)}</span>`,
         ].join('');
@@ -503,7 +514,7 @@ export function initEstimate(): void {
       const email = values.email.trim();
       const phone = values.phone.trim();
       const description = values.description.trim();
-      if (!state.zone || !state.funding) return;
+      if (!state.zone || !state.funding || !state.profile) return;
 
       const serviceId = import.meta.env.PUBLIC_EMAILJS_SERVICE_ID;
       const templateId = import.meta.env.PUBLIC_EMAILJS_ESTIMATE_TEMPLATE_ID;
@@ -521,8 +532,9 @@ export function initEstimate(): void {
       }
 
       const zone = zones[state.zone];
-      const est = calcEstimate(zone, state.funding);
+      const est = calcEstimate(zone, state.funding, state.profile);
       const financed = est.funding === 'financed';
+      const tokens = ltcTokens(est.profile);
       const dash = '\u2014';
       /* Keys mirror the EmailJS "Investment Estimate" template variables. */
       const params = {
@@ -534,7 +546,8 @@ export function initEstimate(): void {
         time: new Date().toLocaleString(locale),
         zone: msg.zone_names?.[state.zone] ?? zone.key,
         profile: state.profile === 'foreign' ? msg.context_foreign : msg.context_resident,
-        funding: financed ? msg.context_financed : msg.context_cash,
+        funding: financed ? fill(msg.context_financed ?? '', tokens) : msg.context_cash,
+        ltc: financed ? tokens.ltc : dash,
         cash_required: usd(est.cashRequired),
         upfront_payment: usd(est.upfront),
         staged_contributions: usd(est.staged),

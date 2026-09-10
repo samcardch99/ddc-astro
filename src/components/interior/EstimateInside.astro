@@ -4,6 +4,8 @@ import LogoLetters from '../LogoLetters.astro';
 import ZoneMap from '../estimate/ZoneMap.astro';
 import UiButton from '../estimate/UiButton.astro';
 import zones from '../../data/zones.json';
+import { RULES } from '../../lib/estimate';
+import { fill } from '../../lib/tokens';
 import { localizePath, useTranslations, useTransHtml, type Lang } from '../../i18n/ui';
 
 interface Props { lang: Lang }
@@ -13,11 +15,28 @@ const transHtml = useTransHtml(lang);
 
 const zoneKeys = ['pinecrest', 'grove', 'sunset'] as const;
 
+/**
+ * The loan card quotes the LTC in prose, but the profile that sets it is chosen
+ * a step earlier, in the browser. The markup ships the resident's standard
+ * terms — the case the copy describes — and `modules/estimate` rewrites the
+ * sentence for a foreign national when the funding step opens.
+ */
+const ltcPct = (profile: 'resident' | 'foreign') => ({
+  ltc: `${Math.round(RULES.ltc[profile] * 100)}%`,
+  down: `${Math.round((1 - RULES.ltc[profile]) * 100)}%`,
+});
+const fundingSub = {
+  financed: fill(t('estimate.financed_sub'), ltcPct('resident')),
+  cash: t('estimate.cash_sub'),
+};
+
 /** Cost ledger rows: [key, isDebtRow]. Values are filled client-side. */
 /** Strings the client-side wizard needs beyond the server-rendered markup. */
 const messages = {
   step_label: t('estimate.step_label'),
   coc_tag: t('estimate.coc_tag'),
+  /* Templates: the profile chosen client-side supplies {ltc} and {down}. */
+  financed_sub: t('estimate.financed_sub'),
   leverage_note: t('estimate.leverage_note'),
   breakeven: t('estimate.results.breakeven'),
   on_budget: t('estimate.results.on_budget'),
@@ -194,8 +213,8 @@ const rowValueClass = {
             >
               <span class="mb-2 block text-right text-[10px] font-bold uppercase tracking-[0.18em] opacity-70 tabular-nums empty:hidden" data-coc-tag={key}></span>
               <span class="block text-base font-bold uppercase tracking-[0.1em]">{t(`estimate.${key}_title`)}</span>
-              <span class="est-option-sub mt-1.5 block text-[13px] font-light tracking-[0.04em] text-grey">
-                {t(`estimate.${key}_sub`)}
+              <span class="est-option-sub mt-1.5 block text-[13px] font-light tracking-[0.04em] text-grey" data-funding-sub={key}>
+                {fundingSub[key]}
               </span>
             </button>
           ))}
