@@ -710,7 +710,12 @@
       "submit": "Envíenme la propuesta",
       "sending": "Enviando…",
       "note": "Tus selecciones viajan con la solicitud — zona, perfil, fondeo y los números en vivo.",
-      "invalid": "Agrega tu nombre, un email válido y una descripción del proyecto para recibir la propuesta."
+      "errors": {
+        "name": "Escribe tu nombre completo — al menos 2 caracteres.",
+        "email": "Escribe un email válido, como nombre@empresa.com.",
+        "phone": "Escribe un teléfono o WhatsApp donde podamos contactarte, de 7 a 20 dígitos.",
+        "description": "Cuéntanos sobre el proyecto — este campo no puede quedar vacío."
+      }
     }
   }
 }

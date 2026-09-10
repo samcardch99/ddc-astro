@@ -41,10 +41,14 @@ interface Messages {
   upfront_cash: string;
   construction_f: string;
   zone_names: Record<string, string>;
-  invalid: string;
+  lead_fields: Record<LeadField, string>;
+  lead_errors: Record<LeadField, string>;
   sending: string;
   fail_title: string;
 }
+
+type LeadField = 'name' | 'email' | 'phone' | 'description';
+const LEAD_FIELDS: LeadField[] = ['name', 'email', 'phone', 'description'];
 
 /** `"{a} of {b}"` → token replacement without a template engine. */
 function fill(template: string, tokens: Record<string, string>): string {
@@ -422,17 +426,83 @@ export function initEstimate(): void {
 
   /* ---------------- lead form → EmailJS ---------------- */
   const leadForm = $<HTMLFormElement>('[data-lead-form]', scope);
+
+  /** Zod ships in its own chunk: only visitors who reach this form pay for it. */
+  let leadRules: Promise<typeof import('../../lib/estimateLead')> | null = null;
+  const rules = () => (leadRules ??= import('../../lib/estimateLead'));
+
+  const leadControl = (field: LeadField) =>
+    $<HTMLInputElement | HTMLTextAreaElement>(`#est-${field}`, scope);
+
+  /** Marks or clears one field. The red wash and `aria-invalid` move together. */
+  function markLead(field: LeadField, message: string | undefined): void {
+    const control = leadControl(field);
+    if (!control) return;
+    if (message) {
+      control.dataset.invalid = 'true';
+      control.setAttribute('aria-invalid', 'true');
+    } else {
+      delete control.dataset.invalid;
+      control.removeAttribute('aria-invalid');
+    }
+  }
+
+  async function recheckLead(field: LeadField): Promise<void> {
+    const control = leadControl(field);
+    if (!control) return;
+    const { validateEstimateLeadField } = await rules();
+    markLead(field, validateEstimateLeadField(field, control.value, msg.lead_errors));
+  }
+
+  if (leadForm) {
+    // Fetch the chunk as soon as someone starts filling the form, so the first
+    // submit validates without waiting on the network.
+    leadForm.addEventListener('focusin', () => void rules(), { once: true });
+
+    LEAD_FIELDS.forEach((field) => {
+      const control = leadControl(field);
+      if (!control) return;
+      // Correcting a rejected field clears it as you type; a field nobody has
+      // rejected yet is only judged once it has content and you leave it.
+      control.addEventListener('input', () => {
+        if (control.dataset.invalid) void recheckLead(field);
+      });
+      control.addEventListener('blur', () => {
+        if (control.dataset.invalid || control.value.trim()) void recheckLead(field);
+      });
+    });
+  }
+
   leadForm?.addEventListener('submit', (event) => {
     event.preventDefault();
     void (async () => {
-      const name = ($<HTMLInputElement>('#est-name', scope)?.value ?? '').trim();
-      const email = ($<HTMLInputElement>('#est-email', scope)?.value ?? '').trim();
-      const phone = ($<HTMLInputElement>('#est-phone', scope)?.value ?? '').trim();
-      const description = ($<HTMLTextAreaElement>('#est-description', scope)?.value ?? '').trim();
-      if (!name || !/.+@.+\..+/.test(email) || !description) {
-        toast.error(msg.invalid ?? 'Invalid form');
+      const values = {
+        name: leadControl('name')?.value ?? '',
+        email: leadControl('email')?.value ?? '',
+        phone: leadControl('phone')?.value ?? '',
+        description: leadControl('description')?.value ?? '',
+      };
+
+      const { validateEstimateLead } = await rules();
+      const errors = validateEstimateLead(values, msg.lead_errors);
+      LEAD_FIELDS.forEach((field) => markLead(field, errors[field]));
+
+      const rejected = LEAD_FIELDS.filter((field) => errors[field]);
+      if (rejected.length) {
+        // One toast per field, in reading order, replacing the previous batch.
+        toast.clear();
+        rejected.forEach((field) =>
+          toast.error(msg.lead_fields?.[field] ?? field, { description: errors[field] }),
+        );
+        leadControl(rejected[0])?.focus();
         return;
       }
+
+      /* Validated above, so the schema's trimmed output is what gets sent. */
+      const name = values.name.trim();
+      const email = values.email.trim();
+      const phone = values.phone.trim();
+      const description = values.description.trim();
       if (!state.zone || !state.funding) return;
 
       const serviceId = import.meta.env.PUBLIC_EMAILJS_SERVICE_ID;
@@ -458,7 +528,7 @@ export function initEstimate(): void {
       const params = {
         name,
         email,
-        phone: phone || dash,
+        phone,
         description,
         lang,
         time: new Date().toLocaleString(locale),

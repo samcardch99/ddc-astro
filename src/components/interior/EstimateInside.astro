@@ -39,7 +39,19 @@ const messages = {
   upfront_cash: t('estimate.results.upfront_cash'),
   construction_f: t('estimate.results.rows.construction_f'),
   zone_names: Object.fromEntries(zoneKeys.map((key) => [key, t(`estimate.zones.${key}.name`)])),
-  invalid: t('estimate.lead.invalid'),
+  /* Field labels double as the title of that field's validation toast. */
+  lead_fields: {
+    name: t('estimate.lead.name'),
+    email: t('estimate.lead.email'),
+    phone: t('estimate.lead.phone'),
+    description: t('estimate.lead.description'),
+  },
+  lead_errors: {
+    name: t('estimate.lead.errors.name'),
+    email: t('estimate.lead.errors.email'),
+    phone: t('estimate.lead.errors.phone'),
+    description: t('estimate.lead.errors.description'),
+  },
   sending: t('estimate.lead.sending'),
   fail_title: t('form_send.fail_title'),
 };
@@ -312,7 +324,7 @@ const rowValueClass = {
             </div>
             <div class="flex flex-col gap-1.5 sm:col-span-2">
               <label class="text-[11px] font-bold uppercase tracking-[0.16em] opacity-80" for="est-phone">{t('estimate.lead.phone')}</label>
-              <input id="est-phone" name="phone" type="tel" autocomplete="tel"
+              <input id="est-phone" name="phone" type="tel" autocomplete="tel" required
                 class="w-full rounded-none border border-secondary/40 bg-transparent p-3 text-secondary outline-none focus:border-secondary" />
             </div>
             <div class="flex flex-col gap-1.5 sm:col-span-2">
@@ -358,5 +370,15 @@ const rowValueClass = {
   }
   [data-estimate] .est-option[aria-pressed='true'] .est-option-sub {
     color: rgba(15, 25, 49, 0.75);
+  }
+
+  /* Rejected lead fields. Same red as the error toast, so the toast that names
+     the field and the field itself read as one message. The wash carries the
+     state on its own — colour is never the only cue, since `aria-invalid` and
+     the toast text both say which field it is. */
+  [data-estimate] [data-lead-form] [data-invalid],
+  [data-estimate] [data-lead-form] [data-invalid]:focus {
+    border-color: #dc2626;
+    background-color: rgba(220, 38, 38, 0.08);
   }
 </style>

@@ -42,7 +42,17 @@ function show(type: ToastType, title: string, options: ToastOptions = {}): void 
   }, duration);
 }
 
+/**
+ * Drops every visible toast at once. A form that reports one toast per invalid
+ * field would otherwise stack a second full set on the next submit, while the
+ * first is still counting down.
+ */
+function clear(): void {
+  container()?.replaceChildren();
+}
+
 export const toast = {
   success: (title: string, options?: ToastOptions) => show('success', title, options),
   error: (title: string, options?: ToastOptions) => show('error', title, options),
+  clear,
 };

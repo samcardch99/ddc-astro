@@ -759,7 +759,12 @@
       "submit": "Send me the proposal",
       "sending": "Sending…",
       "note": "Your selections travel with the request — zone, profile, funding and the live numbers.",
-      "invalid": "Add your name, a valid email and a project description to receive the proposal."
+      "errors": {
+        "name": "Enter your full name — at least 2 characters.",
+        "email": "Enter a valid email address, like name@company.com.",
+        "phone": "Enter a phone or WhatsApp number we can reach you on, 7 to 20 digits.",
+        "description": "Tell us about the project — this field can't be empty."
+      }
     }
   }
 }
