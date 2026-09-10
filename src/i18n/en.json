@@ -754,10 +754,12 @@
       "name": "Full name",
       "email": "Email",
       "phone": "Phone / WhatsApp",
+      "description": "Project description",
+      "description_placeholder": "Tell us about your timeline, budget or the lot you have in mind…",
       "submit": "Send me the proposal",
       "sending": "Sending…",
       "note": "Your selections travel with the request — zone, profile, funding and the live numbers.",
-      "invalid": "Add your name and a valid email to receive the proposal."
+      "invalid": "Add your name, a valid email and a project description to receive the proposal."
     }
   }
 }

@@ -428,7 +428,8 @@ export function initEstimate(): void {
       const name = ($<HTMLInputElement>('#est-name', scope)?.value ?? '').trim();
       const email = ($<HTMLInputElement>('#est-email', scope)?.value ?? '').trim();
       const phone = ($<HTMLInputElement>('#est-phone', scope)?.value ?? '').trim();
-      if (!name || !/.+@.+\..+/.test(email)) {
+      const description = ($<HTMLTextAreaElement>('#est-description', scope)?.value ?? '').trim();
+      if (!name || !/.+@.+\..+/.test(email) || !description) {
         toast.error(msg.invalid ?? 'Invalid form');
         return;
       }
@@ -458,6 +459,7 @@ export function initEstimate(): void {
         name,
         email,
         phone: phone || dash,
+        description,
         lang,
         time: new Date().toLocaleString(locale),
         zone: msg.zone_names?.[state.zone] ?? zone.key,

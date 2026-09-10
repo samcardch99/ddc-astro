@@ -705,10 +705,12 @@
       "name": "Nombre completo",
       "email": "Email",
       "phone": "Teléfono / WhatsApp",
+      "description": "Descripción del proyecto",
+      "description_placeholder": "Cuéntanos sobre tu cronograma, presupuesto o el lote que tienes en mente…",
       "submit": "Envíenme la propuesta",
       "sending": "Enviando…",
       "note": "Tus selecciones viajan con la solicitud — zona, perfil, fondeo y los números en vivo.",
-      "invalid": "Agrega tu nombre y un email válido para recibir la propuesta."
+      "invalid": "Agrega tu nombre, un email válido y una descripción del proyecto para recibir la propuesta."
     }
   }
 }

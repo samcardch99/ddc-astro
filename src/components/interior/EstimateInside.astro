@@ -315,6 +315,11 @@ const rowValueClass = {
               <input id="est-phone" name="phone" type="tel" autocomplete="tel"
                 class="w-full rounded-none border border-secondary/40 bg-transparent p-3 text-secondary outline-none focus:border-secondary" />
             </div>
+            <div class="flex flex-col gap-1.5 sm:col-span-2">
+              <label class="text-[11px] font-bold uppercase tracking-[0.16em] opacity-80" for="est-description">{t('estimate.lead.description')}</label>
+              <textarea id="est-description" name="description" rows="4" required placeholder={t('estimate.lead.description_placeholder')}
+                class="w-full resize-none rounded-none border border-secondary/40 bg-transparent p-3 text-secondary outline-none placeholder:text-secondary/50 focus:border-secondary"></textarea>
+            </div>
             <div class="flex flex-wrap items-center gap-5 sm:col-span-2">
               <button type="submit"
                 class="inline-flex h-11 items-center justify-center rounded-md bg-[#1E1F20] px-7 text-sm tracking-[0.1em] text-primary shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] ring-1 ring-white/20 transition-colors duration-200 hover:bg-secondary/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary">
