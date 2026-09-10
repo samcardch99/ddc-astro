@@ -119,8 +119,12 @@ test('the page ships far less JavaScript than the React build', async ({ page })
 
 test('only the photo viewer hydrates, and only where it is used', async ({ page }) => {
   const islandsOn = async (path: string) => {
-    await page.goto(path);
-    await page.waitForLoadState('networkidle');
+    // `<astro-island>` is server-rendered markup — the placeholder Astro emits
+    // for a component it will hydrate — so the count is settled as soon as the
+    // document is. Waiting on the network here bought nothing and made this the
+    // one test in the suite that timed out under a loaded preview server: four
+    // navigations, each needing a 500 ms gap with no request in flight.
+    await page.goto(path, { waitUntil: 'domcontentloaded' });
     return page.locator('astro-island').count();
   };
 
