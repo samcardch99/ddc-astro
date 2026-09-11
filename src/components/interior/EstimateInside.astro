@@ -52,11 +52,8 @@ const messages = {
   context_resident: t('estimate.results.context_resident'),
   context_foreign: t('estimate.results.context_foreign'),
   net_f: t('estimate.results.net_f'),
-  total_f_financed: t('estimate.results.rows.total_f_financed'),
-  total_f_cash: t('estimate.results.rows.total_f_cash'),
-  upfront_financed: t('estimate.results.upfront_financed'),
-  upfront_cash: t('estimate.results.upfront_cash'),
   construction_f: t('estimate.results.rows.construction_f'),
+  loan_f: t('estimate.results.rows.loan_f'),
   zone_names: Object.fromEntries(zoneKeys.map((key) => [key, t(`estimate.zones.${key}.name`)])),
   /* Field labels double as the title of that field's validation toast. */
   lead_fields: {
@@ -85,6 +82,7 @@ const costRows: Array<[string, boolean, 'major' | 'minor' | 'debt']> = [
   ['land', false, 'major'], ['acq', false, 'minor'], ['construction', false, 'major'],
   ['contingency', false, 'minor'], ['soft', false, 'minor'], ['closing', true, 'debt'],
   ['reserve', true, 'debt'], ['beyond', true, 'debt'], ['holding', false, 'minor'],
+  ['loan', true, 'minor'],
 ];
 
 const rowLabelClass = {
@@ -231,7 +229,7 @@ const rowValueClass = {
 
         <div class="mt-10 grid grid-cols-2 gap-5 md:grid-cols-4">
           {([
-            ['cash', 'estimate.results.cash_required', 'est-cash'],
+            ['cash', 'estimate.results.rows.total', 'est-cash'],
             ['profit', 'estimate.results.profit', 'est-pos'],
             ['coc', 'estimate.results.coc', 'est-pos'],
             ['mult', 'estimate.results.multiple', 'est-pos'],
@@ -273,7 +271,6 @@ const rowValueClass = {
               <tr>
                 <td class="border-t border-primary py-3 pr-2 text-[15px] font-bold">
                   {t('estimate.results.rows.total')}
-                  <span class="mt-0.5 block text-[11px] font-light tracking-[0.06em] text-grey" data-f="total"></span>
                 </td>
                 <td class="est-cash whitespace-nowrap border-t border-primary py-3 text-right text-lg font-bold tabular-nums md:text-xl" data-cell="total"></td>
               </tr>

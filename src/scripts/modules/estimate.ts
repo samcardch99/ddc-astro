@@ -38,11 +38,8 @@ interface Messages {
   context_resident: string;
   context_foreign: string;
   net_f: string;
-  total_f_financed: string;
-  total_f_cash: string;
-  upfront_financed: string;
-  upfront_cash: string;
   construction_f: string;
+  loan_f: string;
   zone_names: Record<string, string>;
   lead_fields: Record<LeadField, string>;
   lead_errors: Record<LeadField, string>;
@@ -321,9 +318,7 @@ export function initEstimate(): void {
       context.textContent = `${msg.zone_names?.[state.zone] ?? zone.key} · ${profile ?? ''} · ${funding ?? ''}`;
     }
 
-    countMetric('cash', est.upfront, usdCompact);
-    const cashLabel = $<HTMLElement>('[data-m-label="cash"]', scope);
-    if (cashLabel) cashLabel.textContent = financed ? msg.upfront_financed : msg.upfront_cash;
+    countMetric('cash', est.cashRequired, usdCompact);
     countMetric('profit', est.netProfit, usdCompact);
     countMetric('coc', est.cashOnCash, pct);
     const mult = $<HTMLElement>('[data-m="mult"]', scope);
@@ -370,6 +365,7 @@ export function initEstimate(): void {
       setCell('closing', usd(est.closing));
       setCell('reserve', usd(est.reserve));
       setCell('beyond', usd(est.interestBeyond));
+      setCell('loan', '\u2212' + usd(est.loan));
     }
     setCell('holding', usd(est.holding));
     setCell('total', usd(est.cashRequired));
@@ -379,8 +375,8 @@ export function initEstimate(): void {
         sqft: nf0.format(zone.sqft),
         rate: String(zone.rate),
       });
-    const totalFormula = $<HTMLElement>('[data-f="total"]', scope);
-    if (totalFormula) totalFormula.textContent = financed ? (msg.total_f_financed ?? '') : (msg.total_f_cash ?? '');
+    const loanFormula = $<HTMLElement>('[data-f="loan"]', scope);
+    if (loanFormula) loanFormula.textContent = fill(msg.loan_f ?? '', tokens);
 
     /* waterfall */
     setCell('sale', usd(zone.arv));

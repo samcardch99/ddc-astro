@@ -649,9 +649,6 @@
       "context_resident": "residente de EE.UU.",
       "context_foreign": "extranjero",
       "title": "El deal, en vivo",
-      "cash_required": "Cash requerido",
-      "upfront_financed": "Entrada inicial · 73% de golpe",
-      "upfront_cash": "Entrada inicial · 83% de golpe",
       "profit": "Ganancia proyectada",
       "coc": "Cash-on-cash · 12 meses",
       "multiple": "Múltiplo de capital",
@@ -679,9 +676,9 @@
         "beyond_f": "≈ 1.14% × préstamo",
         "holding": "Holding — impuestos, seguros, servicios",
         "holding_f": "= $3,000/mes × 12",
-        "total": "Cash total de tu parte",
-        "total_f_financed": "= 73% de golpe + 27% en aportes por etapas",
-        "total_f_cash": "= 83% de golpe + 17% en aportes por etapas"
+        "loan": "Menos: cubierto por el préstamo",
+        "loan_f": "= {ltc} × (terreno + construcción + contingencia)",
+        "total": "Cash total de tu parte"
       },
       "waterfall_title": "Retorno a precio objetivo",
       "sale": "Precio de venta objetivo",

@@ -698,9 +698,6 @@
       "context_resident": "U.S. resident",
       "context_foreign": "foreign national",
       "title": "The deal, live",
-      "cash_required": "Cash required",
-      "upfront_financed": "Initial payment · 73% upfront",
-      "upfront_cash": "Initial payment · 83% upfront",
       "profit": "Projected profit",
       "coc": "Cash-on-cash · 12 mo",
       "multiple": "Equity multiple",
@@ -728,9 +725,9 @@
         "beyond_f": "≈ 1.14% × loan",
         "holding": "Holding — taxes, insurance, utilities",
         "holding_f": "= $3,000/mo × 12",
-        "total": "Total cash from you",
-        "total_f_financed": "= 73% upfront + 27% in staged contributions",
-        "total_f_cash": "= 83% upfront + 17% in staged contributions"
+        "loan": "Less: funded by the loan",
+        "loan_f": "= {ltc} × (land + construction + contingency)",
+        "total": "Total cash from you"
       },
       "waterfall_title": "Return at target sale",
       "sale": "Target sale price",
