@@ -37,6 +37,7 @@ test.describe('loan-to-cost follows the investor profile', () => {
     await expect(page.locator('[data-est-context]')).toContainText('83% financed');
     await expect(page.locator('[data-cap-legend]')).toContainText('83% LTC');
     await expect(page.locator('[data-cap="down"]')).toHaveText('17%');
+    await expect(page.locator('[data-m-label="loan"]')).toHaveText('Loan · 83% LTC');
   });
 
   test('the results carry the foreign rate instead', async ({ page }) => {
@@ -44,6 +45,7 @@ test.describe('loan-to-cost follows the investor profile', () => {
     await expect(page.locator('[data-est-context]')).toContainText('80% financed');
     await expect(page.locator('[data-cap-legend]')).toContainText('80% LTC');
     await expect(page.locator('[data-cap="down"]')).toHaveText('20%');
+    await expect(page.locator('[data-m-label="loan"]')).toHaveText('Loan · 80% LTC');
   });
 
   test('a resident puts in less cash and earns more per dollar', async ({ page }) => {

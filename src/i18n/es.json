@@ -648,6 +648,7 @@
       "context_cash": "todo cash",
       "context_resident": "residente de EE.UU.",
       "context_foreign": "extranjero",
+      "loan_metric": "Préstamo · {ltc} LTC",
       "title": "El deal, en vivo",
       "profit": "Ganancia proyectada",
       "coc": "Cash-on-cash · 12 meses",

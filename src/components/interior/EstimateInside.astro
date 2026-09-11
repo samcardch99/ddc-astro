@@ -51,6 +51,7 @@ const messages = {
   context_cash: t('estimate.results.context_cash'),
   context_resident: t('estimate.results.context_resident'),
   context_foreign: t('estimate.results.context_foreign'),
+  loan_metric: t('estimate.results.loan_metric'),
   net_f: t('estimate.results.net_f'),
   construction_f: t('estimate.results.rows.construction_f'),
   loan_f: t('estimate.results.rows.loan_f'),
@@ -227,14 +228,15 @@ const rowValueClass = {
         </p>
         <h2 class="mt-3 text-2xl font-bold uppercase tracking-[0.08em] md:text-3xl">{t('estimate.results.title')}</h2>
 
-        <div class="mt-10 grid grid-cols-2 gap-5 md:grid-cols-4">
+        <div class="mt-10 grid grid-cols-2 gap-5 md:flex md:flex-wrap">
           {([
-            ['cash', 'estimate.results.rows.total', 'est-cash'],
-            ['profit', 'estimate.results.profit', 'est-pos'],
-            ['coc', 'estimate.results.coc', 'est-pos'],
-            ['mult', 'estimate.results.multiple', 'est-pos'],
-          ] as const).map(([key, label, tone]) => (
-            <div class="border-t border-white/15 pt-3.5">
+            ['cash', 'estimate.results.rows.total', 'est-cash', false],
+            ['loan', 'estimate.results.loan_metric', 'est-debt', true],
+            ['profit', 'estimate.results.profit', 'est-pos', false],
+            ['coc', 'estimate.results.coc', 'est-pos', false],
+            ['mult', 'estimate.results.multiple', 'est-pos', false],
+          ] as const).map(([key, label, tone, debtOnly]) => (
+            <div class="border-t border-white/15 pt-3.5 md:min-w-0 md:flex-1" data-debt-row={debtOnly ? '' : undefined}>
               <p class={`${tone} text-3xl font-bold tabular-nums tracking-[0.02em] md:text-4xl`} data-m={key}>—</p>
               <p class="mt-1 text-[10.5px] font-bold uppercase tracking-[0.22em] text-grey" data-m-label={key}>{t(label)}</p>
             </div>

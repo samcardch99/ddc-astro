@@ -37,6 +37,7 @@ interface Messages {
   context_cash: string;
   context_resident: string;
   context_foreign: string;
+  loan_metric: string;
   net_f: string;
   construction_f: string;
   loan_f: string;
@@ -319,6 +320,9 @@ export function initEstimate(): void {
     }
 
     countMetric('cash', est.cashRequired, usdCompact);
+    countMetric('loan', est.loan, usdCompact);
+    const loanMetricLabel = $<HTMLElement>('[data-m-label="loan"]', scope);
+    if (loanMetricLabel) loanMetricLabel.textContent = fill(msg.loan_metric ?? '', tokens);
     countMetric('profit', est.netProfit, usdCompact);
     countMetric('coc', est.cashOnCash, pct);
     const mult = $<HTMLElement>('[data-m="mult"]', scope);

@@ -697,6 +697,7 @@
       "context_cash": "all cash",
       "context_resident": "U.S. resident",
       "context_foreign": "foreign national",
+      "loan_metric": "Loan · {ltc} LTC",
       "title": "The deal, live",
       "profit": "Projected profit",
       "coc": "Cash-on-cash · 12 mo",
