@@ -494,7 +494,7 @@
       },
       "anisleidy_valle": {
         "role": "Human Resources Leader",
-        "description": "Anisleidy builds a strong people culture at DDC. She leads hiring, onboarding, and compliance, and supports the teams that use modular systems to deliver predictable schedules and high quality results."
+        "description": "Anisleidy Valle leads Human Resources and Organizational Development at DDC Developments, helping align people, culture, and business strategy as the organization grows. Her work encompasses talent management, employee relations, performance, compliance, and the development of people-focused systems and processes. Through close collaboration with leadership and operational teams, she supports the structure, culture, and talent needed to drive DDC’s continued growth."
       },
       "alejandro_gomez": {
         "role": "CEO Executive Assistant",
@@ -519,6 +519,10 @@
       "dany_rodriguez": {
         "role": "Superintendent",
         "description": "Dany brings a keen, vigilant perspective to the construction site, transforming blueprints into physical structures with unwavering attention to detail. His watchful eyes oversee every trade, ensuring that the highest standards of quality are maintained at every phase."
+      },
+      "javier_leon": {
+        "role": "Superintendent",
+        "description": "Javier leads the on site execution of every DDC project, ensuring construction moves forward safely, on schedule, and to the highest standard of quality. With a sharp eye for detail and hands on coordination of contractors and trades, he turns plans into finished spaces that reflect DDC's commitment to craftsmanship. His work keeps every build grounded in precision and purpose."
       }
     }
   },
