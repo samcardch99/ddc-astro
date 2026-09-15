@@ -453,7 +453,7 @@
       },
       "anisleidy_valle": {
         "role": "Líder de Recursos Humanos",
-        "description": "Anisleidy construye una sólida cultura de personas en DDC. Lidera la contratación, la incorporación y el cumplimiento, y apoya a los equipos que utilizan sistemas modulares para entregar cronogramas predecibles y resultados de alta calidad."
+        "description": "Anisleidy Valle lidera Recursos Humanos y Desarrollo Organizacional en DDC Developments, ayudando a alinear a las personas, la cultura y la estrategia de negocio a medida que la organización crece. Su trabajo abarca la gestión del talento, las relaciones laborales, el desempeño, el cumplimiento normativo y el desarrollo de sistemas y procesos centrados en las personas. Mediante una estrecha colaboración con la dirección y los equipos operativos, apoya la estructura, la cultura y el talento necesarios para impulsar el crecimiento continuo de DDC."
       },
       "mateo_correa_hernandez": {
         "role": "Gerente de Finanzas",
@@ -470,6 +470,10 @@
       "dany_rodriguez": {
         "role": "Superintendente",
         "description": "Dany aporta una perspectiva aguda y vigilante al sitio de construcción, transformando planos en estructuras físicas con una atención inquebrantable al detalle. Sus ojos vigilantes supervisan cada oficio, asegurando que los más altos estándares de calidad se mantengan en cada fase."
+      },
+      "javier_leon": {
+        "role": "Superintendente",
+        "description": "Javier lidera la ejecución en obra de cada proyecto de DDC, asegurando que la construcción avance de forma segura, según el cronograma y con los más altos estándares de calidad. Con una gran atención al detalle y una coordinación directa de contratistas y equipos de los distintos oficios, convierte los planos en espacios terminados que reflejan el compromiso de DDC con la excelencia constructiva. Su trabajo mantiene cada obra centrada en la precisión y el propósito."
       }
     }
   },

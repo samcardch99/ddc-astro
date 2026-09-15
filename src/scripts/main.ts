@@ -17,11 +17,13 @@ import { initTechCards } from './modules/techCards';
 import { initContactForm, initInvestmentDialog } from './modules/forms';
 import { initEstimate } from './modules/estimate';
 import { initEstimateSuccess } from './modules/estimateSuccess';
+import { initInvestmentReturn } from './modules/investmentReturn';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 function boot(): void {
   initSmoothScroll();
+  initInvestmentReturn();
   initHeader();
   initHoverLinks();
   initCover();
