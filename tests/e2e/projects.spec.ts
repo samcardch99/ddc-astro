@@ -4,7 +4,7 @@ test.describe('project index', () => {
   test('search narrows the grid', async ({ page }) => {
     await page.goto('/projects');
     const cards = page.locator('[data-project-card]:visible');
-    await expect(cards).toHaveCount(26);
+    await expect(cards).toHaveCount(27);
 
     await page.locator('[data-projects-search]').fill('ochoa');
     await expect(cards).toHaveCount(1);
@@ -22,14 +22,14 @@ test.describe('project index', () => {
     const cards = page.locator('[data-project-card]:visible');
     const count = await cards.count();
     expect(count).toBeGreaterThan(0);
-    expect(count).toBeLessThan(26);
+    expect(count).toBeLessThan(27);
 
     for (const card of await cards.all()) {
       await expect(card).toHaveAttribute('data-location', 'Miami');
     }
 
     await page.locator('[data-projects-location]').selectOption('All');
-    await expect(page.locator('[data-project-card]:visible')).toHaveCount(26);
+    await expect(page.locator('[data-project-card]:visible')).toHaveCount(27);
   });
 
   test('the list/grid toggle changes the layout and survives a reload', async ({ page }) => {
@@ -46,8 +46,8 @@ test.describe('project index', () => {
   test('a card navigates to its detail page', async ({ page }) => {
     await page.goto('/projects');
     await page.locator('[data-project-card]').first().click();
-    await expect(page).toHaveURL(/\/projects\/Villa_Sunset$/);
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Villa Sunset');
+    await expect(page).toHaveURL(/\/projects\/Banyan_Residence$/);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('The Banyan Residence');
   });
 });
 
