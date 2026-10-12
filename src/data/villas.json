@@ -1,5 +1,28 @@
 [
   {
+    "id": 26,
+    "name": "The Banyan Residence",
+    "total_images": 32,
+    "folder": "Banyan_Residence",
+    "shortName": "Banyan",
+    "address": "8450 SW 74th Terrace, Miami, FL 33143",
+    "city": "Miami",
+    "bedrooms": 5,
+    "bathrooms": 4,
+    "lot_area_sq_ft": 15000.0,
+    "living_area_sq_ft": 4887.0,
+    "total_under_structure_sq_ft": 6731.0,
+    "levels": 2,
+    "year_built": 1983,
+    "garage": "2 cars",
+    "pool": "YES",
+    "construction": "Concrete block construction",
+    "roof": "Flat tile",
+    "price": null,
+    "image": "/assets/images/Banyan_Residence/1.jpg",
+    "description": "A two-level residence on a quarter-acre lot in South Miami, set back behind a landscaped forecourt and circular drive beneath wide, low-pitched rooflines. A recessed portal in board-formed concrete marks the front door. Inside, an open timber-and-glass stair rises over an interior planted courtyard, where grasses and river stone run beneath the treads. The living room sits under exposed timber ceilings, anchored by a walnut media wall against a stone pier, with a built-in library wall and a glazed wine display. The kitchen gathers around a six-seat marble island, with full-height walnut cabinetry concealing the pantry and integrated appliances. The primary suite pairs a vaulted ceiling and seating corner with two dressing rooms and a spa bath, while a covered outdoor lounge, second-floor balcony and private pool open to mature landscaping."
+  },
+  {
     "id": 1,
     "name": "Villa Sunset",
     "total_images": 58,

@@ -99,7 +99,7 @@ export function parsePrice(price: unknown): number | undefined {
 /**
  * `"7765 SW 57th Ter, Miami, FL 33143"` -> its parts.
  *
- * Three of the twenty-six addresses in `villas.json` are malformed — one is
+ * Three of the twenty-seven addresses in `villas.json` are malformed — one is
  * just `"Florida, USA"`, one has no city, one has an em dash where the comma
  * should be — so the parse is forgiving and falls back to the `city` field,
  * which every project does have. An address-less listing loses the local

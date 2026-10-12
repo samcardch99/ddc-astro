@@ -40,8 +40,8 @@ test.describe('without JavaScript', () => {
   test('the project list is fully rendered and navigable', async ({ page }) => {
     await page.goto('/projects');
     const cards = page.locator('[data-project-card]');
-    await expect(cards).toHaveCount(26);
-    await expect(cards.first()).toHaveAttribute('href', '/projects/Villa_Sunset');
+    await expect(cards).toHaveCount(27);
+    await expect(cards.first()).toHaveAttribute('href', '/projects/Banyan_Residence');
   });
 
   test('a project gallery renders every photo as a real <img>', async ({ page }) => {

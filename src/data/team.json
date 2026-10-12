@@ -80,14 +80,6 @@
   },
 
   {
-    "name": "Rosario Gomez",
-    "id": "rosario_gomez",
-    "role": "Project Manager",
-    "description": "Rosario ensures every operation and real estate project runs smoothly from start to finish. With a strong focus on planning and control, she connects teams, processes, and execution, playing a key role in keeping DDC’s operations efficient, coordinated, and consistently reliable.",
-    "image": "assets/employees/rosario.jpg",
-    "class": "object-center"
-  },
-  {
     "name": "Mateo Correa",
     "id": "mateo_correa_hernandez",
     "role": "Finance Manager",
