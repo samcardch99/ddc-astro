@@ -435,7 +435,7 @@ export function initEstimate(): void {
     }
   }
 
-  /* ---------------- lead form → EmailJS ---------------- */
+  /* ---------------- lead form → GoHighLevel webhook + EmailJS ---------------- */
   const leadForm = $<HTMLFormElement>('[data-lead-form]', scope);
 
   /** Zod ships in its own chunk: only visitors who reach this form pay for it. */
@@ -516,10 +516,12 @@ export function initEstimate(): void {
       const description = values.description.trim();
       if (!state.zone || !state.funding || !state.profile) return;
 
+      const webhook = scope.dataset.webhook ?? '';
       const serviceId = import.meta.env.PUBLIC_EMAILJS_SERVICE_ID;
       const templateId = import.meta.env.PUBLIC_EMAILJS_ESTIMATE_TEMPLATE_ID;
       const publicKey = import.meta.env.PUBLIC_EMAILJS_PUBLIC_KEY;
-      if (!serviceId || !templateId || !publicKey) {
+      const hasEmail = Boolean(serviceId && templateId && publicKey);
+      if (!webhook && !hasEmail) {
         toast.error(msg.fail_title ?? 'Error');
         return;
       }
@@ -572,18 +574,61 @@ export function initEstimate(): void {
         break_even: usd(breakEvenSale(est)),
       };
 
-      try {
-        const emailjs = (await import('@emailjs/browser')).default;
-        await emailjs.send(serviceId, templateId, params, { publicKey });
-        /* Delivered — the success page is the confirmation. */
-        window.location.assign(scope.dataset.successUrl ?? '/investments/success');
-      } catch (error) {
-        console.warn('[ddc] estimate EmailJS delivery failed', error);
-        toast.error(msg.fail_title ?? 'Error');
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.textContent = submitLabel;
+      // Two independent delivery paths, as on the contact form: the CRM webhook
+      // and the EmailJS copy. One arriving is enough to send the visitor on to
+      // the success page; both failing must not.
+      let delivered = false;
+
+      if (webhook) {
+        try {
+          /* Keys the "FORMULARIO DDC INVERSIONES" workflow in GoHighLevel maps. */
+          const response = await fetch(webhook, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              from_name: name,
+              email,
+              phone,
+              description,
+              investment_title: params.zone,
+              zone: params.zone,
+              profile: params.profile,
+              funding: params.funding,
+              cash_required: params.cash_required,
+              net_profit: params.net_profit,
+              cash_on_cash: params.cash_on_cash,
+              equity_multiple: params.equity_multiple,
+              lang,
+              source: 'investment_estimator',
+            }),
+          });
+          if (response.ok) delivered = true;
+          else console.warn(`[ddc] estimate webhook responded ${response.status}`);
+        } catch (error) {
+          console.warn('[ddc] estimate webhook unreachable', error);
         }
+      }
+
+      if (hasEmail) {
+        try {
+          const emailjs = (await import('@emailjs/browser')).default;
+          await emailjs.send(serviceId, templateId, params, { publicKey });
+          delivered = true;
+        } catch (error) {
+          console.warn('[ddc] estimate EmailJS delivery failed', error);
+        }
+      }
+
+      if (delivered) {
+        /* The success page is the confirmation. */
+        window.location.assign(scope.dataset.successUrl ?? '/investments/success');
+        return;
+      }
+
+      toast.error(msg.fail_title ?? 'Error');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = submitLabel;
       }
     })();
   });
