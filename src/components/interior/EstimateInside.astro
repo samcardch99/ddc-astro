@@ -6,6 +6,7 @@ import UiButton from '../estimate/UiButton.astro';
 import zones from '../../data/zones.json';
 import { RULES } from '../../lib/estimate';
 import { fill } from '../../lib/tokens';
+import { site } from '../../lib/site';
 import { localizePath, useTranslations, useTransHtml, type Lang } from '../../i18n/ui';
 
 interface Props { lang: Lang }
@@ -103,6 +104,7 @@ const rowValueClass = {
   data-zones={JSON.stringify(zones)}
   data-messages={JSON.stringify(messages)}
   data-success-url={localizePath('/investments/success', lang)}
+  data-webhook={site.investmentWebhook}
   class="relative z-20 min-h-screen w-full bg-primary px-6 pb-28 pt-8 md:px-10"
 >
   <div class="absolute inset-0 -z-10 bg-black/80"></div>

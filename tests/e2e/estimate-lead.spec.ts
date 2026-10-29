@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 const EMAILJS = /emailjs\.com/;
+const WEBHOOK = /services\.leadconnectorhq\.com\/hooks/;
 
 const TOAST = '#ddc-toaster .ddc-toast';
 
@@ -24,6 +25,11 @@ async function fillLead(page: Page) {
 }
 
 test.describe('estimate lead form validation', () => {
+  // A valid submit posts to the live GoHighLevel workflow; no test may reach it.
+  test.beforeEach(async ({ page }) => {
+    await page.route(WEBHOOK, (route) => route.fulfill({ status: 200, body: '{}' }));
+  });
+
   test('raises one toast per invalid field, not a single generic one', async ({ page }) => {
     let sent = false;
     await page.route(EMAILJS, async (route) => {
@@ -109,6 +115,64 @@ test.describe('estimate lead form validation', () => {
     await page.waitForURL('**/investments/success');
     expect(payload).toContain('jane@example.com');
     expect(payload).toContain('Pinecrest');
+  });
+
+  test('posts the lead and its estimate to the CRM webhook', async ({ page }) => {
+    let lead: Record<string, string> | null = null;
+    await page.route(WEBHOOK, async (route) => {
+      lead = route.request().postDataJSON();
+      await route.fulfill({ status: 200, body: '{}' });
+    });
+    await page.route(EMAILJS, (route) => route.fulfill({ status: 200, body: 'OK' }));
+
+    await openLeadForm(page);
+    await fillLead(page);
+    await page.click('[data-lead-form] button[type="submit"]');
+
+    await page.waitForURL('**/investments/success');
+    expect(lead).toMatchObject({
+      from_name: 'Jane Smith',
+      email: 'jane@example.com',
+      phone: '+1 (305) 555-0100',
+      source: 'investment_estimator',
+      lang: 'en',
+    });
+    expect(lead!.investment_title).toContain('Pinecrest');
+    expect(lead!.cash_required).toMatch(/^\$[\d,]+$/);
+  });
+
+  test('reaches the success page when only the webhook delivers', async ({ page }) => {
+    await page.route(EMAILJS, (route) => route.fulfill({ status: 500, body: '' }));
+
+    await openLeadForm(page);
+    await fillLead(page);
+    await page.click('[data-lead-form] button[type="submit"]');
+
+    await page.waitForURL('**/investments/success');
+  });
+
+  test('reaches the success page when only the email delivers', async ({ page }) => {
+    await page.route(WEBHOOK, (route) => route.fulfill({ status: 500, body: '' }));
+    await page.route(EMAILJS, (route) => route.fulfill({ status: 200, body: 'OK' }));
+
+    await openLeadForm(page);
+    await fillLead(page);
+    await page.click('[data-lead-form] button[type="submit"]');
+
+    await page.waitForURL('**/investments/success');
+  });
+
+  test('stays on the form and says so when nothing delivers', async ({ page }) => {
+    await page.route(WEBHOOK, (route) => route.abort());
+    await page.route(EMAILJS, (route) => route.fulfill({ status: 500, body: '' }));
+
+    await openLeadForm(page);
+    await fillLead(page);
+    await page.click('[data-lead-form] button[type="submit"]');
+
+    await expect(page.locator(TOAST)).toHaveCount(1);
+    await expect(page).toHaveURL(/\/investments\/?$/);
+    await expect(page.locator('[data-lead-form] button[type="submit"]')).toBeEnabled();
   });
 
   test('validates in Spanish on the Spanish route', async ({ page }) => {
