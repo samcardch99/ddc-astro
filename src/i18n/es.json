@@ -414,10 +414,6 @@
         "role": "Gerente de Proyecto",
         "description": "Alejandro mantiene cada construcción de DDC en el camino correcto. Desde los permisos hasta los últimos detalles, coordina arquitectos, ingenieros y contratistas, controlando costos y plazos para que todo se ensamble sin demoras."
       },
-      "alex_olivares": {
-        "role": "Contratista General Senior",
-        "description": "Alex lidera en obra con precisión. Con amplia experiencia, coordina equipos, proveedores y protocolos de seguridad para que nuestras estructuras modulares se ejecuten sin errores. Su atención al detalle asegura calidad y cumplimiento con los plazos."
-      },
       "javi_ferrer": {
         "role": "Director de Ventas",
         "description": "Javi transforma ideas en historias memorables. Con datos claros y creatividad fresca, lidera campañas que destacan los proyectos modulares de DDC. Desde una publicación hasta una presentación para inversores, cada detalle comunica distinción."
@@ -439,8 +435,8 @@
         "description": "Wilfredo convierte conceptos en experiencias visuales. Desde renders fotorrealistas hasta vistas en realidad aumentada, permite que los clientes recorran el proyecto antes de construirlo, elevando cada decisión con claridad y precisión técnica."
       },
       "esteban_villavicencio": {
-        "role": "Ingeniero Civil Senior",
-        "description": "Esteban convierte la visión en una realidad construible y conforme al código. Lidera el alcance civil, desde cimientos, nivelación y drenaje hasta la coordinación estructural para instalaciones modulares, asegurando que cada proyecto cumpla con el Código de Construcción de Florida y los requisitos locales. Trabajando estrechamente con nuestro COO, Gerente de Proyecto y Contratista General Senior, optimiza los envíos, inspecciones y RFIs, aplicando ingeniería de valor a las conexiones y trabajos en el sitio para mantener los cronogramas ajustados sin comprometer la seguridad o la calidad."
+        "role": "Contratista General",
+        "description": "Esteban lidera en obra con precisión. Con formación en ingeniería civil y amplia experiencia en campo, coordina equipos, proveedores y protocolos de seguridad para que nuestras estructuras modulares se ejecuten sin errores y cumplan el Código de Construcción de Florida. Su atención al detalle asegura calidad y cumplimiento con los plazos."
       },
       "blanca_mendoza": {
         "role": "Asociada de Ventas",

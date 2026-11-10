@@ -52,10 +52,6 @@
       "role": "Project Manager",
       "description": "Alejandro keeps every DDC build on track. From permitting to punch-list, he aligns architects, engineers, and trades, tracking costs and milestones so modules arrive and assemble without delays. His rigorous oversight safeguards budgets and ensures DDC’s signature quality reaches the site as designed."
     },
-    "alex_olivares": {
-      "role": "Senior General Contractor",
-      "description": "Alex is the on‑site force behind DDC’s precision builds. Drawing on deep field experience, he orchestrates crews, suppliers, and safety protocols so our modular structures rise flawlessly. His eye for detail and proactive problem‑solving keep timelines tight and quality uncompromised—delivering the craft clients expect."
-    },
     "javi_ferrer": {
       "role": "Sales Director",
       "description": "Javi turns ideas into stories people remember. Using clear data and fresh creativity, he builds campaigns that show why DDC’s modular projects stand out. From a social-post to an investor pitch, he keeps every detail polished so clients and partners feel the distinction and quality that define DDC."
@@ -463,10 +459,6 @@
         "role": "Project Manager",
         "description": "Alejandro keeps every DDC build on track. From permitting to punch-list, he aligns architects, engineers, and trades, tracking costs and milestones so modules arrive and assemble without delays. His rigorous oversight safeguards budgets and ensures DDC’s signature quality reaches the site as designed."
       },
-      "alex_olivares": {
-        "role": "Senior General Contractor",
-        "description": "Alex is the on‑site force behind DDC’s precision builds. Drawing on deep field experience, he orchestrates crews, suppliers, and safety protocols so our modular structures rise flawlessly. His eye for detail and proactive problem‑solving keep timelines tight and quality uncompromised—delivering the craft clients expect."
-      },
       "javi_ferrer": {
         "role": "Sales Director",
         "description": "Javi turns ideas into stories people remember. Using clear data and fresh creativity, he builds campaigns that show why DDC’s modular projects stand out. From a social-post to an investor pitch, he keeps every detail polished so clients and partners feel the distinction and quality that define DDC."
@@ -488,8 +480,8 @@
         "description": "Wilfredo turns concepts into immersive realities. As the mind behind DDC’s photorealistic renders, augmented-reality previews, and graphic identity, he lets clients walk through a project—feel its light, materials, and flow—long before construction begins, elevating every decision with clarity, beauty, and technical precision."
       },
       "esteban_villavicencio": {
-        "role": "Senior Civil Engineer",
-        "description": "Esteban turns vision into buildable, code-compliant reality. He leads the civil scope—from foundations, grading, and drainage to structural coordination for modular installs—so every project meets Florida Building Code and local requirements. Working closely with our COO, Project Manager, and Senior General Contractor, he streamlines submittals, inspections, and RFIs, value-engineering connections and site works to keep timelines tight without compromising safety or quality."
+        "role": "General Contractor",
+        "description": "Esteban is the on-site force behind DDC’s precision builds. With a civil engineering background and deep field experience, he orchestrates crews, suppliers, and safety protocols so our modular structures rise flawlessly and meet Florida Building Code. His eye for detail and proactive problem-solving keep timelines tight and quality uncompromised—delivering the craft clients expect."
       },
       "blanca_mendoza": {
         "role": "Sales Associate",
