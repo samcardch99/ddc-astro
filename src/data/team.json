@@ -14,7 +14,7 @@
     "description": "A veteran builder, Danilo turns strategy into flawless execution. He fine-tunes procurement, scheduling, and on-site workflows so our modular builds rise faster and safer. His hands-on leadership safeguards cost, quality, and compliance, delivering the operational excellence clients and investors expect from DDC.",
     "image": "assets/employees/danilo1.jpg"
   },
-    {
+  {
     "name": "Alejandro Gomez",
     "id": "alejandro_gomez",
     "role": "CEO Executive Assistant",
@@ -31,11 +31,11 @@
     "class": "scale-[1.1] -translate-y-40"
   },
   {
-    "name": "Alex Olivares",
-    "id": "alex_olivares",
-    "role": "Senior General Contractor",
-    "description": "Alex is the on‑site force behind DDC’s precision builds. Drawing on deep field experience, he orchestrates crews, suppliers, and safety protocols so our modular structures rise flawlessly. His eye for detail and proactive problem‑solving keep timelines tight and quality uncompromised—delivering the craft clients expect.",
-    "image": "assets/employees/alex.jpg",
+    "name": "Esteban Villavicencio",
+    "id": "esteban_villavicencio",
+    "role": "General Contractor",
+    "description": "Esteban is the on-site force behind DDC’s precision builds. With a civil engineering background and deep field experience, he orchestrates crews, suppliers, and safety protocols so our modular structures rise flawlessly and meet Florida Building Code. His eye for detail and proactive problem-solving keep timelines tight and quality uncompromised—delivering the craft clients expect.",
+    "image": "assets/employees/esteban.jpg",
     "class": ""
   },
   {
@@ -63,14 +63,6 @@
     "class": ""
   },
   {
-    "name": "Esteban Villavicencio",
-    "id": "esteban_villavicencio",
-    "role": "Senior Civil Engineer",
-    "description": "Esteban turns vision into buildable, code-compliant reality. He leads the civil scope—from foundations, grading, and drainage to structural coordination for modular installs—so every project meets Florida Building Code and local requirements. Working closely with our COO, Project Manager, and Senior General Contractor, he streamlines submittals, inspections, and RFIs, value-engineering connections and site works to keep timelines tight without compromising safety or quality.",
-    "image": "assets/employees/esteban.jpg",
-    "class": ""
-  },
-  {
     "name": "Anisleidy Valle",
     "id": "anisleidy_valle",
     "role": "Human Resources Lead",
@@ -78,7 +70,6 @@
     "image": "assets/employees/anisleidy.jpg",
     "class": ""
   },
-
   {
     "name": "Mateo Correa",
     "id": "mateo_correa_hernandez",
